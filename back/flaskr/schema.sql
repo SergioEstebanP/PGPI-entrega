@@ -14,10 +14,10 @@ CREATE TABLE estado(
 
 CREATE TABLE usuario(
     nick VARCHAR(50) PRIMARY KEY,
-    email VARCHAR(50),
-    password VARCHAR(50),
-    nombre VARCHAR(50),
-    apellidos VARCHAR(100),
+    email VARCHAR(50) NOT NULL,
+    password VARCHAR(50) NOT NULL,
+    nombre VARCHAR(50) NOT NULL,
+    apellidos VARCHAR(100) NOT NULL,
     biografia VARCHAR(200),
     fotoPerfil VARCHAR(200)
 );
