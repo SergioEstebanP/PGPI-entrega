@@ -30,7 +30,7 @@ def insert_user(nick, email, password, nombre, apellidos, biografia=None, fotoPe
     db = get_db()
     cursor = db.cursor()
 
-    cursor.execute('INSERT INTO usuario VALUES (%s, %s)', (nick, email, password, nombre, apellidos, biografia, fotoPerfil))
+    cursor.execute('INSERT INTO usuario VALUES (%s, %s, %s, %s, %s, %s, %s)', (nick, email, password, nombre, apellidos, biografia, fotoPerfil))
     db.commit()
 
     print(cursor.rowcount, "records inserted.")
