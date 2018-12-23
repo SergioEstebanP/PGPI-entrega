@@ -26,14 +26,27 @@ def init_db():
         cursor.execute(line)
         db.commit()
 
-def insert_user(nick, email, password, nombre, apellidos, biografia=None, fotoPerfil=None):
+def execute_command(command):
     db = get_db()
     cursor = db.cursor()
 
-    cursor.execute('INSERT INTO usuario VALUES (%s, %s, %s, %s, %s, %s, %s)', (nick, email, password, nombre, apellidos, biografia, fotoPerfil))
+    cursor.execute(command)
     db.commit()
+    result = cursor.fetchall()
 
-    print(cursor.rowcount, "records inserted.")
+    return result
+
+
+
+#######################
+#       USUARIO       #
+#######################
+def insert_user(nick, email, password, nombre, apellidos, tipo=0, biografia=None, fotoPerfil=None):
+    db = get_db()
+    cursor = db.cursor()
+
+    cursor.execute('INSERT INTO usuario VALUES (%s, %s, %s, %s, %s, %d, %s, %s)', (nick, email, password, nombre, apellidos, tipo, biografia, fotoPerfil))
+    db.commit()
 
 def get_users():
     db = get_db()
@@ -42,4 +55,41 @@ def get_users():
     cursor.execute('SELECT * FROM usuario')
     result = cursor.fetchall()
 
-    print(result)
+    return result
+
+def get_user(nick):
+    db = get_db()
+    cursor = db.cursor()
+    
+    cursor.execute('SELECT * FROM usuario WHERE nick LIKE %s', (nick, ))
+    result = cursor.fetchall()
+
+    return result[0]
+
+#######################
+#     INCIDENCIA      #
+#######################
+def insert_incidencia(id, comentario, prioridad, tiempoEstimado, descripcion, estado):
+    db = get_db()
+    cursor = db.cursor()
+
+    cursor.execute('INSERT INTO incidencia VALUES (%d, %s, %d, %d, %s, %d)', (id, comentario, prioridad, tiempoEstimado, descripcion, estado)
+    db.commit()
+
+def get_incidencias():
+    db = get_db()
+    cursor = db.cursor()
+    
+    cursor.execute('SELECT * FROM incidencia')
+    result = cursor.fetchall()
+
+    return result
+
+def get_incidencia(id):
+    db = get_db()
+    cursor = db.cursor()
+    
+    cursor.execute('SELECT * FROM usuario WHERE id = %d', (id, ))
+    result = cursor.fetchall()
+
+    return result[0]

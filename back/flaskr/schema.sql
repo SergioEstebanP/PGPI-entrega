@@ -1,6 +1,7 @@
 USE PGPI_grupo02;
 
 DROP TABLE IF EXISTS estado;
+DROP TABLE IF EXISTS tipoUsuario;
 DROP TABLE IF EXISTS usuario;
 DROP TABLE IF EXISTS incidencia;
 DROP TABLE IF EXISTS elementoInventario;
@@ -12,6 +13,11 @@ CREATE TABLE estado(
     estado VARCHAR (30)
 );
 
+CREATE TABLE tipoUsuario(
+    id INTEGER PRIMARY KEY,
+    tipoUsuario VARCHAR(20)
+);
+
 CREATE TABLE usuario(
     nick VARCHAR(50) PRIMARY KEY,
     email VARCHAR(50) NOT NULL,
@@ -19,7 +25,8 @@ CREATE TABLE usuario(
     nombre VARCHAR(50) NOT NULL,
     apellidos VARCHAR(100) NOT NULL,
     biografia VARCHAR(200),
-    fotoPerfil VARCHAR(200)
+    fotoPerfil VARCHAR(200),
+    tipo INTEGER REFERENCES tipoUsuario(id) NOT NULL
 );
 
 CREATE TABLE incidencia(
@@ -29,8 +36,8 @@ CREATE TABLE incidencia(
     tiempoEstimado INTEGER,
     descripcion VARCHAR(200),
     estado INTEGER REFERENCES estado(id),
-    tecnicoAsignado VARCHAR(50) REFERENCES usuario(nick),
-    cliente VARCHAR(50) REFERENCES usuario(nick)
+    tecnicoAsignado VARCHAR(50) REFERENCES usuario(nick) NOT NULL,
+    cliente VARCHAR(50) REFERENCES usuario(nick) NOT NULL
 );
 
 CREATE TABLE elementoInventario(
@@ -40,13 +47,13 @@ CREATE TABLE elementoInventario(
 );
 
 CREATE TABLE elementoIncidencia(
-    incidencia INTEGER REFERENCES incidencia(id),
-    elemento INTEGER references elementoInventario(id)
+    incidencia INTEGER REFERENCES incidencia(id) NOT NULL,
+    elemento INTEGER REFERENCES elementoInventario(id) NOT NULL
 );
 
 CREATE TABLE cambio(
     fecha DATE PRIMARY KEY,
     estado INTEGER REFERENCES estado(id),
-    tecnico VARCHAR(50) REFERENCES tecnico(id),
-    incidencia INTEGER REFERENCES incidencia(id)
+    tecnico VARCHAR(50) REFERENCES tecnico(id) NOT NULL,
+    incidencia INTEGER REFERENCES incidencia(id) NOT NULL
 );
