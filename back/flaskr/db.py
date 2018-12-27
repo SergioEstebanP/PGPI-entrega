@@ -15,8 +15,10 @@ def get_db():
     return db
 
 def close_db():
+    global db
     if db:
         db.close()
+        db = None
 
 def init_db():
     db = get_db()
@@ -28,7 +30,7 @@ def init_db():
 
 def execute_command(command):
     db = get_db()
-    cursor = db.cursor()
+    cursor = db.cursor(dictionary=True)
 
     cursor.execute(command)
     db.commit()
@@ -41,16 +43,9 @@ def execute_command(command):
 #######################
 #       USUARIO       #
 #######################
-def insert_user(nick, email, password, nombre, apellidos, tipo=0, biografia=None, fotoPerfil=None):
+ef get_users():
     db = get_db()
-    cursor = db.cursor()
-
-    cursor.execute('INSERT INTO usuario VALUES (%s, %s, %s, %s, %s, %d, %s, %s)', (nick, email, password, nombre, apellidos, tipo, biografia, fotoPerfil))
-    db.commit()
-
-def get_users():
-    db = get_db()
-    cursor = db.cursor()
+    cursor = db.cursor(dictionary=True)
     
     cursor.execute('SELECT * FROM usuario')
     result = cursor.fetchall()
@@ -59,7 +54,7 @@ def get_users():
 
 def get_user(nick):
     db = get_db()
-    cursor = db.cursor()
+    cursor = db.cursor(dictionary=True)
     
     cursor.execute('SELECT * FROM usuario WHERE nick LIKE %s', (nick, ))
     result = cursor.fetchone()
@@ -78,7 +73,7 @@ def insert_incidencia(id, descripcion, estado, cliente, comentario=None, priorid
 
 def get_incidencias():
     db = get_db()
-    cursor = db.cursor()
+    cursor = db.cursor(dictionary=True)
     
     cursor.execute('SELECT * FROM incidencia')
     result = cursor.fetchall()
@@ -87,7 +82,7 @@ def get_incidencias():
 
 def get_incidencia(id):
     db = get_db()
-    cursor = db.cursor()
+    cursor = db.cursor(dictionary=True)
     
     cursor.execute('SELECT * FROM usuario WHERE id = %d', (id, ))
     result = cursor.fetchone()
