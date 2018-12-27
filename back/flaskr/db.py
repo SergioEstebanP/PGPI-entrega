@@ -69,11 +69,11 @@ def get_user(nick):
 #######################
 #     INCIDENCIA      #
 #######################
-def insert_incidencia(id, comentario, prioridad, tiempoEstimado, descripcion, estado):
+def insert_incidencia(id, descripcion, estado, cliente, comentario=None, prioridad=None, tiempoEstimado=None, tecnico=None):
     db = get_db()
     cursor = db.cursor()
 
-    cursor.execute('INSERT INTO incidencia VALUES (%d, %s, %d, %d, %s, %d)', (id, comentario, prioridad, tiempoEstimado, descripcion, estado)
+    cursor.execute('INSERT INTO incidencia VALUES (%d, %s, %d, %d, %s, %d, %s, %s)', (id, comentario, prioridad, tiempoEstimado, descripcion, estado, tecnico, cliente)
     db.commit()
 
 def get_incidencias():

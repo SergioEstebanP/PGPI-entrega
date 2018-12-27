@@ -34,9 +34,9 @@ CREATE TABLE incidencia(
     comentario VARCHAR(200),
     prioridad INTEGER,
     tiempoEstimado INTEGER,
-    descripcion VARCHAR(200),
-    estado INTEGER REFERENCES estado(id),
-    tecnicoAsignado VARCHAR(50) REFERENCES usuario(nick) NOT NULL,
+    descripcion VARCHAR(200) NOT NULL,
+    estado INTEGER REFERENCES estado(id) NOT NULL,
+    tecnicoAsignado VARCHAR(50) REFERENCES usuario(nick),
     cliente VARCHAR(50) REFERENCES usuario(nick) NOT NULL
 );
 
