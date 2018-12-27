@@ -8,7 +8,7 @@ def get_db():
         db = mysql.connector.connect(
             user='PGPI_grupo02',
             passwd='JEbITzwe',
-            host='jair.lab.inf.uva.es',
+            host='localhost',
             database='PGPI_grupo02'
         )
 
@@ -62,9 +62,9 @@ def get_user(nick):
     cursor = db.cursor()
     
     cursor.execute('SELECT * FROM usuario WHERE nick LIKE %s', (nick, ))
-    result = cursor.fetchall()
+    result = cursor.fetchone()
 
-    return result[0]
+    return result
 
 #######################
 #     INCIDENCIA      #
@@ -73,7 +73,7 @@ def insert_incidencia(id, descripcion, estado, cliente, comentario=None, priorid
     db = get_db()
     cursor = db.cursor()
 
-    cursor.execute('INSERT INTO incidencia VALUES (%d, %s, %d, %d, %s, %d, %s, %s)', (id, comentario, prioridad, tiempoEstimado, descripcion, estado, tecnico, cliente)
+    cursor.execute('INSERT INTO incidencia VALUES (%d, %s, %d, %d, %s, %d, %s, %s)', (id, comentario, prioridad, tiempoEstimado, descripcion, estado, tecnico, cliente))
     db.commit()
 
 def get_incidencias():
@@ -90,6 +90,6 @@ def get_incidencia(id):
     cursor = db.cursor()
     
     cursor.execute('SELECT * FROM usuario WHERE id = %d', (id, ))
-    result = cursor.fetchall()
+    result = cursor.fetchone()
 
-    return result[0]
+    return result
