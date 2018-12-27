@@ -32,10 +32,19 @@ nav {
     border-right-style: groove;
     border-right-width: 1px;
     overflow: hidden;
-    transition: width 20ms ease-out;
+    transition-delay: 100ms!important;
+    transition: width 220ms ease-out;
+}
+.collapse{
+    min-width: 100%;
 }
 
-
+.collapse.width {
+    height: auto;
+    width:0;
+    transition-delay: 0!important;
+    transition: width inherit;
+}
 .side-title{
     height: 64px;
     width: 100%;
@@ -47,17 +56,6 @@ nav {
     padding: 5px;
 }
 
-.side-text{
-    visibility: hidden;
-    transition-delay: 3ms; 
-    transition: visibility 0ms;
-    overflow: hidden;
-}
-
-.role{
-    margin-top: 40px;
-
-}
 .side-options{
     margin-left: 15px;
     font-size: 18px;
@@ -91,12 +89,37 @@ nav {
     width: 100%;
     height: 100%;
     padding-top: 64px!important;
-    padding-left: 200px!important;
+    padding-left: 4%!important;
     margin-right: 0!important;
     margin-bottom: 0!important;
     padding-right: 0!important;
     padding-bottom: 0!important;
-    display: flex;
+}
+
+/*---------------------------------------------Cards---------------------------------------------*/
+.card-deck {
+    margin: 1em;
+}
+
+#card1 {
+    background-color: lightgrey;
+}
+
+#card2 {
+    background-color: lightblue;
+}
+.card-title {
+    font-size: 1em;
+    font-weight: bold;
+}
+
+#card-description {
+    font-size: 0.90em;
+}
+
+#tituloColumna {
+    font-size: 1.2em;
+    font-style: italic;
 }
 
 /*---------------------------------------------Responsive Stuff---------------------------------------------*/
