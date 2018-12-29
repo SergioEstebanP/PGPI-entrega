@@ -43,7 +43,7 @@ def execute_command(command):
 #######################
 #       USUARIO       #
 #######################
-ef get_users():
+def get_users():
     db = get_db()
     cursor = db.cursor(dictionary=True)
     

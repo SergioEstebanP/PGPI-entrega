@@ -2,9 +2,9 @@ import functools
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for
 from flaskr.db import *
 
-bp = Blueprint('auth', __name__, url_prefix='/auth')
+bp = Blueprint('auth', __name__)
 
-@bp.route('/login', methods=('GET', 'POST'))
+@bp.route('/', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
         username = request.form['username']
@@ -25,9 +25,9 @@ def login():
 
         flash(error)
 
-    return render_template('auth/login.html')
+    return render_template('login.html')
 
-@bp.before_app_request
+#@bp.before_app_request
 def load_logged_in_user():
     user_id = session.get('user_id')
 
