@@ -36,11 +36,11 @@ def create_app(test_config=None):
     # a simple page that says hello
     @app.route('/index')
     def index():
-        return render_template('front/html/incidencias_cliente.html')
+        return render_template('incidencias_cliente.html')
 
-    from . import db
+    #from . import db
     
-    db.init_app(app)
+    #db.init_app(app)
    
     from . import auth
     app.register_blueprint(auth.bp)
