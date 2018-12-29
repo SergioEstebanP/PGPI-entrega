@@ -2,4 +2,4 @@
 *.swp
 back/venv/
 back/flaskr/__pycache__/
-
+back/activate.sh
