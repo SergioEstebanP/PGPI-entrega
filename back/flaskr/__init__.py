@@ -1,7 +1,11 @@
 import os
 
-from flask import Flask
+from flask import Flask, render_template
 
+print(__name__)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=80)
 
 def create_app(test_config=None):
     # create and configure the app
@@ -29,6 +33,10 @@ def create_app(test_config=None):
     def hello():
         return 'Hello, World!'
 
+    # a simple page that says hello
+    @app.route('/index')
+    def index():
+        return render_template('front/html/incidencias_cliente.html')
 
     from . import db
     

@@ -8,7 +8,7 @@
     <meta name="viewport" content="width = device-width, initial-scale = 1, shrink-to-fit=no">
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="./static/css/clientView.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/clientView.css') }}">
     <!-- Link al css de Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
         crossorigin="anonymous">
@@ -27,7 +27,7 @@
     <div id="side-nav" class="side-nav fixed-top flex-nowrap flex-column justify-content-start d-inline-flex align-items-start bg-light"
         onmouseover="openSide('side-nav')">
         <div class="side-title side-content d-flex ">
-            <img id="user-img" class="user-icon" src=".\static\img\default-gravatar.png" alt="user icon">
+            <img id="user-img" class="user-icon" src="../static/img/default-gravatar.png" alt="user icon">
             <span class="collapse width align-self-center" style="min-width: 70%;padding-left: 5%">User Name</span>
         </div>
         <div class="list-group list-group-flush w-100 side-icons">
@@ -63,102 +63,79 @@
         <!-- Body -->
         <div class="row" style="width: 100%; padding-top: 0.5em; padding-bottom: 0.5em; font-size: 2em;">
             <div class="col">
-                <p class="text-center">Todas las incidencias</p>
+                <p class="text-center">Incidencias Abiertas para un cliente</p>
             </div>
         </div>
 
-        <div style="display: flex;">
-            <div>
-                <p class="text-center" id="tituloColumna">Abiertas</p>
-                <div class="card-deck" style="margin: 1em;">
-                    <div class="card" id="card1">
-                        <div class="card-body">
-                            <p class="card-title">Probar la conexión con la base de datos</p>
-                            <hr>
-                            <p class="card-text">Descripción:</p>
-                            <p class="card-text .text-justify" id="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor ipsum et elit pulvinar, at condimentum velit porta. Suspendisse potenti.</p>
-                            <hr>
-                            <p class="card-text">Asignado a: Sergio.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-deck" style="margin: 1em;">
-                    <div class="card" id="card1">
-                        <div class="card-body">
-                            <p class="card-title">Probar la conexión con la base de datos</p>
-                            <hr>
-                            <p class="card-text">Descripción:</p>
-                            <p class="card-text .text-justify" id="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor ipsum et elit pulvinar, at condimentum velit porta. Suspendisse potenti.</p>
-                            <hr>
-                            <p class="card-text">Asignado a: Sergio.</p>
-                        </div>
-                    </div>
+        <div class="card-deck" style="margin: 1em;">
+            <div class="card" id="card1">
+                <div class="card-body">
+                    <p class="card-title">Probar la conexión con la base de datos</p>
+                    <hr>
+                    <p class="card-text">Descripción:</p>
+                    <p class="card-text .text-justify" id="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor ipsum et elit pulvinar, at condimentum velit porta. Suspendisse potenti.</p>
+                    <hr>
+                    <p class="card-text">Asignado a: Sergio.</p>
                 </div>
             </div>
 
-            <div style="border-left: 1px solid grey; height: 70%;">
-                <p class="text-center" id="tituloColumna">Pendientes Aprobación</p>
-                <div class="card-deck" style="margin: 1em;">
-                    <div class="card" id="card2">
-                        <div class="card-body">
-                            <p class="card-title">Probar la conexión con la base de datos</p>
-                            <hr>
-                            <p class="card-text">Descripción:</p>
-                            <p class="card-text .text-justify" id="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor ipsum et elit pulvinar, at condimentum velit porta. Suspendisse potenti.</p>
-                            <hr>
-                            <p class="card-text">Asignado a: Sergio.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-deck" style="margin: 1em;">
-                    <div class="card" id="card2">
-                        <div class="card-body">
-                            <p class="card-title">Probar la conexión con la base de datos</p>
-                            <hr>
-                            <p class="card-text">Descripción:</p>
-                            <p class="card-text .text-justify" id="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor ipsum et elit pulvinar, at condimentum velit porta. Suspendisse potenti.</p>
-                            <hr>
-                            <p class="card-text">Asignado a: Sergio.</p>
-                        </div>
-                    </div>
+            <div class="card" id="card1">
+                <div class="card-body">
+                    <p class="card-title">Empezar la implementación del backend</p>
+                    <hr>
+                    <p class="card-text">Descripción:</p>
+                    <p class="card-text .text-justify" id="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor ipsum et elit pulvinar, at condimentum velit porta. Suspendisse potenti.</p>
+                    <hr>
+                    <p class="card-text">Asignado a: Marta.</p>
                 </div>
             </div>
 
-            <div style="border-left: 1px solid grey; height: 70%;">
-                <p class="text-center" id="tituloColumna">En Resolución</p>
-                <div class="card-deck" style="margin: 1em;">
-                    <div class="card" id="card1">
-                        <div class="card-body">
-                            <p class="card-title">Probar la conexión con la base de datos</p>
-                            <hr>
-                            <p class="card-text">Descripción:</p>
-                            <p class="card-text .text-justify" id="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor ipsum et elit pulvinar, at condimentum velit porta. Suspendisse potenti.</p>
-                            <hr>
-                            <p class="card-text">Asignado a: Sergio.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-deck" style="margin: 1em;">
-                    <div class="card" id="card1">
-                        <div class="card-body">
-                            <p class="card-title">Probar la conexión con la base de datos</p>
-                            <hr>
-                            <p class="card-text">Descripción:</p>
-                            <p class="card-text .text-justify" id="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor ipsum et elit pulvinar, at condimentum velit porta. Suspendisse potenti.</p>
-                            <hr>
-                            <p class="card-text">Asignado a: Sergio.</p>
-                        </div>
-                    </div>
+            <div class="card" id="card1">
+                <div class="card-body">
+                    <p class="card-title">Diseñar la base de datos</p>
+                    <hr>
+                    <p class="card-text">Descripción:</p>
+                    <p class="card-text .text-justify" id="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor ipsum et elit pulvinar, at condimentum velit porta. Suspendisse potenti.</p>
+                    <hr>
+                    <p class="card-text">Asignado a: Nacho.</p>
                 </div>
             </div>
         </div>
-        
 
-        
-        
+        <div class="card-deck" style="margin: 1em;">
+            <div class="card" id="card2">
+                <div class="card-body">
+                    <p class="card-title">Probar la conexión con la base de datos</p>
+                    <hr>
+                    <p class="card-text">Descripción:</p>
+                    <p class="card-text .text-justify" id="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor ipsum et elit pulvinar, at condimentum velit porta. Suspendisse potenti.</p>
+                    <hr>
+                    <p class="card-text">Asignado a: Sergio.</p>
+                </div>
+            </div>
+
+            <div class="card" id="card2">
+                <div class="card-body">
+                    <p class="card-title">Empezar la implementación del backend</p>
+                    <hr>
+                    <p class="card-text">Descripción:</p>
+                    <p class="card-text .text-justify" id="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor ipsum et elit pulvinar, at condimentum velit porta. Suspendisse potenti.</p>
+                    <hr>
+                    <p class="card-text">Asignado a: Marta.</p>
+                </div>
+            </div>
+
+            <div class="card" id="card2">
+                <div class="card-body">
+                    <p class="card-title">Diseñar la base de datos</p>
+                    <hr>
+                    <p class="card-text">Descripción:</p>
+                    <p class="card-text .text-justify" id="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor ipsum et elit pulvinar, at condimentum velit porta. Suspendisse potenti.</p>
+                    <hr>
+                    <p class="card-text">Asignado a: Nacho.</p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>

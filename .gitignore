@@ -1,4 +1,5 @@
 .DS_Store
 *.swp
 back/venv/
-__pycache__/
+back/flaskr/__pycache__/
+
