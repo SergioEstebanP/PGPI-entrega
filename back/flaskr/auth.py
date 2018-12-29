@@ -27,6 +27,24 @@ def login():
 
     return render_template('auth/login.html')
 
+@bp.route('front/html/datos_incidencia_cliente', methods=('GET', 'POST'))
+def registroIncidencia():
+    user=session.get('nick')
+    if request.method == 'POST':
+        descripcion=request.form['descripcion']
+        estado="Solicitada"
+        titutlo=request.form['titulo']
+        categoria=request.form['categoria']
+        id_inv=request.form['id_elemento']
+        fecha=request.form['fecha']
+
+        db = get_db()
+        error = None
+        db.insert_incidencia(titulo, categoria, id_inv, descripcion, estado, user,fecha)
+        db.commit()
+    return render_template('front/html/incidencias_cliente.html')
+
+
 @bp.before_app_request
 def load_logged_in_user():
     user_id = session.get('user_id')

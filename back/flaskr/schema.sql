@@ -37,7 +37,8 @@ CREATE TABLE incidencia(
     descripcion VARCHAR(200) NOT NULL,
     estado INTEGER REFERENCES estado(id) NOT NULL,
     tecnicoAsignado VARCHAR(50) REFERENCES usuario(nick),
-    cliente VARCHAR(50) REFERENCES usuario(nick) NOT NULL
+    cliente VARCHAR(50) REFERENCES usuario(nick) NOT NULL,
+    categoria VARCHAR(20) NOT NULL
 );
 
 CREATE TABLE elementoInventario(
