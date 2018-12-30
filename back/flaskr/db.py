@@ -8,7 +8,7 @@ def get_db():
         db = mysql.connector.connect(
             user='PGPI_grupo02',
             passwd='JEbITzwe',
-            host='localhost',
+            host='jair.lab.inf.uva.es',
             database='PGPI_grupo02'
         )
 
