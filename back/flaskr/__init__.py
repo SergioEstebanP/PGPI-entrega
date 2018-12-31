@@ -32,6 +32,12 @@ def create_app(test_config=None):
     def informacion_incidencia_cliente():
             return render_template('info_incidencia.html')
 
+    @app.route('/informacion_incidencia_supervisor', methods=['GET', 'POST'])
+    def informacion_incidencia_supervisor():
+        todas_incidencias = get_incidencias();
+        return render_template('info_incidencia.html', userType=supervisor)
+
+
     @app.route('/registrar_nueva_incidencia', methods=['GET', 'POST'])
     def registrar_nueva_incidencia():
 
@@ -42,6 +48,8 @@ def create_app(test_config=None):
             idElementoInventario = form.get('idElementoInventario')
             fecha = form.get('fecha')
             categoria = form.get('categoria')
+            # quitar estos datos mockeados, habria que ponerlos en algun sitio por defecto o dejarlos a null en la bbd
+            # o definir los datos base cuando se crea una nueva incidencia y ponerlos aqui
             idIncidencia = randint(0, 9999999999)
             comentario = ''
             prioridad = 0
@@ -65,6 +73,8 @@ def create_app(test_config=None):
             db = get_db()
             error = None
             user = get_user(username)
+            userType = user['tipo']
+            session['userType'] = user['tipo']
 
             if user is None:
                 error = 'Incorrect username.'
@@ -74,16 +84,21 @@ def create_app(test_config=None):
             if error is None:
                 session.clear()
                 session['user_id'] = user['nick']
+
+                # se obtienen las incidencias del usuario introducido y luego, dependiendo del tipo de usuario,
+                # se carga una vista u otra, ya que las vistas son diferentes para cada usuario
+
+                if userType == 0:
+
+                if userType == 1:
+
+                if userType == 2:
+
                 return render_template('incidencias_cliente.html')
 
             flash(error)
 
+
         return render_template('login.html')
-
-    #from . import db
-    #db.init_app(app)
-
-    #from . import auth
-    #app.register_blueprint(auth.bp)
 
     return app

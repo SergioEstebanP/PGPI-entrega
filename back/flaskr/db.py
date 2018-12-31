@@ -56,7 +56,8 @@ def get_user(nick):
     db = get_db()
     cursor = db.cursor(dictionary=True)
 
-    cursor.execute('SELECT * FROM usuario WHERE nick LIKE %s', (nick, ))
+    sqlQuery = "SELECT * FROM usuario WHERE nick = '%s'" % (nick)
+    cursor.execute(sqlQuery)
     result = cursor.fetchone()
 
     return result
@@ -84,7 +85,7 @@ def get_incidencia(id):
     db = get_db()
     cursor = db.cursor(dictionary=True)
 
-    cursor.execute('SELECT * FROM usuario WHERE id = %d', (id, ))
+    cursor.execute('SELECT * FROM usuario WHERE id = %d', (id))
     result = cursor.fetchone()
 
     return result
