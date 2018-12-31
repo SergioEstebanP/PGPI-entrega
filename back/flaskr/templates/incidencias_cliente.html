@@ -78,10 +78,10 @@
                     <a href="/informacion_incidencia">
                         <p class="card-title">{{ incidencias[3*i+j]['titulo'] }}</p>
                         <hr>
-                        <p class="card-text">Descripción:</p>
-                        <p class="card-text .text-justify" id="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor ipsum et elit pulvinar, at condimentum velit porta. Suspendisse potenti.</p>
+                        <p class="card-text">Descripcion</p>
+                        <p class="card-text .text-justify" id="card-description">{{ incidencias[3*i+j]['descripcion'] }}</p>
                         <hr>
-                        <p class="card-text">Asignado a: Sergio.</p>
+                        <p class="card-text">Asignado a: {{ incidencias[3*i+j]['tecnicoAsignado'] }}.</p>
                     </a>
                 </div>
             </div>

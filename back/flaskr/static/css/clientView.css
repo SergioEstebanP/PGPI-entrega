@@ -5,11 +5,7 @@ html {
 }
 
 body{
-    background: #81bef7; /* fallback for old browsers */
-    background: -webkit-linear-gradient(right, #81bef7, #cee3f6);
-    background: -moz-linear-gradient(right, #81bef7, #cee3f6);
-    background: -o-linear-gradient(right, #81bef7, #cee3f6);
-    background: linear-gradient(to left, #81bef7, #cee3f6);
+    background: #FFFFFF; /* fallback for old browsers */
     font-family: "Roboto", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;      
