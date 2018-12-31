@@ -8,7 +8,7 @@ def get_db():
         db = mysql.connector.connect(
             user='PGPI_grupo02',
             passwd='JEbITzwe',
-            host='jair.lab.inf.uva.es',
+            host='localhost',
             database='PGPI_grupo02'
         )
 
@@ -46,7 +46,7 @@ def execute_command(command):
 def get_users():
     db = get_db()
     cursor = db.cursor(dictionary=True)
-    
+
     cursor.execute('SELECT * FROM usuario')
     result = cursor.fetchall()
 
@@ -55,7 +55,7 @@ def get_users():
 def get_user(nick):
     db = get_db()
     cursor = db.cursor(dictionary=True)
-    
+
     cursor.execute('SELECT * FROM usuario WHERE nick LIKE %s', (nick, ))
     result = cursor.fetchone()
 
@@ -64,17 +64,17 @@ def get_user(nick):
 #######################
 #     INCIDENCIA      #
 #######################
-def insert_incidencia(id, descripcion, estado, cliente, comentario=None, prioridad=None, tiempoEstimado=None, tecnico=None):
+def insert_incidencia(idIncidencia, descripcion, estado, cliente, comentario=None, prioridad=None, tiempoEstimado=None, tecnico=None):
     db = get_db()
     cursor = db.cursor()
 
-    cursor.execute('INSERT INTO incidencia VALUES (%d, %s, %d, %d, %s, %d, %s, %s)', (id, comentario, prioridad, tiempoEstimado, descripcion, estado, tecnico, cliente))
+    cursor.execute('INSERT INTO incidencia VALUES (%s, %s, %s, %s, %s, %s, %s, %s)', (idIncidencia, comentario, prioridad, tiempoEstimado, descripcion, estado, tecnico, cliente))
     db.commit()
 
 def get_incidencias():
     db = get_db()
     cursor = db.cursor(dictionary=True)
-    
+
     cursor.execute('SELECT * FROM incidencia')
     result = cursor.fetchall()
 
@@ -83,7 +83,7 @@ def get_incidencias():
 def get_incidencia(id):
     db = get_db()
     cursor = db.cursor(dictionary=True)
-    
+
     cursor.execute('SELECT * FROM usuario WHERE id = %d', (id, ))
     result = cursor.fetchone()
 
