@@ -2,7 +2,7 @@ import os
 from random import randint
 from collections import namedtuple
 
-from flask import Flask, render_template, request, flash, session, g
+from flask import Flask, render_template, request, flash, session, g, redirect, url_for
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from flask_login import UserMixin
 
@@ -23,10 +23,10 @@ def login():
 
         if user is None:
             flash('Incorrect username.')
-        elif password != user['password']:
+        elif password != user.password:
             flash('Incorrect password.')
         else:
-            login_user(load_user(user['nick']))
+            login_user(load_user(user.nick))
             return redirect(url_for('incidencias'))
 
     return render_template('login.html')
@@ -72,7 +72,7 @@ def registrar_nueva_incidencia():
 
 @login_manager.user_loader
 def load_user(nick):
-    return Usuario.get(Usuario.nick == nick)
+    return get_user(nick)
 
 
 
@@ -96,6 +96,9 @@ class Usuario(db.Model, UserMixin):
     biografia = db.Column(db.String(200))
     fotoPerfil = db.Column(db.String(200))
     tipo = db.Column(db.Integer)
+
+    def get_id(self):
+        return self.nick
 
 class Incidencia(db.Model):
     id = db.Column(db.Integer, primary_key=True)
