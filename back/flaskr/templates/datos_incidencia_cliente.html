@@ -9,19 +9,20 @@
     <h1 align="center">PGPIncidents - Introducir incidencia</h1>
   <div class="formCli">  
     
-    <form class="incidentCli">
+    <form class="incidentCli" method='POST' action='/registrar_nueva_incidencia'>
       
-      <input type="text" placeholder="Título"/>
-      <textarea placeholder="Descripción"></textarea>
-      <input type="text" placeholder="Id elemento inventario "/>
-      <input type="date" id="fecha">
-      <select name="Categoria" >
+      <input type="text" placeholder="Título" name="titlo"/>
+      <textarea placeholder="Descripción" name="descripcion"></textarea>
+      <input type="text" placeholder="Id elemento inventario " name="idElementoInventario"/>
+      <input type="date" id="fecha" name="fecha">
+      <select name="categoria">
         <option value="hw">Hardware</option>
         <option value="com">Comunicaciones</option>
         <option value="softwareBa">Software básico</option>
         <option value="softwareApp">Software de aplicaciones</option>
+        <option value="otros">Otros</option>
       </select>
-      <button>enviar</button>
+      <button type="submit">Enviar</button>
     </form>
   </div>
 </div>
