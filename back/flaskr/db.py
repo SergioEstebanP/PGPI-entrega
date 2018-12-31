@@ -81,11 +81,13 @@ def get_incidencias():
 
     return result
 
-def get_incidencia(id):
-    db = get_db()
+def get_incidencias_by_user(userNick):
+
     cursor = db.cursor(dictionary=True)
 
-    cursor.execute('SELECT * FROM usuario WHERE id = %d', (id))
-    result = cursor.fetchone()
+    sqlQuery = "SELECT * FROM incidencia WHERE reportadaPor = '%s'" % (userNick)
+    cursor.execute(sqlQuery)
+    result = cursor.fetchall()
 
     return result
+

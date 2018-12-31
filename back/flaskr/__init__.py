@@ -89,12 +89,20 @@ def create_app(test_config=None):
                 # se carga una vista u otra, ya que las vistas son diferentes para cada usuario
 
                 if userType == 0:
+                    # supervisor
+                    incidencias = get_incidencias()
+                    return render_template('incidencias_cliente.html', userType=userType, userName=username, incidencias=incidencias)
 
                 if userType == 1:
+                    # tecnico
+                    incidencias = get_incidencias_by_user(username)
+                    return render_template('incidencias_columnas.html', userType=userType, userName=username, incidencias=incidencias)
 
                 if userType == 2:
+                    # cliente
+                    incidencias = get_incidencias_by_user(username)
+                    return render_template('incidencias_cliente.html', userType=userType, userName=username, incidencias=incidencias)
 
-                return render_template('incidencias_cliente.html')
 
             flash(error)
 
