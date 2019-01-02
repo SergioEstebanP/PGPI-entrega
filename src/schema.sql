@@ -44,7 +44,7 @@ CREATE TABLE usuario(
 );
 
 CREATE TABLE incidencia(
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
     titulo VARCHAR(100),
     comentario VARCHAR(200),
     prioridad INTEGER,
