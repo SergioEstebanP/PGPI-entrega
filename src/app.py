@@ -1,10 +1,7 @@
 import os
-from random import randint
-from collections import namedtuple
-
-from flask import Flask, render_template, request, flash, session, g, redirect, url_for
-from flask_login import LoginManager, current_user, login_user, logout_user, login_required
-from flask_login import UserMixin
+from flask import Flask, render_template, request, flash, redirect, url_for
+from flask_login import LoginManager, current_user, login_user, logout_user, login_required, UserMixin
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
@@ -64,16 +61,17 @@ def registrar_nueva_incidencia():
         prioridad       = 0
         tiempoEstimado  = 0
         descripcion     = request.form.get('descripcion')
+        fecha           = datetime.strptime(request.form.get('fecha'), '%Y-%m-%d')
+        print('TIPO:  ', end='')
+        print(type(fecha))
+        print(fecha)
         estado          = 0
         tecnicoAsignado = 'sin asignar'
-        registradaPor   = current_user.nick
+        reportadaPor    = current_user.nick
+        idInventario    = request.form.get('idElementoInventario')
+        categoria       = request.form.get('categoria')
 
-        #Estos no se almacenan en la bbdd
-        idInventario   = request.form.get('idElementoInventario')
-        fecha          = request.form.get('fecha')
-        categoria      = request.form.get('categoria')
-
-        insert_incidencia(titulo, descripcion, estado, reportadaPor, comentario, prioridad, tiempoEstimado, tecnicoAsignado)
+        insert_incidencia(titulo, descripcion, fecha, estado, reportadaPor, categoria, comentario, prioridad, tiempoEstimado, tecnicoAsignado)
        
         return redirect(url_for('incidencias'))
       
@@ -104,7 +102,7 @@ class Usuario(db.Model, UserMixin):
     tipo = db.Column(db.Integer)
 
     def get_id(self):
-        return self.nick
+            return self.nick
 
 class Incidencia(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -113,10 +111,21 @@ class Incidencia(db.Model):
     prioridad = db.Column(db.Integer)
     tiempoEstimado = db.Column(db.Integer)
     descripcion = db.Column(db.String(200))
+    fecha = db.Column(db.DateTime)
     estado = db.Column(db.Integer)
     tecnicoAsignado = db.Column(db.String(50))
     reportadaPor = db.Column(db.String(50))
+    categoria = db.Column(db.String(40))
      
+class ElementoIncidencia(db.Model):
+    incidencia = db.Column(db.Integer, primary_key=True)
+    elemento = db.Column(db.Integer, primary_key=True)
+
+class Cambio(db.Model):
+    fecha = db.Column(db.DateTime, primary_key=True)
+    estado = db.Column(db.Integer)
+    tecnico = db.Column(db.String(50))
+    incidencia = db.Column(db.Integer)
 
 
 #######################
@@ -129,11 +138,12 @@ def get_users():
 def get_user(nick):
     return Usuario.query.get(nick)
 
+ 
 #######################
 #     INCIDENCIA      #
 #######################
-def insert_incidencia(titulo, descripcion, estado, reportadaPor, comentario=None, prioridad=None, tiempoEstimado=None, tecnicoAsignado=None):
-    db.session.add(Incidencia(titulo=titulo, comentario=comentario, prioridad=prioridad, tiempoEstimado=tiempoEstimado, descripcion=descripcion, estado=estado, tecnicoAsignado=tecnicoAsignado, reportadaPor=reportadaPor))
+def insert_incidencia(titulo, descripcion, fecha, estado, reportadaPor, categoria, comentario=None, prioridad=None, tiempoEstimado=None, tecnicoAsignado=None):
+    db.session.add(Incidencia(titulo=titulo, comentario=comentario, prioridad=prioridad, tiempoEstimado=tiempoEstimado, descripcion=descripcion, fecha=fecha, estado=estado, tecnicoAsignado=tecnicoAsignado, reportadaPor=reportadaPor, categoria=categoria))
     db.session.commit()
 
 def get_incidencias():
@@ -144,3 +154,22 @@ def get_incidencia(id):
 
 def get_incidencias_by_user(userNick):
     return list(Incidencia.query.filter_by(reportadaPor=userNick))
+
+
+#######################
+#     INVENTARIO      #
+#######################
+def insert_elemento_incidencia(incidencia, elemento):
+    db.session.add(ElementoIncidencia(incidencia=incidencia, elemento=elemento))
+    db.session.commit()
+
+def get_elementos_incidencia(incidencia):
+    return list(ElementoIncidencia.query.filter_by(incidencia=incidencia))
+
+
+#######################
+#       CAMBIO        #
+#######################
+def insert_cambio(estado, tecnico, incidencia, fecha=datetime.now()):
+    db.session.add(Cambio(fecha=fecha, estado=estado, tecnico=tecnico, incidencia=incidencia))
+    db.session.commit()
