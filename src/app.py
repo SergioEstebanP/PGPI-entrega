@@ -14,39 +14,39 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         user = get_user(username)
-
+        
         if user is None:
             flash('Incorrect username.')
         elif password != user.password:
             flash('Incorrect password.')
         else:
-            userType = user['tipo']
+            userType = user.tipo
             if userType == 0:
                     # supervisor
                     incidencias = get_incidencias()
                     login_user(load_user(user.nick))
                     return render_template('incidencias_cliente.html', userType=userType, userName=username, incidencias=incidencias)
 
-                if userType == 1:
+            if userType == 1:
                     # tecnico
                     incidencias = get_incidencias_by_user(username)
                     login_user(load_user(user.nick))
                     return render_template('incidencias_columnas.html', userType=userType, userName=username, incidencias=incidencias)
 
-                if userType == 2:
+            if userType == 2:
                     # cliente
                     incidencias = get_incidencias_by_user(username)
                     login_user(load_user(user.nick))
                     return render_template('incidencias_cliente.html', userType=userType, userName=username, incidencias=incidencias)
           
-     return render_template('login.html')
+    return render_template('login.html')
   
 
 @app.route("/logout")
@@ -55,9 +55,7 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-@app.route("/favicon.ico")
-def favicon():
-    return redirect(url_for('img/bola_azul.png'))
+
 
 @app.route('/incidencias')
 @login_required
@@ -85,15 +83,15 @@ def registrar_nueva_incidencia():
         idElementoInventario = form.get('idElementoInventario')
         fecha = form.get('fecha')
         categoria = form.get('categoria')
-        idIncidencia = randint(0, 9999999999)
+        idIncidencia=31
         comentario = ''
         prioridad = 0
         tiempoEstimado = 0
         tecnico = 'sin asignar'
 
-        insert_incidencia(idIncidencia, descripcion, 0, session.get('user_id'), comentario, prioridad, tiempoEstimado, tecnico)
-        
-        return render_template('incidencias_cliente.html')
+        insert_incidencia(idIncidencia, tituloIncidencia,descripcion, 0, current_user.nick, comentario, prioridad, tiempoEstimado, tecnico)
+       
+        return render_template('incidencias_cliente.html', incidencias=get_incidencias_by_user(current_user.nick))
       
     elif request.method == 'GET':
         return render_template('datos_incidencia_cliente.html')
@@ -113,6 +111,7 @@ from flask_login import UserMixin
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@127.0.0.1:3306/PGPI_grupo02'
 db = SQLAlchemy(app)
+
 
 class Usuario(db.Model, UserMixin):
     nick = db.Column(db.String(50), primary_key=True)
@@ -136,7 +135,7 @@ class Incidencia(db.Model):
     descripcion = db.Column(db.String(200))
     estado = db.Column(db.Integer)
     tecnicoAsignado = db.Column(db.String(50))
-    cliente = db.Column(db.String(50))
+    reportadaPor = db.Column(db.String(50))
      
 
 
@@ -144,7 +143,7 @@ class Incidencia(db.Model):
 #       USUARIO       #
 #######################
 def get_users():
-    return Usuario.query.all()
+    return list(Usuario.query.all())
 
 def get_user(nick):
     return Usuario.query.get(nick)
@@ -152,17 +151,17 @@ def get_user(nick):
 #######################
 #     INCIDENCIA      #
 #######################
-def insert_incidencia(id, titulo, desripcion, estado, cliente, comentario=None, prioridad=None, tiempoEstimado=None, tecnicoAsignado=None):
-    db.session.add(Incidencia(id, titulo, comentario, prioridad, tiempoEstimado, descripcion, estado, tecnicoAsignado, cliente))
+def insert_incidencia(id, titulo, descripcion, estado, cliente, comentario=None, prioridad=None, tiempoEstimado=None, tecnicoAsignado=None):
+    db.session.add(Incidencia(id=id, titulo=titulo, comentario=comentario, prioridad=prioridad, tiempoEstimado=tiempoEstimado, descripcion=descripcion, estado=estado, tecnicoAsignado=tecnicoAsignado, reportadaPor=cliente))
     db.session.commit()
 
 def get_incidencias():
-    return Incidencia.query.all()
+    return list(Incidencia.query.all())
 
 def get_incidencia(id):
     return Incidencia.query.get(id)
 
 def get_incidencias_by_user(userNick):
-    return Incidencia.query.filter_by(reportadaPor=userNick)
+    return list(Incidencia.query.filter_by(reportadaPor=userNick))
     
   
