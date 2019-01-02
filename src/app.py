@@ -27,27 +27,10 @@ def login():
         elif password != user.password:
             flash('Incorrect password.')
         else:
-            userType = user.tipo
-            if userType == 0:
-                # supervisor
-                incidencias = get_incidencias()
-                login_user(load_user(user.nick))
-                return render_template('incidencias_cliente.html', userType=userType, userName=username, incidencias=incidencias)
+            login_user(user)
+            return redirect(url_for('incidencias'))
 
-            if userType == 1:
-                # tecnico
-                incidencias = get_incidencias_by_user(username)
-                login_user(load_user(user.nick))
-                return render_template('incidencias_columnas.html', userType=userType, userName=username, incidencias=incidencias)
-
-            if userType == 2:
-                # cliente
-                incidencias = get_incidencias_by_user(username)
-                login_user(load_user(user.nick))
-                return render_template('incidencias_cliente.html', userType=userType, userName=username, incidencias=incidencias)
-          
     return render_template('login.html')
-  
 
 @app.route("/logout")
 @login_required
@@ -60,45 +43,42 @@ def logout():
 @app.route('/incidencias')
 @login_required
 def incidencias():
-    return render_template('incidencias_cliente.html')
+    if current_user.tipo == 0: # Supervisor
+        incidencias = get_incidencias()
+    else:
+        incidencias = get_incidencias_by_user(current_user.nick)
 
-@app.route('/informacion_incidencia', methods=['GET', 'POST'])
+    return render_template('incidencias_cliente.html', incidencias=incidencias)
+
+@app.route('/informacion_incidencia', methods=['GET'])
 @login_required
 def informacion_incidencia_cliente():
     return render_template('info_incidencia.html')
   
-@app.route('/informacion_incidencia_supervisor', methods=['GET', 'POST'])
-@login_required
-def informacion_incidencia_supervisor():
-    todas_incidencias = get_incidencias();
-    return render_template('info_incidencia.html', userType=supervisor)
-
 @app.route('/registrar_nueva_incidencia', methods=['GET', 'POST'])
 @login_required
 def registrar_nueva_incidencia():
     if request.method == 'POST':
-        form = request.form
-        tituloIncidencia = form.get('titulo')
-        descripcion = form.get('descripcion')
-        idElementoInventario = form.get('idElementoInventario')
-        fecha = form.get('fecha')
-        categoria = form.get('categoria')
-        comentario = ''
-        prioridad = 0
-        tiempoEstimado = 0
-        tecnico = 'sin asignar'
+        titulo          = request.form.get('titulo')
+        comentario      = ''
+        prioridad       = 0
+        tiempoEstimado  = 0
+        descripcion     = request.form.get('descripcion')
+        estado          = 0
+        tecnicoAsignado = 'sin asignar'
+        registradaPor   = current_user.nick
 
-        insert_incidencia(tituloIncidencia, descripcion, 0, current_user.nick, comentario, prioridad, tiempoEstimado, tecnico)
+        #Estos no se almacenan en la bbdd
+        idInventario   = request.form.get('idElementoInventario')
+        fecha          = request.form.get('fecha')
+        categoria      = request.form.get('categoria')
+
+        insert_incidencia(titulo, descripcion, estado, reportadaPor, comentario, prioridad, tiempoEstimado, tecnicoAsignado)
        
-        return render_template('incidencias_cliente.html', incidencias=get_incidencias_by_user(current_user.nick))
+        return redirect(url_for('incidencias'))
       
-    elif request.method == 'GET':
-        return render_template('datos_incidencia_cliente.html')
+    return render_template('datos_incidencia_cliente.html')
       
-@login_manager.user_loader
-def load_user(nick):
-    return get_user(nick)
-
 
 
 ###################################################
@@ -145,14 +125,15 @@ class Incidencia(db.Model):
 def get_users():
     return list(Usuario.query.all())
 
+@login_manager.user_loader
 def get_user(nick):
     return Usuario.query.get(nick)
 
 #######################
 #     INCIDENCIA      #
 #######################
-def insert_incidencia(titulo, descripcion, estado, cliente, comentario=None, prioridad=None, tiempoEstimado=None, tecnicoAsignado=None):
-    db.session.add(Incidencia(titulo=titulo, comentario=comentario, prioridad=prioridad, tiempoEstimado=tiempoEstimado, descripcion=descripcion, estado=estado, tecnicoAsignado=tecnicoAsignado, reportadaPor=cliente))
+def insert_incidencia(titulo, descripcion, estado, reportadaPor, comentario=None, prioridad=None, tiempoEstimado=None, tecnicoAsignado=None):
+    db.session.add(Incidencia(titulo=titulo, comentario=comentario, prioridad=prioridad, tiempoEstimado=tiempoEstimado, descripcion=descripcion, estado=estado, tecnicoAsignado=tecnicoAsignado, reportadaPor=reportadaPor))
     db.session.commit()
 
 def get_incidencias():
@@ -163,5 +144,3 @@ def get_incidencia(id):
 
 def get_incidencias_by_user(userNick):
     return list(Incidencia.query.filter_by(reportadaPor=userNick))
-    
-  
