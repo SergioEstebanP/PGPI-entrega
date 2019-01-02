@@ -31,19 +31,22 @@ def login():
             if userType == 0:
                     # supervisor
                     incidencias = get_incidencias()
+
+                    incidencias_abiertas = get_incidencias_abiertas_super()
+                    incidencias_notif_cierre = get_incidencias_notif_cierre_super()
+
                     login_user(load_user(user.nick))
-                    return render_template('incidencias_cliente.html', userType=userType, userName=username, incidencias=incidencias)
+                    return render_template('incidencias_supervisor.html', userType=userType, userName=username, incidencias=incidencias, incidencias_abiertas = incidencias_abiertas, incidencias_notif_cierre = incidencias_notif_cierre)
 
             if userType == 1:
                     # tecnico
                     incidencias = get_incidencias_by_user(username)
 
-                    incidencias_abiertas = get_incidencias_asignadas(username)
-                    incidencias_notif_resolucion = get_incidencias_notif_resolucion(username)
-                    incidencias_notif_cierre = get_incidencias_notif_cierrer(username)
+                    incidencias_abiertas = get_incidencias_abiertas(username)
+                    incidencias_notif_cierre = get_incidencias_notif_cierre(username)
 
                     login_user(load_user(user.nick))
-                    return render_template('incidencias_columnas.html', userType=userType, userName=username, incidencias=incidencias, incidencias_abiertas = incidencias_abiertas, incidencias_notif_cierre = incidencias_notif_cierre, incidencias_notif_resolucion = incidencias_notif_resolucion)
+                    return render_template('incidencias_columnas.html', userType=userType, userName=username, incidencias=incidencias, incidencias_abiertas = incidencias_abiertas, incidencias_notif_cierre = incidencias_notif_cierre)
 
             if userType == 2:
                     # cliente
@@ -71,9 +74,14 @@ def incidencias():
 @login_required
 def informacion_incidencia_cliente(idIncidencia):
     incidencias = get_incidencia(idIncidencia)
-    incidencia = incidencias[0]
-    print(incidencia[0].estado)
-    return render_template('info_incidencia.html', idIncidencia=idIncidencia, incidencia=incidencia)
+    listaTecnicos = get_tecnicos()
+    if request.method == 'POST':
+        tecnico = request.form['tecnicoAsignado']
+        cambio_estado_incidencia(idIncidencia, 1, tecnico)
+
+    print(incidencias[0].tecnicoAsignado)
+    print(incidencias[0].estado)
+    return render_template('info_incidencia.html', idIncidencia=idIncidencia, incidencias=incidencias, listaTecnicos=listaTecnicos)
 
 @app.route('/registrar_nueva_incidencia', methods=['GET', 'POST'])
 @login_required
@@ -85,7 +93,7 @@ def registrar_nueva_incidencia():
         idElementoInventario = form.get('idElementoInventario')
         fecha = form.get('fecha')
         categoria = form.get('categoria')
-        idIncidencia=90
+        idIncidencia = randint(0, 10000)
         comentario = ''
         prioridad = 0
         tiempoEstimado = 0
@@ -150,11 +158,20 @@ def get_users():
 def get_user(nick):
     return Usuario.query.get(nick)
 
+def get_tecnicos():
+    return list(Usuario.query.filter_by(tipo=1))
+
 #######################
 #     INCIDENCIA      #
 #######################
 def insert_incidencia(id, titulo, descripcion, estado, cliente, comentario=None, prioridad=None, tiempoEstimado=None, tecnicoAsignado=None):
     db.session.add(Incidencia(id=id, titulo=titulo, comentario=comentario, prioridad=prioridad, tiempoEstimado=tiempoEstimado, descripcion=descripcion, estado=estado, tecnicoAsignado=tecnicoAsignado, reportadaPor=cliente))
+    db.session.commit()
+
+def cambio_estado_incidencia(id, estado, tecnicoAsignado):
+    incidencia = Incidencia.query.get(id)
+    incidencia.estado = estado
+    incidencia.tecnicoAsignado = tecnicoAsignado
     db.session.commit()
 
 def get_incidencias():
@@ -167,14 +184,14 @@ def get_incidencias_by_user(userNick):
     return list(Incidencia.query.filter_by(reportadaPor=userNick))
 
 def get_incidencias_abiertas(userNick):
-    return list(Incidencia.query.filter_by(reportadaPor=userNick, estado=1))
+    return list(Incidencia.query.filter_by(tecnicoAsignado=userNick, estado=1))
 
-def get_incidencias_notif_resolucion(userNick):
+def get_incidencias_abiertas_super():
+    return list(Incidencia.query.filter_by(estado=0))
+
+def get_incidencias_notif_cierre_super():
+    return list(Incidencia.query.filter_by(estado=2))
+
+def get_incidencias_notif_cierre(userNick):
     return list(Incidencia.query.filter_by(reportadaPor=userNick, estado=2))
-
-def get_incidencias_notif_cierre_solucion(userNick):
-    return list(Incidencia.query.filter_by(reportadaPor=userNick, estado=3))
-
-def get_incidencias_notif_cierre_solucion(userNick):
-    return list(Incidencia.query.filter_by(reportadaPor=userNick, estado=4))
 
