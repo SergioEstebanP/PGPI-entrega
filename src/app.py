@@ -83,13 +83,12 @@ def registrar_nueva_incidencia():
         idElementoInventario = form.get('idElementoInventario')
         fecha = form.get('fecha')
         categoria = form.get('categoria')
-        idIncidencia=31
         comentario = ''
         prioridad = 0
         tiempoEstimado = 0
         tecnico = 'sin asignar'
 
-        insert_incidencia(idIncidencia, tituloIncidencia,descripcion, 0, current_user.nick, comentario, prioridad, tiempoEstimado, tecnico)
+        insert_incidencia(tituloIncidencia, descripcion, 0, current_user.nick, comentario, prioridad, tiempoEstimado, tecnico)
        
         return render_template('incidencias_cliente.html', incidencias=get_incidencias_by_user(current_user.nick))
       
@@ -151,8 +150,8 @@ def get_user(nick):
 #######################
 #     INCIDENCIA      #
 #######################
-def insert_incidencia(id, titulo, descripcion, estado, cliente, comentario=None, prioridad=None, tiempoEstimado=None, tecnicoAsignado=None):
-    db.session.add(Incidencia(id=id, titulo=titulo, comentario=comentario, prioridad=prioridad, tiempoEstimado=tiempoEstimado, descripcion=descripcion, estado=estado, tecnicoAsignado=tecnicoAsignado, reportadaPor=cliente))
+def insert_incidencia(titulo, descripcion, estado, cliente, comentario=None, prioridad=None, tiempoEstimado=None, tecnicoAsignado=None):
+    db.session.add(Incidencia(titulo=titulo, comentario=comentario, prioridad=prioridad, tiempoEstimado=tiempoEstimado, descripcion=descripcion, estado=estado, tecnicoAsignado=tecnicoAsignado, reportadaPor=cliente))
     db.session.commit()
 
 def get_incidencias():
