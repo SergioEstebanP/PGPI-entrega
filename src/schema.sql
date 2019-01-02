@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS elementoInventario;
 DROP TABLE IF EXISTS elementoIncidencia;
 DROP TABLE IF EXISTS cambio;
 
+
 /* Valores para estado de la incidencia:
     [0, abierta]
     [1, asignada a un tecnico]
@@ -19,6 +20,7 @@ CREATE TABLE estado(
     id INTEGER PRIMARY KEY,
     estado VARCHAR (30)
 );
+
 
 /* Valores para tipo de ususario:
     [0, supervisor]

@@ -1,205 +1,168 @@
 import os
-
-from flask import Flask, render_template, request, flash, session, g
-from flaskr.db import *
 from random import randint
+from collections import namedtuple
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80)
+from flask import Flask, render_template, request, flash, session, g, redirect, url_for
+from flask_login import LoginManager, current_user, login_user, logout_user, login_required
+from flask_login import UserMixin
 
-def create_app(test_config=None):
-    # create and configure the app
-    app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(
-        SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
-    )
+app = Flask(__name__)
+app.config['SECRET_KEY'] = os.urandom(24)
 
-    if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.config.from_pyfile('config.py', silent=True)
-    else:
-        # load the test config if passed in
-        app.config.from_mapping(test_config)
-
-    # ensure the instance folder exists
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
-
-    @app.route('/informacion_incidencia', methods=['GET', 'POST'])
-    def informacion_incidencia_cliente():
-            return render_template('info_incidencia.html')
-
-    @app.route('/informacion_incidencia_supervisor', methods=['GET', 'POST'])
-    def informacion_incidencia_supervisor():
-        todas_incidencias = get_incidencias();
-        return render_template('info_incidencia.html', userType=supervisor)
+login_manager = LoginManager(app)
+login_manager.init_app(app)
+login_manager.login_view = 'login'
 
 
-    @app.route('/registrar_nueva_incidencia', methods=['GET', 'POST'])
-    def registrar_nueva_incidencia():
+@app.route('/')
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = get_user(username)
 
-        if request.method == 'POST':
-            form = request.form
-            tituloIncidencia = form.get('titulo')
-            descripcion = form.get('descripcion')
-            idElementoInventario = form.get('idElementoInventario')
-            fecha = form.get('fecha')
-            categoria = form.get('categoria')
-            # quitar estos datos mockeados, habria que ponerlos en algun sitio por defecto o dejarlos a null en la bbd
-            # o definir los datos base cuando se crea una nueva incidencia y ponerlos aqui
-            idIncidencia = randint(0, 9999999999)
-            comentario = ''
-            prioridad = 0
-            tiempoEstimado = 0
-            tecnico = 'sin asignar'
-
-            insert_incidencia(idIncidencia, descripcion, 0, session.get('user_id'), comentario, prioridad, tiempoEstimado, tecnico)
-
-            return render_template('incidencias_cliente.html')
-
-        elif request.method == 'GET':
-            return render_template('datos_incidencia_cliente.html')
-
-    @app.route('/', methods=('GET', 'POST'))
-    def login():
-
-        if request.method == 'POST':
-            username = request.form['username']
-            password = request.form['password']
-            session['userNick'] = username
-            db = get_db()
-            error = None
-            user = get_user(username)
+        if user is None:
+            flash('Incorrect username.')
+        elif password != user.password:
+            flash('Incorrect password.')
+        else:
             userType = user['tipo']
-            session['userType'] = user['tipo']
-
-            if user is None:
-                error = 'Incorrect username.'
-            elif password != user['password']:
-                error = 'Incorrect password.'
-
-            if error is None:
-                session.clear()
-                session['user_id'] = user['nick']
-
-                # se obtienen las incidencias del usuario introducido y luego, dependiendo del tipo de usuario,
-                # se carga una vista u otra, ya que las vistas son diferentes para cada usuario
-
-                if userType == 0:
+            if userType == 0:
                     # supervisor
                     incidencias = get_incidencias()
+                    login_user(load_user(user.nick))
                     return render_template('incidencias_cliente.html', userType=userType, userName=username, incidencias=incidencias)
 
                 if userType == 1:
                     # tecnico
                     incidencias = get_incidencias_by_user(username)
+                    login_user(load_user(user.nick))
                     return render_template('incidencias_columnas.html', userType=userType, userName=username, incidencias=incidencias)
 
                 if userType == 2:
                     # cliente
                     incidencias = get_incidencias_by_user(username)
+                    login_user(load_user(user.nick))
                     return render_template('incidencias_cliente.html', userType=userType, userName=username, incidencias=incidencias)
+          
+     return render_template('login.html')
+  
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+
+@app.route("/favicon.ico")
+def favicon():
+    return redirect(url_for('img/bola_azul.png'))
+
+@app.route('/incidencias')
+@login_required
+def incidencias():
+    return render_template('incidencias_cliente.html')
+
+@app.route('/informacion_incidencia', methods=['GET', 'POST'])
+@login_required
+def informacion_incidencia_cliente():
+    return render_template('info_incidencia.html')
+  
+@app.route('/informacion_incidencia_supervisor', methods=['GET', 'POST'])
+@login_required
+def informacion_incidencia_supervisor():
+    todas_incidencias = get_incidencias();
+    return render_template('info_incidencia.html', userType=supervisor)
+
+@app.route('/registrar_nueva_incidencia', methods=['GET', 'POST'])
+@login_required
+def registrar_nueva_incidencia():
+    if request.method == 'POST':
+        form = request.form
+        tituloIncidencia = form.get('titulo')
+        descripcion = form.get('descripcion')
+        idElementoInventario = form.get('idElementoInventario')
+        fecha = form.get('fecha')
+        categoria = form.get('categoria')
+        idIncidencia = randint(0, 9999999999)
+        comentario = ''
+        prioridad = 0
+        tiempoEstimado = 0
+        tecnico = 'sin asignar'
+
+        insert_incidencia(idIncidencia, descripcion, 0, session.get('user_id'), comentario, prioridad, tiempoEstimado, tecnico)
+        
+        return render_template('incidencias_cliente.html')
+      
+    elif request.method == 'GET':
+        return render_template('datos_incidencia_cliente.html')
+      
+@login_manager.user_loader
+def load_user(nick):
+    return get_user(nick)
 
 
-            flash(error)
 
+###################################################
+###                 DATABASE                    ###
+###################################################
 
-        return render_template('login.html')
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
 
-    return app
-import mysql.connector
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@127.0.0.1:3306/PGPI_grupo02'
+db = SQLAlchemy(app)
 
-db = None
+class Usuario(db.Model, UserMixin):
+    nick = db.Column(db.String(50), primary_key=True)
+    email = db.Column(db.String(50))
+    password = db.Column(db.String(50))
+    nombre = db.Column(db.String(50))
+    apellidos = db.Column(db.String(100))
+    biografia = db.Column(db.String(200))
+    fotoPerfil = db.Column(db.String(200))
+    tipo = db.Column(db.Integer)
 
-def get_db():
-    global db
-    if not db:
-        db = mysql.connector.connect(
-            user='PGPI_grupo02',
-            passwd='JEbITzwe',
-            host='localhost',
-            database='PGPI_grupo02'
-        )
+    def get_id(self):
+        return self.nick
 
-    return db
-
-def close_db():
-    global db
-    if db:
-        db.close()
-        db = None
-
-def init_db():
-    db = get_db()
-    cursor = db.cursor()
-
-    for line in open('schema.sql'):
-        cursor.execute(line)
-        db.commit()
-
-def execute_command(command):
-    db = get_db()
-    cursor = db.cursor(dictionary=True)
-
-    cursor.execute(command)
-    db.commit()
-    result = cursor.fetchall()
-
-    return result
-
+class Incidencia(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    titulo = db.Column(db.String(100))
+    comentario = db.Column(db.String(200))
+    prioridad = db.Column(db.Integer)
+    tiempoEstimado = db.Column(db.Integer)
+    descripcion = db.Column(db.String(200))
+    estado = db.Column(db.Integer)
+    tecnicoAsignado = db.Column(db.String(50))
+    cliente = db.Column(db.String(50))
+     
 
 
 #######################
 #       USUARIO       #
 #######################
 def get_users():
-    db = get_db()
-    cursor = db.cursor(dictionary=True)
-
-    cursor.execute('SELECT * FROM usuario')
-    result = cursor.fetchall()
-
-    return result
+    return Usuario.query.all()
 
 def get_user(nick):
-    db = get_db()
-    cursor = db.cursor(dictionary=True)
-
-    sqlQuery = "SELECT * FROM usuario WHERE nick = '%s'" % (nick)
-    cursor.execute(sqlQuery)
-    result = cursor.fetchone()
-
-    return result
+    return Usuario.query.get(nick)
 
 #######################
 #     INCIDENCIA      #
 #######################
-def insert_incidencia(idIncidencia, descripcion, estado, cliente, comentario=None, prioridad=None, tiempoEstimado=None, tecnico=None):
-    db = get_db()
-    cursor = db.cursor()
-
-    cursor.execute('INSERT INTO incidencia VALUES (%s, %s, %s, %s, %s, %s, %s, %s)', (idIncidencia, comentario, prioridad, tiempoEstimado, descripcion, estado, tecnico, cliente))
-    db.commit()
+def insert_incidencia(id, titulo, desripcion, estado, cliente, comentario=None, prioridad=None, tiempoEstimado=None, tecnicoAsignado=None):
+    db.session.add(Incidencia(id, titulo, comentario, prioridad, tiempoEstimado, descripcion, estado, tecnicoAsignado, cliente))
+    db.session.commit()
 
 def get_incidencias():
-    db = get_db()
-    cursor = db.cursor(dictionary=True)
+    return Incidencia.query.all()
 
-    cursor.execute('SELECT * FROM incidencia')
-    result = cursor.fetchall()
-
-    return result
+def get_incidencia(id):
+    return Incidencia.query.get(id)
 
 def get_incidencias_by_user(userNick):
-
-    cursor = db.cursor(dictionary=True)
-
-    sqlQuery = "SELECT * FROM incidencia WHERE reportadaPor = '%s'" % (userNick)
-    cursor.execute(sqlQuery)
-    result = cursor.fetchall()
-
-    return result
-
+    return Incidencia.query.filter_by(reportadaPor=userNick)
+    
+  
