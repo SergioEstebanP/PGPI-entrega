@@ -14,6 +14,7 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 
+@app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -37,6 +38,9 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
+@app.route("/favicon.ico")
+def favicon():
+    return redirect(url_for('img/bola_azul.png'))
 
 @app.route('/incidencias')
 @login_required
@@ -83,8 +87,7 @@ def load_user(nick):
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@localhost:3306/PGPI_grupo02'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@127.0.0.1:3306/PGPI_grupo02'
 db = SQLAlchemy(app)
 
 class Usuario(db.Model, UserMixin):
@@ -111,30 +114,6 @@ class Incidencia(db.Model):
     tecnicoAsignado = db.Column(db.String(50))
     cliente = db.Column(db.String(50))
 
-def close_db():
-    #global db
-    if db:
-        db.close()
-        db = None
-
-def init_db():
-    cursor = db.cursor()
-
-    for line in open('schema.sql'):
-        cursor.execute(line)
-        db.commit()
-
-def execute_command(command):
-    #db = get_db()
-    cursor = db.cursor(dictionary=True)
-
-    cursor.execute(command)
-    db.commit()
-    result = cursor.fetchall()
-
-    return result
-
-
 
 #######################
 #       USUARIO       #
@@ -145,32 +124,15 @@ def get_users():
 def get_user(nick):
     return Usuario.query.get(nick)
 
-'''
 #######################
 #     INCIDENCIA      #
 #######################
-def insert_incidencia(idIncidencia, descripcion, estado, cliente, comentario=None, prioridad=None, tiempoEstimado=None, tecnico=None):
-    #db = get_db()
-    cursor = db.cursor()
-
-    cursor.execute('INSERT INTO incidencia VALUES (%s, %s, %s, %s, %s, %s, %s, %s)', (idIncidencia, comentario, prioridad, tiempoEstimado, descripcion, estado, tecnico, cliente))
-    db.commit()
+def insert_incidencia(id, titulo, desripcion, estado, cliente, comentario=None, prioridad=None, tiempoEstimado=None, tecnicoAsignado=None):
+    db.session.add(Incidencia(id, titulo, comentario, prioridad, tiempoEstimado, descripcion, estado, tecnicoAsignado, cliente))
+    db.session.commit()
 
 def get_incidencias():
-    #db = get_db()
-    cursor = db.cursor(dictionary=True)
-
-    cursor.execute('SELECT * FROM incidencia')
-    result = cursor.fetchall()
-
-    return result
+    return Incidencia.query.all()
 
 def get_incidencia(id):
-    #db = get_db()
-    cursor = db.cursor(dictionary=True)
-
-    cursor.execute('SELECT * FROM usuario WHERE id = %d', (id, ))
-    result = cursor.fetchone()
-
-    return result
-'''
+    return Incidencia.query.get(id)
