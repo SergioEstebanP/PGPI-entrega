@@ -29,22 +29,22 @@ def login():
         else:
             userType = user.tipo
             if userType == 0:
-                    # supervisor
-                    incidencias = get_incidencias()
-                    login_user(load_user(user.nick))
-                    return render_template('incidencias_cliente.html', userType=userType, userName=username, incidencias=incidencias)
+                # supervisor
+                incidencias = get_incidencias()
+                login_user(load_user(user.nick))
+                return render_template('incidencias_cliente.html', userType=userType, userName=username, incidencias=incidencias)
 
             if userType == 1:
-                    # tecnico
-                    incidencias = get_incidencias_by_user(username)
-                    login_user(load_user(user.nick))
-                    return render_template('incidencias_columnas.html', userType=userType, userName=username, incidencias=incidencias)
+                # tecnico
+                incidencias = get_incidencias_by_user(username)
+                login_user(load_user(user.nick))
+                return render_template('incidencias_columnas.html', userType=userType, userName=username, incidencias=incidencias)
 
             if userType == 2:
-                    # cliente
-                    incidencias = get_incidencias_by_user(username)
-                    login_user(load_user(user.nick))
-                    return render_template('incidencias_cliente.html', userType=userType, userName=username, incidencias=incidencias)
+                # cliente
+                incidencias = get_incidencias_by_user(username)
+                login_user(load_user(user.nick))
+                return render_template('incidencias_cliente.html', userType=userType, userName=username, incidencias=incidencias)
           
     return render_template('login.html')
   
@@ -109,6 +109,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@127.0.0.1:3306/PGPI_grupo02'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
