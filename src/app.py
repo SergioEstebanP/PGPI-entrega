@@ -27,10 +27,27 @@ def login():
         elif password != user.password:
             flash('Incorrect password.')
         else:
-            login_user(load_user(user.nick))
-            return redirect(url_for('incidencias'))
+            userType = user['tipo']
+            if userType == 0:
+                    # supervisor
+                    incidencias = get_incidencias()
+                    login_user(load_user(user.nick))
+                    return render_template('incidencias_cliente.html', userType=userType, userName=username, incidencias=incidencias)
 
-    return render_template('login.html')
+                if userType == 1:
+                    # tecnico
+                    incidencias = get_incidencias_by_user(username)
+                    login_user(load_user(user.nick))
+                    return render_template('incidencias_columnas.html', userType=userType, userName=username, incidencias=incidencias)
+
+                if userType == 2:
+                    # cliente
+                    incidencias = get_incidencias_by_user(username)
+                    login_user(load_user(user.nick))
+                    return render_template('incidencias_cliente.html', userType=userType, userName=username, incidencias=incidencias)
+          
+     return render_template('login.html')
+  
 
 @app.route("/logout")
 @login_required
@@ -51,6 +68,12 @@ def incidencias():
 @login_required
 def informacion_incidencia_cliente():
     return render_template('info_incidencia.html')
+  
+@app.route('/informacion_incidencia_supervisor', methods=['GET', 'POST'])
+@login_required
+def informacion_incidencia_supervisor():
+    todas_incidencias = get_incidencias();
+    return render_template('info_incidencia.html', userType=supervisor)
 
 @app.route('/registrar_nueva_incidencia', methods=['GET', 'POST'])
 @login_required
@@ -69,11 +92,12 @@ def registrar_nueva_incidencia():
         tecnico = 'sin asignar'
 
         insert_incidencia(idIncidencia, descripcion, 0, session.get('user_id'), comentario, prioridad, tiempoEstimado, tecnico)
-
+        
         return render_template('incidencias_cliente.html')
-
-    return render_template('datos_incidencia_cliente.html')
-
+      
+    elif request.method == 'GET':
+        return render_template('datos_incidencia_cliente.html')
+      
 @login_manager.user_loader
 def load_user(nick):
     return get_user(nick)
@@ -113,6 +137,7 @@ class Incidencia(db.Model):
     estado = db.Column(db.Integer)
     tecnicoAsignado = db.Column(db.String(50))
     cliente = db.Column(db.String(50))
+     
 
 
 #######################
@@ -136,3 +161,8 @@ def get_incidencias():
 
 def get_incidencia(id):
     return Incidencia.query.get(id)
+
+def get_incidencias_by_user(userNick):
+    return Incidencia.query.filter_by(reportadaPor=userNick)
+    
+  

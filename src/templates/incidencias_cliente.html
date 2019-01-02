@@ -60,81 +60,34 @@
         <!-- Body -->
         <div class="row" style="width: 100%; padding-top: 0.5em; padding-bottom: 0.5em; font-size: 2em;">
             <div class="col">
-                <p class="text-center">Incidencias Abiertas para un cliente</p>
+                {% if userType == 0 %}
+                <p class="text-center">Todas las Incidencias del Sistema</p>
+                {% elif userType == 2 %}
+                <p class="text-center">Incidencias abiertas por {{ userName }}</p>
+                {% endif %}
             </div>
         </div>
 
+        {% for i in range(2) %}
         <div class="card-deck" style="margin: 1em;">
+
+            {% for j in range(3) %}
             <div class="card" id="card1">
                 <div class="card-body">
                     <a href="/informacion_incidencia">
-                        <p class="card-title">Probar la conexión con la base de datos</p>
+                        <p class="card-title">{{ incidencias[3*i+j]['titulo'] }}</p>
                         <hr>
-                        <p class="card-text">Descripción:</p>
-                        <p class="card-text .text-justify" id="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor ipsum et elit pulvinar, at condimentum velit porta. Suspendisse potenti.</p>
+                        <p class="card-text">Descripcion</p>
+                        <p class="card-text .text-justify" id="card-description">{{ incidencias[3*i+j]['descripcion'] }}</p>
                         <hr>
-                        <p class="card-text">Asignado a: Sergio.</p>
+                        <p class="card-text">Asignado a: {{ incidencias[3*i+j]['tecnicoAsignado'] }}.</p>
                     </a>
                 </div>
             </div>
-
-            <div class="card" id="card1">
-                <div class="card-body">
-                    <p class="card-title">Empezar la implementación del backend</p>
-                    <hr>
-                    <p class="card-text">Descripción:</p>
-                    <p class="card-text .text-justify" id="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor ipsum et elit pulvinar, at condimentum velit porta. Suspendisse potenti.</p>
-                    <hr>
-                    <p class="card-text">Asignado a: Marta.</p>
-                </div>
-            </div>
-
-            <div class="card" id="card1">
-                <div class="card-body">
-                    <p class="card-title">Diseñar la base de datos</p>
-                    <hr>
-                    <p class="card-text">Descripción:</p>
-                    <p class="card-text .text-justify" id="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor ipsum et elit pulvinar, at condimentum velit porta. Suspendisse potenti.</p>
-                    <hr>
-                    <p class="card-text">Asignado a: Nacho.</p>
-                </div>
-            </div>
+            {% endfor %}
         </div>
+        {% endfor %}
 
-        <div class="card-deck" style="margin: 1em;">
-            <div class="card" id="card2">
-                <div class="card-body">
-                    <p class="card-title">Probar la conexión con la base de datos</p>
-                    <hr>
-                    <p class="card-text">Descripción:</p>
-                    <p class="card-text .text-justify" id="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor ipsum et elit pulvinar, at condimentum velit porta. Suspendisse potenti.</p>
-                    <hr>
-                    <p class="card-text">Asignado a: Sergio.</p>
-                </div>
-            </div>
-
-            <div class="card" id="card2">
-                <div class="card-body">
-                    <p class="card-title">Empezar la implementación del backend</p>
-                    <hr>
-                    <p class="card-text">Descripción:</p>
-                    <p class="card-text .text-justify" id="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor ipsum et elit pulvinar, at condimentum velit porta. Suspendisse potenti.</p>
-                    <hr>
-                    <p class="card-text">Asignado a: Marta.</p>
-                </div>
-            </div>
-
-            <div class="card" id="card2">
-                <div class="card-body">
-                    <p class="card-title">Diseñar la base de datos</p>
-                    <hr>
-                    <p class="card-text">Descripción:</p>
-                    <p class="card-text .text-justify" id="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor ipsum et elit pulvinar, at condimentum velit porta. Suspendisse potenti.</p>
-                    <hr>
-                    <p class="card-text">Asignado a: Nacho.</p>
-                </div>
-            </div>
-        </div>
     </div>
 
     <script>
