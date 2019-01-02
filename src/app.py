@@ -37,8 +37,13 @@ def login():
             if userType == 1:
                     # tecnico
                     incidencias = get_incidencias_by_user(username)
+
+                    incidencias_abiertas = get_incidencias_asignadas(username)
+                    incidencias_notif_resolucion = get_incidencias_notif_resolucion(username)
+                    incidencias_notif_cierre = get_incidencias_notif_cierrer(username)
+
                     login_user(load_user(user.nick))
-                    return render_template('incidencias_columnas.html', userType=userType, userName=username, incidencias=incidencias)
+                    return render_template('incidencias_columnas.html', userType=userType, userName=username, incidencias=incidencias, incidencias_abiertas = incidencias_abiertas, incidencias_notif_cierre = incidencias_notif_cierre, incidencias_notif_resolucion = incidencias_notif_resolucion)
 
             if userType == 2:
                     # cliente
@@ -62,16 +67,13 @@ def logout():
 def incidencias():
     return render_template('incidencias_cliente.html')
 
-@app.route('/informacion_incidencia/<id>', methods=['GET', 'POST'])
+@app.route('/informacion_incidencia/<idIncidencia>', methods=['GET', 'POST'])
 @login_required
-def informacion_incidencia_cliente(id):
-    return render_template('info_incidencia.html', id)
-
-@app.route('/informacion_incidencia_supervisor', methods=['GET', 'POST'])
-@login_required
-def informacion_incidencia_supervisor():
-    todas_incidencias = get_incidencias();
-    return render_template('info_incidencia.html', userType=supervisor)
+def informacion_incidencia_cliente(idIncidencia):
+    incidencias = get_incidencia(idIncidencia)
+    incidencia = incidencias[0]
+    print(incidencia[0].estado)
+    return render_template('info_incidencia.html', idIncidencia=idIncidencia, incidencia=incidencia)
 
 @app.route('/registrar_nueva_incidencia', methods=['GET', 'POST'])
 @login_required
@@ -83,7 +85,7 @@ def registrar_nueva_incidencia():
         idElementoInventario = form.get('idElementoInventario')
         fecha = form.get('fecha')
         categoria = form.get('categoria')
-        idIncidencia=31
+        idIncidencia=90
         comentario = ''
         prioridad = 0
         tiempoEstimado = 0
@@ -109,7 +111,7 @@ def load_user(nick):
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@127.0.0.1:3306/PGPI_grupo02'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@jair.lab.inf.uva.es:3306/PGPI_grupo02'
 db = SQLAlchemy(app)
 
 
@@ -159,9 +161,20 @@ def get_incidencias():
     return list(Incidencia.query.all())
 
 def get_incidencia(id):
-    return Incidencia.query.get(id)
+    return list(Incidencia.query.filter_by(id=id))
 
 def get_incidencias_by_user(userNick):
     return list(Incidencia.query.filter_by(reportadaPor=userNick))
 
+def get_incidencias_abiertas(userNick):
+    return list(Incidencia.query.filter_by(reportadaPor=userNick, estado=1))
+
+def get_incidencias_notif_resolucion(userNick):
+    return list(Incidencia.query.filter_by(reportadaPor=userNick, estado=2))
+
+def get_incidencias_notif_cierre_solucion(userNick):
+    return list(Incidencia.query.filter_by(reportadaPor=userNick, estado=3))
+
+def get_incidencias_notif_cierre_solucion(userNick):
+    return list(Incidencia.query.filter_by(reportadaPor=userNick, estado=4))
 
