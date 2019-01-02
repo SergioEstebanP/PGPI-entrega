@@ -21,7 +21,7 @@ def login():
         username = request.form['username']
         password = request.form['password']
         user = get_user(username)
-        
+
         if user is None:
             flash('Incorrect username.')
         elif password != user.password:
@@ -45,9 +45,9 @@ def login():
                     incidencias = get_incidencias_by_user(username)
                     login_user(load_user(user.nick))
                     return render_template('incidencias_cliente.html', userType=userType, userName=username, incidencias=incidencias)
-          
+
     return render_template('login.html')
-  
+
 
 @app.route("/logout")
 @login_required
@@ -62,11 +62,11 @@ def logout():
 def incidencias():
     return render_template('incidencias_cliente.html')
 
-@app.route('/informacion_incidencia', methods=['GET', 'POST'])
+@app.route('/informacion_incidencia/<id>', methods=['GET', 'POST'])
 @login_required
-def informacion_incidencia_cliente():
-    return render_template('info_incidencia.html')
-  
+def informacion_incidencia_cliente(id):
+    return render_template('info_incidencia.html', id)
+
 @app.route('/informacion_incidencia_supervisor', methods=['GET', 'POST'])
 @login_required
 def informacion_incidencia_supervisor():
@@ -90,12 +90,12 @@ def registrar_nueva_incidencia():
         tecnico = 'sin asignar'
 
         insert_incidencia(idIncidencia, tituloIncidencia,descripcion, 0, current_user.nick, comentario, prioridad, tiempoEstimado, tecnico)
-       
+
         return render_template('incidencias_cliente.html', incidencias=get_incidencias_by_user(current_user.nick))
-      
+
     elif request.method == 'GET':
         return render_template('datos_incidencia_cliente.html')
-      
+
 @login_manager.user_loader
 def load_user(nick):
     return get_user(nick)
@@ -136,7 +136,7 @@ class Incidencia(db.Model):
     estado = db.Column(db.Integer)
     tecnicoAsignado = db.Column(db.String(50))
     reportadaPor = db.Column(db.String(50))
-     
+
 
 
 #######################
@@ -163,5 +163,5 @@ def get_incidencia(id):
 
 def get_incidencias_by_user(userNick):
     return list(Incidencia.query.filter_by(reportadaPor=userNick))
-    
-  
+
+
