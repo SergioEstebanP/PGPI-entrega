@@ -83,7 +83,7 @@ def registrar_nueva_incidencia():
         idElementoInventario = form.get('idElementoInventario')
         fecha = form.get('fecha')
         categoria = form.get('categoria')
-        idIncidencia=28
+        idIncidencia=31
         comentario = ''
         prioridad = 0
         tiempoEstimado = 0
@@ -143,7 +143,7 @@ class Incidencia(db.Model):
 #       USUARIO       #
 #######################
 def get_users():
-    return Usuario.query.all()
+    return list(Usuario.query.all())
 
 def get_user(nick):
     return Usuario.query.get(nick)
@@ -156,12 +156,12 @@ def insert_incidencia(id, titulo, descripcion, estado, cliente, comentario=None,
     db.session.commit()
 
 def get_incidencias():
-    return Incidencia.query.all()
+    return list(Incidencia.query.all())
 
 def get_incidencia(id):
     return Incidencia.query.get(id)
 
 def get_incidencias_by_user(userNick):
-    return Incidencia.query.filter_by(reportadaPor=userNick)
+    return list(Incidencia.query.filter_by(reportadaPor=userNick))
     
   

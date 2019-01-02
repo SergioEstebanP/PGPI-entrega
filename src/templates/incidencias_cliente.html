@@ -68,7 +68,7 @@
             </div>
         </div>
 
-        {% for i in range(2) %}
+        {% for i in range(((incidencias|length)/3)|int) %}
         <div class="card-deck" style="margin: 1em;">
 
             {% for j in range(3) %}
@@ -87,6 +87,24 @@
             {% endfor %}
         </div>
         {% endfor %}
+        {% set i=((incidencias|length)/3)|int %}
+        <div class="card-deck" style="margin: 1em;">
+        {% for j in range((incidencias|length)%3) %}
+        
+            <div class="card" id="card1">
+                <div class="card-body">
+                    <a href="/informacion_incidencia">
+                        <p class="card-title">{{ incidencias[3*i+j]['titulo'] }}</p>
+                        <hr>
+                        <p class="card-text">Descripcion</p>
+                        <p class="card-text .text-justify" id="card-description">{{ incidencias[3*i+j]['descripcion'] }}</p>
+                        <hr>
+                        <p class="card-text">Asignado a: {{ incidencias[3*i+j]['tecnicoAsignado'] }}.</p>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
 
     </div>
 
