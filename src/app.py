@@ -14,39 +14,39 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         user = get_user(username)
-
+        
         if user is None:
             flash('Incorrect username.')
         elif password != user.password:
             flash('Incorrect password.')
         else:
-            userType = user['tipo']
+            userType = user.tipo
             if userType == 0:
                     # supervisor
                     incidencias = get_incidencias()
                     login_user(load_user(user.nick))
                     return render_template('incidencias_cliente.html', userType=userType, userName=username, incidencias=incidencias)
 
-                if userType == 1:
+            if userType == 1:
                     # tecnico
                     incidencias = get_incidencias_by_user(username)
                     login_user(load_user(user.nick))
                     return render_template('incidencias_columnas.html', userType=userType, userName=username, incidencias=incidencias)
 
-                if userType == 2:
+            if userType == 2:
                     # cliente
                     incidencias = get_incidencias_by_user(username)
                     login_user(load_user(user.nick))
                     return render_template('incidencias_cliente.html', userType=userType, userName=username, incidencias=incidencias)
           
-     return render_template('login.html')
+    return render_template('login.html')
   
 
 @app.route("/logout")
@@ -55,9 +55,7 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-@app.route("/favicon.ico")
-def favicon():
-    return redirect(url_for('img/bola_azul.png'))
+
 
 @app.route('/incidencias')
 @login_required
@@ -136,7 +134,7 @@ class Incidencia(db.Model):
     descripcion = db.Column(db.String(200))
     estado = db.Column(db.Integer)
     tecnicoAsignado = db.Column(db.String(50))
-    cliente = db.Column(db.String(50))
+    reportadaPor = db.Column(db.String(50))
      
 
 
@@ -152,7 +150,7 @@ def get_user(nick):
 #######################
 #     INCIDENCIA      #
 #######################
-def insert_incidencia(id, titulo, desripcion, estado, cliente, comentario=None, prioridad=None, tiempoEstimado=None, tecnicoAsignado=None):
+def insert_incidencia(id, titulo, descripcion, estado, cliente, comentario=None, prioridad=None, tiempoEstimado=None, tecnicoAsignado=None):
     db.session.add(Incidencia(id, titulo, comentario, prioridad, tiempoEstimado, descripcion, estado, tecnicoAsignado, cliente))
     db.session.commit()
 
