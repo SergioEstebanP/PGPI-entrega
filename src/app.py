@@ -14,6 +14,7 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 
+@app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -37,6 +38,9 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
+@app.route("/favicon.ico")
+def favicon():
+    return redirect(url_for('img/bola_azul.png'))
 
 @app.route('/incidencias')
 @login_required
