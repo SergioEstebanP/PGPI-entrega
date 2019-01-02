@@ -1,5 +1,4 @@
 .DS_Store
 *.swp
-back/venv/
-back/flaskr/__pycache__/
-back/activate.sh
+venv
+__pycache__
