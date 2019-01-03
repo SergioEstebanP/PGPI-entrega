@@ -38,6 +38,21 @@ def logout():
 
 
 
+@app.route('/informacion_incidencia/<idIncidencia>', methods=['GET', 'POST'])
+@login_required
+def informacion_incidencia_cliente(idIncidencia):
+    incidencias = get_incidencia(idIncidencia)
+    listaTecnicos = get_tecnicos()
+    if request.method == 'POST':
+        print(incidencias[0].estado)
+        if incidencias[0].estado==0:
+            tecnico = request.form['tecnicoAsignado']
+            cambio_estado_incidencia(idIncidencia, 1, tecnico)
+        elif incidencias[0].estado==1:
+            cambio_estado(idIncidencia, 2)
+
+    return render_template('info_incidencia.html', idIncidencia=idIncidencia, incidencias=incidencias, listaTecnicos=listaTecnicos)
+
 @app.route('/index')
 @login_required
 def index():
@@ -68,7 +83,7 @@ def incidencia(idIncidencia):
     incidencia = get_incidencia(idIncidencia)
     listaTecnicos = get_tecnicos()
     return render_template('info_incidencia.html', incidencia=incidencia, listaTecnicos=listaTecnicos)
-  
+
 @app.route('/registrar_incidencia', methods=['GET', 'POST'])
 @login_required
 def registrar_incidencia():
@@ -86,9 +101,9 @@ def registrar_incidencia():
         categoria       = request.form.get('categoria')
 
         insert_incidencia(titulo, descripcion, fecha, estado, reportadaPor, categoria, comentario, prioridad, tiempoEstimado, tecnicoAsignado)
-       
+
         return redirect(url_for('index'))
-      
+
     return render_template('registrar_incidencia.html')
 
 
@@ -130,7 +145,7 @@ class Incidencia(db.Model):
     tecnicoAsignado = db.Column(db.String(50))
     reportadaPor = db.Column(db.String(50))
     categoria = db.Column(db.String(40))
-     
+
 class Cambio(db.Model):
     fecha = db.Column(db.DateTime, primary_key=True)
     estado = db.Column(db.Integer)
@@ -166,6 +181,11 @@ def cambio_estado_incidencia(id, estado, tecnicoAsignado):
     incidencia = get_incidencia(id)
     incidencia.estado = estado
     incidencia.tecnicoAsignado = tecnicoAsignado
+    db.session.commit()
+
+def cambio_estado(id,estado):
+    incidencia = Incidencia.query.get(id)
+    incidencia.estado = estado
     db.session.commit()
 
     insert_cambio(estado, tecnicoAsignado, id)
