@@ -70,7 +70,7 @@ def informacion_incidencia_cliente():
 @app.route('/informacion_incidencia_supervisor', methods=['GET', 'POST'])
 @login_required
 def informacion_incidencia_supervisor():
-    todas_incidencias = get_incidencias();
+    todas_incidencias = get_incidencias()
     return render_template('info_incidencia.html', userType=supervisor)
 
 @app.route('/registrar_nueva_incidencia', methods=['GET', 'POST'])
@@ -83,7 +83,7 @@ def registrar_nueva_incidencia():
         idElementoInventario = form.get('idElementoInventario')
         fecha = form.get('fecha')
         categoria = form.get('categoria')
-        idIncidencia=31
+        idIncidencia=34
         comentario = ''
         prioridad = 0
         tiempoEstimado = 0
