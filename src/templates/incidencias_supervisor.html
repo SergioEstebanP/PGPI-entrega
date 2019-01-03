@@ -63,102 +63,53 @@
         <!-- Body -->
         <div class="row" style="width: 100%; padding-top: 0.5em; padding-bottom: 0.5em; font-size: 2em;">
             <div class="col">
-                <p class="text-center">Todas las incidencias por columnas</p>
+                <p class="text-center">Estado de las incidencias del supervisor {{ username }}</p>
             </div>
         </div>
 
         <div style="display: flex;">
             <div>
-                <p class="text-center" id="tituloColumna">Abiertas</p>
-                <div class="card-deck" style="margin: 1em;">
-                    <div class="card" id="card1">
-                        <div class="card-body">
-                            <p class="card-title">Probar la conexión con la base de datos</p>
-                            <hr>
-                            <p class="card-text">Descripción:</p>
-                            <p class="card-text .text-justify" id="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor ipsum et elit pulvinar, at condimentum velit porta. Suspendisse potenti.</p>
-                            <hr>
-                            <p class="card-text">Asignado a: Sergio.</p>
-                        </div>
-                    </div>
-                </div>
+                <p class="text-center" id="tituloColumna">Pendientes de asignar</p>
 
+                {% for i in range(incidencias_abiertas|length) %}
                 <div class="card-deck" style="margin: 1em;">
                     <div class="card" id="card1">
                         <div class="card-body">
-                            <p class="card-title">Probar la conexión con la base de datos</p>
-                            <hr>
-                            <p class="card-text">Descripción:</p>
-                            <p class="card-text .text-justify" id="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor ipsum et elit pulvinar, at condimentum velit porta. Suspendisse potenti.</p>
-                            <hr>
-                            <p class="card-text">Asignado a: Sergio.</p>
+                            <a href="/incidencia/{{ incidencias_abiertas[i].id  }}">
+                                <p class="card-title">{{ incidencias_abiertas[i].titulo }}</p>
+                                <hr>
+                                <p class="card-text">Descripción:</p>
+                                <p class="card-text .text-justify" id="card-description">{{ incidencias_abiertas[i].descripcion }}</p>
+                                <hr>
+                                <p class="card-text">Incidencia pendiente de asignar a un tecnico.</p>
+                            </a>
                         </div>
                     </div>
                 </div>
+                {% endfor %}
+
             </div>
 
             <div style="border-left: 1px solid grey; height: 70%;">
-                <p class="text-center" id="tituloColumna">Pendientes Aprobación</p>
+                <p class="text-center" id="tituloColumna">Pendientes de Cerrar</p>
+                {% for i in range(incidencias_notif_cierre|length) %}
                 <div class="card-deck" style="margin: 1em;">
                     <div class="card" id="card2">
                         <div class="card-body">
-                            <p class="card-title">Probar la conexión con la base de datos</p>
-                            <hr>
-                            <p class="card-text">Descripción:</p>
-                            <p class="card-text .text-justify" id="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor ipsum et elit pulvinar, at condimentum velit porta. Suspendisse potenti.</p>
-                            <hr>
-                            <p class="card-text">Asignado a: Sergio.</p>
+                            <a href="/incidencia/{{ incidencias_notif_cierre[i].id  }}">
+                                <p class="card-title">{{ incidencias_notif_cierre[i].titulo }}</p>
+                                <hr>
+                                <p class="card-text">Descripción:</p>
+                                <p class="card-text .text-justify" id="card-description">{{ incidencias_notif_cierre[i].descripcion }}</p>
+                                <hr>
+                                <p class="card-text">Incidencia abierta por {{ incidencias_notif_cierre[i].reportadaPor }}</p>
+                            </a>
                         </div>
                     </div>
                 </div>
-
-                <div class="card-deck" style="margin: 1em;">
-                    <div class="card" id="card2">
-                        <div class="card-body">
-                            <p class="card-title">Probar la conexión con la base de datos</p>
-                            <hr>
-                            <p class="card-text">Descripción:</p>
-                            <p class="card-text .text-justify" id="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor ipsum et elit pulvinar, at condimentum velit porta. Suspendisse potenti.</p>
-                            <hr>
-                            <p class="card-text">Asignado a: Sergio.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div style="border-left: 1px solid grey; height: 70%;">
-                <p class="text-center" id="tituloColumna">En Resolución</p>
-                <div class="card-deck" style="margin: 1em;">
-                    <div class="card" id="card1">
-                        <div class="card-body">
-                            <p class="card-title">Probar la conexión con la base de datos</p>
-                            <hr>
-                            <p class="card-text">Descripción:</p>
-                            <p class="card-text .text-justify" id="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor ipsum et elit pulvinar, at condimentum velit porta. Suspendisse potenti.</p>
-                            <hr>
-                            <p class="card-text">Asignado a: Sergio.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-deck" style="margin: 1em;">
-                    <div class="card" id="card1">
-                        <div class="card-body">
-                            <p class="card-title">Probar la conexión con la base de datos</p>
-                            <hr>
-                            <p class="card-text">Descripción:</p>
-                            <p class="card-text .text-justify" id="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor ipsum et elit pulvinar, at condimentum velit porta. Suspendisse potenti.</p>
-                            <hr>
-                            <p class="card-text">Asignado a: Sergio.</p>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
-        
-
-        
-        
     </div>
 
     <script>

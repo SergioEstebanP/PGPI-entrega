@@ -2,9 +2,9 @@ USE PGPI_grupo02;
 
 DROP TABLE IF EXISTS estado;
 DROP TABLE IF EXISTS tipoUsuario;
+DROP TABLE IF EXISTS elementoInventario;
 DROP TABLE IF EXISTS usuario;
 DROP TABLE IF EXISTS incidencia;
-DROP TABLE IF EXISTS elementoInventario;
 DROP TABLE IF EXISTS elementoIncidencia;
 DROP TABLE IF EXISTS cambio;
 
@@ -32,12 +32,29 @@ CREATE TABLE tipoUsuario(
     tipoUsuario VARCHAR(20)
 );
 
+/* Valores para categoria de incidencia:
+    [0, hardware]
+    [1, problemas con las comunicaciones]
+    [2, software basico]
+    [3, software de aplicaciones]
+ */
+CREATE TABLE categoriaIncidencia(
+    id INTEGER PRIMARY KEY,
+    categoria VARCHAR(40)
+);
+
+CREATE TABLE elementoInventario(
+    id INTEGER PRIMARY KEY,
+    nombre VARCHAR(200),
+    fechaAdquisicion INTEGER
+);
+
 CREATE TABLE usuario(
     nick VARCHAR(50) PRIMARY KEY,
-    email VARCHAR(50) NOT NULL,
-    password VARCHAR(50) NOT NULL,
-    nombre VARCHAR(50) NOT NULL,
-    apellidos VARCHAR(100) NOT NULL,
+    email VARCHAR(50),
+    password VARCHAR(50),
+    nombre VARCHAR(50),
+    apellidos VARCHAR(100),
     biografia VARCHAR(200),
     fotoPerfil VARCHAR(200),
     tipo INTEGER REFERENCES tipoUsuario(id) 
@@ -49,27 +66,23 @@ CREATE TABLE incidencia(
     comentario VARCHAR(200),
     prioridad INTEGER,
     tiempoEstimado INTEGER,
-    descripcion VARCHAR(200) NOT NULL,
-    estado INTEGER REFERENCES estado(id) ,
+    descripcion VARCHAR(200),
+    fecha DATE,
+    estado INTEGER REFERENCES estado(id),
     tecnicoAsignado VARCHAR(50) REFERENCES usuario(nick),
-    reportadaPor VARCHAR(50) REFERENCES usuario(nick) 
-);
-
-CREATE TABLE elementoInventario(
-    id INTEGER PRIMARY KEY,
-    nombre VARCHAR(200),
-    fechaAdquisicion INTEGER
+    reportadaPor VARCHAR(50) REFERENCES usuario(nick),
+    categoria INTEGER REFERENCES categoriaIncidencia(id)
 );
 
 CREATE TABLE elementoIncidencia(
-    incidencia INTEGER REFERENCES incidencia(id) ,
+    incidencia INTEGER REFERENCES incidencia(id),
     elemento INTEGER REFERENCES elementoInventario(id) 
 );
 
 CREATE TABLE cambio(
     fecha DATE PRIMARY KEY,
-    estado INTEGER REFERENCES estado(id) ,
-    tecnico VARCHAR(50) REFERENCES usuario(nick) ,
+    estado INTEGER REFERENCES estado(id),
+    tecnico VARCHAR(50) REFERENCES usuario(nick),
     incidencia INTEGER REFERENCES incidencia(id) 
 );
 
