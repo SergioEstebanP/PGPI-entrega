@@ -92,7 +92,7 @@ def registrar_incidencia():
        
         return redirect(url_for('index'))
       
-    return render_template('datos_incidencia_cliente.html')
+    return render_template('registrar_incidencia.html')
 
 
 
