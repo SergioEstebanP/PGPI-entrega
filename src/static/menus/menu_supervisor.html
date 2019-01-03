@@ -1,43 +1,16 @@
-<div id="side-nav" class="side-nav fixed-top flex-nowrap flex-column justify-content-start d-inline-flex align-items-start bg-light" onmouseover="openSide('side-nav')">
-    <div class="side-title side-content d-flex ">
-        <img id="user-img" class="user-icon" src="../static/img/default-gravatar.png" alt="user icon">
-        <span class="collapse width align-self-center" style="min-width: 70%;padding-left: 5%">"hola"</span>
-    </div>
-    <div class="list-group list-group-flush w-100 side-icons">
+<div class="list-group list-group-flush w-100 side-icons">
+    <a class="list-group-item d-flex justify-content-start align-items-center bg-light" href="/index">
+        <span class="material-icons" style="color: black;"></span>
+        <span class="collapse width align-top side-options">Inicio</span>
+    </a>
 
-        <a class="list-group-item d-flex justify-content-start align-items-center bg-light" href="/index">
-            <span class="material-icons" style="color: black;"></span>
-            <span class="collapse width align-top side-options">Inicio</span>
-        </a>
+    <a class="list-group-item d-flex justify-content-start align-items-center bg-light" href="/incidencias_cerradas">
+        <span class="material-icons" style="color: black;"></span>
+        <span class="collapse width align-top side-options">Incidencias Cerradas</span>
+    </a>
 
-        <a class="list-group-item d-flex justify-content-start align-items-center bg-light" href="/incidencias_cerradas">
-            <span class="material-icons" style="color: black;"></span>
-            <span class="collapse width align-top side-options">Incidencias Cerradas</span>
-        </a>
-
-        <a class="list-group-item d-flex justify-content-start align-items-center bg-light" href="/logout">
-            <span class="material-icons" style="color: black;"></span>
-            <span class="collapse width align-top side-options">Cerrar sesión</span>
-        </a>
-
-    </div>
+    <a class="list-group-item d-flex justify-content-start align-items-center bg-light" href="/logout">
+        <span class="material-icons" style="color: black;"></span>
+        <span class="collapse width align-top side-options">Cerrar sesión</span>
+    </a>
 </div>
-
-<script>
-function openSide(id) {
-    let el = document.getElementById(id);
-    if (!el.classList.contains('open')) {
-        $('.collapse').collapse('show');
-        el.classList.add('open');
-        document.getElementById('side-nav').style.width = "200px";
-    }
-};
-function closeSide(id) {
-    let el = document.getElementById(id);
-    if (el.classList.contains('open')) {
-        el.classList.remove('open');
-        $('.collapse').collapse('hide')
-            document.getElementById('side-nav').style.width = "64px";
-    }
-};
-</script>
