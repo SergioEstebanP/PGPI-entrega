@@ -1,6 +1,5 @@
 import os
 from datetime import datetime
-#from functools import wrap
 
 from flask import Flask, render_template, request, flash, redirect, url_for
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required, UserMixin
@@ -49,11 +48,10 @@ def index():
         return render_template('incidencias_supervisor.html', incidencias_abiertas=incidencias_abiertas, incidencias_notif_cierre=incidencias_notif_cierre)
 
     elif current_user.tipo == 1: #Tecnico
-        incidencias = get_incidencias_by_user(current_user.nick)
         incidencias_abiertas = get_incidencias_abiertas(current_user.nick)
         incidencias_notif_cierre = get_incidencias_notif_cierre(current_user.nick)
 
-        return render_template('incidencias_tecnico.html', incidencias=incidencias, incidencias_abiertas = incidencias_abiertas, incidencias_notif_cierre = incidencias_notif_cierre)
+        return render_template('incidencias_tecnico.html', incidencias_abiertas=incidencias_abiertas, incidencias_notif_cierre=incidencias_notif_cierre)
 
     elif current_user.tipo == 2: #Cliente
         incidencias = get_incidencias_by_user(current_user.nick)
@@ -82,7 +80,7 @@ def registrar_incidencia():
         descripcion     = request.form.get('descripcion')
         fecha           = datetime.strptime(request.form.get('fecha'), '%Y-%m-%d')
         estado          = 0
-        tecnicoAsignado = 'sin asignar'
+        tecnicoAsignado = 'Sin asignar'
         reportadaPor    = current_user.nick
         idInventario    = request.form.get('idElementoInventario')
         categoria       = request.form.get('categoria')
