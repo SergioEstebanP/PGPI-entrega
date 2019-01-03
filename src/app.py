@@ -36,20 +36,6 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-@app.route('/incidencia/<idIncidencia>', methods=['GET', 'POST'])
-@login_required
-def informacion_incidencia_cliente(idIncidencia):
-    incidencia = get_incidencia(idIncidencia)
-    listaTecnicos = get_tecnicos()
-    if request.method == 'POST':
-        if incidencia.estado==0:
-            tecnico = request.form['tecnicoAsignado']
-            cambio_estado_incidencia(idIncidencia, 1, tecnico)
-        elif incidencia.estado==1:
-            cambio_estado(idIncidencia, 2)
-
-    return render_template('info_incidencia.html', incidencia=incidencia, listaTecnicos=listaTecnicos)
-
 @app.route('/index')
 @login_required
 def index():
@@ -70,15 +56,25 @@ def index():
 
         return render_template('incidencias_cliente.html', incidencias=incidencias)
 
+@app.route('/incidencias_cerradas')
+@login_required
+def incidencias_cerradas():
+    incidencias = get_incidencias_cerradas()
+    return render_template('incidencias_cliente.html', incidencias=incidencias)
+
+
 @app.route('/incidencia/<idIncidencia>', methods=['GET', 'POST'])
 @login_required
 def incidencia(idIncidencia):
-    if request.method == 'POST':
-        tecnico = request.form['tecnicoAsignado']
-        cambio_estado_incidencia(idIncidencia, 1, tecnico)
-
     incidencia = get_incidencia(idIncidencia)
     listaTecnicos = get_tecnicos()
+    if request.method == 'POST':
+        if incidencia.estado==0:
+            tecnico = request.form['tecnicoAsignado']
+            cambio_estado_incidencia(idIncidencia, 1, tecnico)
+        elif incidencia.estado==1:
+            cambio_estado(idIncidencia, 2)
+
     return render_template('info_incidencia.html', incidencia=incidencia, listaTecnicos=listaTecnicos)
 
 @app.route('/registrar_incidencia', methods=['GET', 'POST'])
@@ -184,6 +180,9 @@ def cambio_estado(id,estado):
     incidencia = Incidencia.query.get(id)
     incidencia.estado = estado
     db.session.commit()
+
+def get_incidencias_cerradas():
+    return list(Incidencia.query.filter(Incidencia.estado in (4,5)))
 
 def get_incidencias_by_user(userNick):
     return list(Incidencia.query.filter_by(reportadaPor=userNick))
