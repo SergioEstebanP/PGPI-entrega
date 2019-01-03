@@ -40,7 +40,7 @@
                 <span class="collapse width align-top side-options">Item</span>
             </a>
             </a>
-            <a class="list-group-item d-flex justify-content-start align-items-center bg-light" href="/registrar_nueva_incidencia">
+            <a class="list-group-item d-flex justify-content-start align-items-center bg-light" href="/registrar_incidencia">
                 <span class="fas fa-project-diagram fa-m " style="color: gray;"></span>
                 <span class="collapse width align-top side-options">Registrar nueva incidencia</span>
             </a>
@@ -74,7 +74,7 @@
             {% for j in range(3) %}
             <div class="card" id="card1">
                 <div class="card-body">
-                    <a href="/informacion_incidencia/{{ incidencias[3*i+j]['id']  }}">
+                    <a href="/incidencia/{{ incidencias[3*i+j]['id']  }}">
                         <p class="card-title">{{ incidencias[3*i+j]['titulo'] }}</p>
                         <hr>
                         <p class="card-text">Descripcion</p>
@@ -93,7 +93,7 @@
         
             <div class="card" id="card1">
                 <div class="card-body">
-                    <a href="/informacion_incidencia/{{ incidencias[3*i+j]['id']  }}">
+                    <a href="/incidencia/{{ incidencias[3*i+j]['id']  }}">
                         <p class="card-title">{{ incidencias[3*i+j]['titulo'] }}</p>
                         <hr>
                         <p class="card-text">Descripcion</p>
