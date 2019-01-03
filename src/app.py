@@ -49,10 +49,10 @@ def informacion_incidencia_cliente(idIncidencia):
             tecnico = request.form['tecnicoAsignado']
             cambio_estado_incidencia(idIncidencia, 1, tecnico)
         elif incidencias[0].estado==1: 
-            cambio_estado(idIncidencia, 2)
-        elif incidencias[0].estado>1:
-            cambio_estado(idIncidencia,3)
-            return render_template('incidencias_supervisor', idIncidencia=idIncidencia, incidencia=incidencia, listaTecnicos=listaTecnicos)
+            cambio_estado(idIncidencia, 3)
+        elif incidencias[0].estado>1 :
+            cambio_estado(idIncidencia,4)
+            
 
     
     return render_template('info_incidencia.html', idIncidencia=idIncidencia, incidencias=incidencias, listaTecnicos=listaTecnicos)
@@ -219,10 +219,10 @@ def get_incidencias_abiertas_super():
     return list(Incidencia.query.filter_by(estado=0))
 
 def get_incidencias_notif_cierre_super():
-    return list(Incidencia.query.filter_by(estado=2))
+    return list(Incidencia.query.filter_by(estado=3))
 
 def get_incidencias_notif_cierre(userNick):
-    return list(Incidencia.query.filter_by(reportadaPor=userNick, estado=2))
+    return (list((Incidencia.query.filter_by(reportadaPor=userNick, estado=2))),list(Incidencia.query.filter_by(reportadaPor=userNick, estado=3)))
 
 #######################
 #     INVENTARIO      #

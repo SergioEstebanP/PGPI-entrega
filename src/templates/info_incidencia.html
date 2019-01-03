@@ -183,8 +183,8 @@
 
                 {% if (current_user.tipo == 0) and (incidencias[0].estado ==  2) %}
                 <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
-                <button type="submit" class="btn btn-outline-primary" name="Solucion">Cerrar Incidencia Solucionada</button>
-                <button type="submit" class="btn btn-outline-primary" name="n-Solucion">Cerrar Incidencia sin Solucion</button>
+                <button type="submit" class="btn btn-outline-primary" >Cerrar Incidencia Solucionada</button>
+                <button type="submit" class="btn btn-outline-primary" >Cerrar Incidencia sin Solucion</button>
                 {% endif %}}
 
                 {% if (current_user.tipo == 1) and (incidencias[0].estado==1) %}
@@ -199,7 +199,9 @@
 
                 {% if current_user.tipo == 2 %}
                 <button type="button" class="btn btn-outline-primary">Ver comentario</button>
+                <button type="submit" class="btn btn-outline-primary">Solicitar Cierre</button>
                 {% endif %}
+                
             </footer>
          </form>
 
