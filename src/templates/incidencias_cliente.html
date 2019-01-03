@@ -26,11 +26,11 @@
     </nav>
 
     {% if current_user.tipo == 0 %}
-    <div w3-include-html="{{ url_for('static', filename='menus/menu_cliente.html') }}"></div>
+    <div w3-include-html="{{ url_for('static', filename='menus/menu_supervisor.html') }}"></div>
     {% elif current_user.tipo == 1 %}
     <div w3-include-html="{{ url_for('static', filename='menus/menu_tecnico.html') }}"></div>
     {% elif current_user.tipo == 2 %}
-    <div w3-include-html="{{ url_for('static', filename='menus/menu_supervisor.html') }}"></div>
+    <div w3-include-html="{{ url_for('static', filename='menus/menu_cliente.html') }}"></div>
     {% endif %}
 
     <div id="data-body" class="container-fluid flex-grow-1" onmouseover="closeSide('side-nav')" >
