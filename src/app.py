@@ -31,14 +31,22 @@ def login():
             if userType == 0:
                     # supervisor
                     incidencias = get_incidencias()
+
+                    incidencias_abiertas = get_incidencias_abiertas_super()
+                    incidencias_notif_cierre = get_incidencias_notif_cierre_super()
+
                     login_user(load_user(user.nick))
-                    return render_template('incidencias_cliente.html', userType=userType, userName=username, incidencias=incidencias)
+                    return render_template('incidencias_supervisor.html', userType=userType, userName=username, incidencias=incidencias, incidencias_abiertas = incidencias_abiertas, incidencias_notif_cierre = incidencias_notif_cierre)
 
             if userType == 1:
                     # tecnico
                     incidencias = get_incidencias_by_user(username)
+
+                    incidencias_abiertas = get_incidencias_abiertas(username)
+                    incidencias_notif_cierre = get_incidencias_notif_cierre(username)
+
                     login_user(load_user(user.nick))
-                    return render_template('incidencias_columnas.html', userType=userType, userName=username, incidencias=incidencias)
+                    return render_template('incidencias_columnas.html', userType=userType, userName=username, incidencias=incidencias, incidencias_abiertas = incidencias_abiertas, incidencias_notif_cierre = incidencias_notif_cierre)
 
             if userType == 2:
                     # cliente
@@ -62,16 +70,18 @@ def logout():
 def incidencias():
     return render_template('incidencias_cliente.html')
 
-@app.route('/informacion_incidencia/<id>', methods=['GET', 'POST'])
+@app.route('/informacion_incidencia/<idIncidencia>', methods=['GET', 'POST'])
 @login_required
-def informacion_incidencia_cliente(id):
-    return render_template('info_incidencia.html', id)
+def informacion_incidencia_cliente(idIncidencia):
+    incidencias = get_incidencia(idIncidencia)
+    listaTecnicos = get_tecnicos()
+    if request.method == 'POST':
+        tecnico = request.form['tecnicoAsignado']
+        cambio_estado_incidencia(idIncidencia, 1, tecnico)
 
-@app.route('/informacion_incidencia_supervisor', methods=['GET', 'POST'])
-@login_required
-def informacion_incidencia_supervisor():
-    todas_incidencias = get_incidencias();
-    return render_template('info_incidencia.html', userType=supervisor)
+    print(incidencias[0].tecnicoAsignado)
+    print(incidencias[0].estado)
+    return render_template('info_incidencia.html', idIncidencia=idIncidencia, incidencias=incidencias, listaTecnicos=listaTecnicos)
 
 @app.route('/registrar_nueva_incidencia', methods=['GET', 'POST'])
 @login_required
@@ -83,7 +93,7 @@ def registrar_nueva_incidencia():
         idElementoInventario = form.get('idElementoInventario')
         fecha = form.get('fecha')
         categoria = form.get('categoria')
-        idIncidencia=31
+        idIncidencia = randint(0, 10000)
         comentario = ''
         prioridad = 0
         tiempoEstimado = 0
@@ -109,7 +119,7 @@ def load_user(nick):
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@127.0.0.1:3306/PGPI_grupo02'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@jair.lab.inf.uva.es:3306/PGPI_grupo02'
 db = SQLAlchemy(app)
 
 
@@ -148,6 +158,9 @@ def get_users():
 def get_user(nick):
     return Usuario.query.get(nick)
 
+def get_tecnicos():
+    return list(Usuario.query.filter_by(tipo=1))
+
 #######################
 #     INCIDENCIA      #
 #######################
@@ -155,13 +168,30 @@ def insert_incidencia(id, titulo, descripcion, estado, cliente, comentario=None,
     db.session.add(Incidencia(id=id, titulo=titulo, comentario=comentario, prioridad=prioridad, tiempoEstimado=tiempoEstimado, descripcion=descripcion, estado=estado, tecnicoAsignado=tecnicoAsignado, reportadaPor=cliente))
     db.session.commit()
 
+def cambio_estado_incidencia(id, estado, tecnicoAsignado):
+    incidencia = Incidencia.query.get(id)
+    incidencia.estado = estado
+    incidencia.tecnicoAsignado = tecnicoAsignado
+    db.session.commit()
+
 def get_incidencias():
     return list(Incidencia.query.all())
 
 def get_incidencia(id):
-    return Incidencia.query.get(id)
+    return list(Incidencia.query.filter_by(id=id))
 
 def get_incidencias_by_user(userNick):
     return list(Incidencia.query.filter_by(reportadaPor=userNick))
 
+def get_incidencias_abiertas(userNick):
+    return list(Incidencia.query.filter_by(tecnicoAsignado=userNick, estado=1))
+
+def get_incidencias_abiertas_super():
+    return list(Incidencia.query.filter_by(estado=0))
+
+def get_incidencias_notif_cierre_super():
+    return list(Incidencia.query.filter_by(estado=2))
+
+def get_incidencias_notif_cierre(userNick):
+    return list(Incidencia.query.filter_by(reportadaPor=userNick, estado=2))
 

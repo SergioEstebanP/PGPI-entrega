@@ -63,7 +63,7 @@
         <!-- Body -->
         <div class="row">
             <div class="col-md-12" style="font: bold; font-size: 2.5em; margin: 1em;">
-                <p>Red inaccesible por caida de switch</p>
+                <p>{{  incidencias[0].titulo }}</p>
                 <hr>
             </div>
         </div>
@@ -72,7 +72,7 @@
             <div class="col-md-6">
                 <div class="card" id="card1">
                     <div class="card-body">
-                        <p class="card-text text-justify" id="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut porttitor velit vel odio sollicitudin pellentesque. Sed congue dolor nec eros consectetur mollis. Donec a erat nec odio pretium congue. Nulla facilisi. Praesent non felis non justo venenatis faucibus eget nec mi. Etiam ullamcorper hendrerit nulla, eu malesuada metus. Nunc quis magna interdum, semper ante malesuada, condimentum erat. Maecenas vel sagittis metus. Praesent gravida dolor vel luctus scelerisque. Aenean id imperdiet velit.Suspendisse laoreet arcu nec euismod vestibulum. Phasellus condimentum aliquet ante ac fringilla. Nam in dignissim enim. Aenean in elementum tellus. Vivamus placerat venenatis rutrum. Donec bibendum turpis eu eros consequat, sed tincidunt libero iaculis. Maecenas dignissim aliquet dui at gravida. Curabitur porttitor blandit volutpat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Phasellus aliquam augue quis tellus dapibus, vel vulputate velit rhoncus. Suspendisse nisi felis, consequat eu leo et, pretium commodo sapien. Quisque tristique tincidunt mi, a facilisis augue consequat vitae. Cras ac nunc tortor. Integer dapibus imperdiet molestie. Aliquam vel mollis leo, laoreet tincidunt ipsum. Maecenas varius ornare tortor non iaculis. Donec elementum non nibh rhoncus venenatis. Cras pharetra non arcu vel aliquam. Aliquam placerat hendrerit diam, condimentum auctor justo. Fusce semper nisl ac sem fermentum bibendum. Curabitur tempus laoreet nibh vitae rutrum. Duis lacinia ut nunc sit amet suscipit. In a faucibus ipsum, sed commodo ante.</p>
+                        <p class="card-text text-justify" id="card-description">{{ incidencias[0].descripcion}}</p>
                     </div>
                 </div>
             </div>
@@ -90,7 +90,7 @@
                     <tr>
                     <th scope="row">1</th>
                     <td>Estado</td>
-                    <td>En resolución</td>
+                    <td>{{ incidencias[0].estado  }}</td>
                     </tr>
                     <tr>
                     <th scope="row">2</th>
@@ -109,8 +109,8 @@
                     </tr>
                     <tr>
                     <th scope="row">5</th>
-                    <td>Reportada por</td>
-                    <td>En resolución</td>
+                    <td>{{ incidencias[0].reportadaPor}}</td>
+                    <td></td>
                     </tr>
                 </tbody>
                 </table>
@@ -120,29 +120,36 @@
         <section id="Steps" class="steps-section">
 
     <div class="steps-timeline" style="margin-top: 7em;">
-
       <div class="steps-one">
         <img class="steps-img" src="http://placehold.it/50/3498DB/FFFFFF" alt="" />
         <h3 class="steps-name">
           Abierta
         </h3>
         <p class="steps-description">
-            Incidencia abierta por Sergio el 23/12/18
+        Incidencia abierta por {{ incidencias[0].reportadaPor}} el 23/12/18
         </p>
       </div>
 
       <div class="steps-two">
+          {% if incidencias[0].estado == 1 or incidencias[0].estado == 2 or incidencias[0].estado == 3 or incidencias[0].estado == 4%}
         <img class="steps-img" src="http://placehold.it/50/3498DB/FFFFFF" alt="" />
+        {% else %}
+        <img class="steps-img" src="http://placehold.it/50/FF0000/FFFFFF" alt="" />
+        {% endif %}
         <h3 class="steps-name">
           Aceptada
         </h3>
         <p class="steps-description">
-            Aceptada y pendiente de resolución
+        Aceptada y asignada a {{ incidencias[0].tecnico }}
         </p>
       </div>
 
       <div class="steps-three">
+          {% if incidencias[0].estado == 3 or incidencias[0].etado == 4%}
         <img class="steps-img" src="http://placehold.it/50/3498DB/FFFFFF" alt="" />
+        {% else %}
+        <img class="steps-img" src="http://placehold.it/50/FF0000/FFFFFF" alt="" />
+        {% endif %}
         <h3 class="steps-name">
           Cerrada
         </h3>
@@ -156,12 +163,39 @@
   </section>
 
 
-        <footer>
-            <button type="button" class="btn btn-outline-primary">Cerrar Incidencia</button>
-            <button type="button" class="btn btn-outline-primary">Solicitar Cierre</button>
-            <button type="button" class="btn btn-outline-primary">Ver seguimiento</button>
-            <button type="button" class="btn btn-outline-primary">Informar Técnico</button>
-        </footer>
+        <form method="POST" action='/informacion_incidencia/{{ incidencias[0].id }}'>
+            <footer>
+                {% if (current_user.tipo == 0) and (incidencias[0].estado ==  0) %}
+                <!-- <form method="POST" action='/informacion_incidencia/{{ incidencias[0].id }}'> -->
+                <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
+
+                    <button type="submit" class="btn btn-outline-primary">Asignar tecnico</button>
+                     <select name="tecnicoAsignado">  
+                        {% for i in range(listaTecnicos|length) %}
+                        <option value="{{ listaTecnicos[i].nick }}">{{ listaTecnicos[i].nick }}</option>
+                        {% endfor %}
+                    </select> 
+                {% endif %}}
+
+                {% if (current_user.tipo == 0) and (incidencias[0].estado ==  1) %}
+                <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
+                {% endif %}}
+
+                {% if (current_user.tipo == 0) and (incidencias[0].estado ==  2) %}
+                <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
+                <button type="button" class="btn btn-outline-primary">Cerrar Incidencia</button>
+                {% endif %}}
+
+                {% if current_user.tipo == 1 %}
+                <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
+                <button type="submit" class="btn btn-outline-primary">Solicitar Cierre</button>
+                {% endif %}}
+
+                {% if current_user.tipo == 2 %}
+                <button type="button" class="btn btn-outline-primary">Ver comentario</button>
+                {% endif %}
+            </footer>
+         </form>
 
     <script>
         function openSide(id) {
