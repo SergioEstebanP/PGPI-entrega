@@ -45,13 +45,12 @@ def informacion_incidencia_cliente(idIncidencia):
     incidencias = get_incidencia(idIncidencia)
     listaTecnicos = get_tecnicos()
     if request.method == 'POST':
-        
+        print(incidencias[0].estado)
         if incidencias[0].estado==0:
             tecnico = request.form['tecnicoAsignado']
             cambio_estado_incidencia(idIncidencia, 1, tecnico)
-        if incidencias[0].estado==1:
-            tecnico=request.form['tecnicoAsignado']
-            cambio_estado_incidencia(idIncidencia, 2, tecnico)
+        elif incidencias[0].estado==1: 
+            cambio_estado(idIncidencia, 2)
     
     return render_template('info_incidencia.html', idIncidencia=idIncidencia, incidencias=incidencias, listaTecnicos=listaTecnicos)
 
@@ -195,6 +194,10 @@ def cambio_estado_incidencia(id, estado, tecnicoAsignado):
     incidencia = Incidencia.query.get(id)
     incidencia.estado = estado
     incidencia.tecnicoAsignado = tecnicoAsignado
+    db.session.commit()
+def cambio_estado(id,estado):
+    incidencia = Incidencia.query.get(id)
+    incidencia.estado = estado
     db.session.commit()
 
 def get_incidencias():
