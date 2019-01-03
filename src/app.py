@@ -39,54 +39,42 @@ def logout():
 
 
 
-@app.route('/informacion_incidencia/<idIncidencia>', methods=['GET', 'POST'])
+@app.route('/index')
 @login_required
-def informacion_incidencia_cliente(idIncidencia):
-    incidencias = get_incidencia(idIncidencia)
-    listaTecnicos = get_tecnicos()
+def index():
+    if current_user.tipo == 0: #Supervisor
+        incidencias = get_incidencias()
+        incidencias_abiertas = get_incidencias_abiertas_super()
+        incidencias_notif_cierre = get_incidencias_notif_cierre_super()
+
+        return render_template('incidencias_supervisor.html', incidencias=incidencias, incidencias_abiertas = incidencias_abiertas, incidencias_notif_cierre = incidencias_notif_cierre)
+
+    elif current_user.tipo == 1: #Tecnico
+        incidencias = get_incidencias_by_user(current_user.nick)
+        incidencias_abiertas = get_incidencias_abiertas(current_user.nick)
+        incidencias_notif_cierre = get_incidencias_notif_cierre(current_user.nick)
+
+        return render_template('incidencias_tecnico.html', incidencias=incidencias, incidencias_abiertas = incidencias_abiertas, incidencias_notif_cierre = incidencias_notif_cierre)
+
+    elif current_user.tipo == 2: #Cliente
+        incidencias = get_incidencias_by_user(current_user.nick)
+
+        return render_template('incidencias_cliente.html', incidencias=incidencias)
+
+@app.route('/incidencia/<idIncidencia>', methods=['GET', 'POST'])
+@login_required
+def incidencia(idIncidencia):
     if request.method == 'POST':
         tecnico = request.form['tecnicoAsignado']
         cambio_estado_incidencia(idIncidencia, 1, tecnico)
 
-    print(incidencias[0].tecnicoAsignado)
-    print(incidencias[0].estado)
+    incidencia = get_incidencia(idIncidencia)
+    listaTecnicos = get_tecnicos()
     return render_template('info_incidencia.html', idIncidencia=idIncidencia, incidencias=incidencias, listaTecnicos=listaTecnicos)
-
-@app.route('/index')
-@login_required
-def index():
-    userType = current_user.tipo
-    if userType == 0:
-        # supervisor
-        incidencias = get_incidencias()
-
-        incidencias_abiertas = get_incidencias_abiertas_super()
-        incidencias_notif_cierre = get_incidencias_notif_cierre_super()
-
-        login_user(get_user(current_user.nick))
-        return render_template('incidencias_supervisor.html', userType=userType, userName=current_user.nick, incidencias=incidencias, incidencias_abiertas = incidencias_abiertas, incidencias_notif_cierre = incidencias_notif_cierre)
-
-    if userType == 1:
-        # tecnico
-        incidencias = get_incidencias_by_user(current_user.nick)
-
-        incidencias_abiertas = get_incidencias_abiertas(current_user.nick)
-        incidencias_notif_cierre = get_incidencias_notif_cierre(current_user.nick)
-
-        login_user(get_user(current_user.nick))
-        return render_template('incidencias_columnas.html', userType=userType, userName=current_user.nick, incidencias=incidencias, incidencias_abiertas = incidencias_abiertas, incidencias_notif_cierre = incidencias_notif_cierre)
-
-    if userType == 2:
-        # cliente
-        incidencias = get_incidencias_by_user(current_user.nick)
-        login_user(get_user(current_user.nick))
-        return render_template('incidencias_cliente.html', userType=userType, userName=current_user.nick, incidencias=incidencias)
-
   
-@app.route('/registrar_nueva_incidencia', methods=['GET', 'POST'])
+@app.route('/registrar_incidencia', methods=['GET', 'POST'])
 @login_required
-#@requires_access_level([1, 2])
-def registrar_nueva_incidencia():
+def registrar_incidencia():
     if request.method == 'POST':
         titulo          = request.form.get('titulo')
         comentario      = ''
@@ -105,19 +93,6 @@ def registrar_nueva_incidencia():
         return redirect(url_for('index'))
       
     return render_template('datos_incidencia_cliente.html')
-
-'''
-def requires_access_level(access_level):
-    def decorator(f):
-        @wraps(f)
-        def decorated_function(*args, **kwargs):
-            if current_user.tipo not in access_level:
-                return redirect(url_for('index'))
-
-            return f(*args, **kwargs)
-        return decorated_function
-    return decorator
-'''
 
 
 
