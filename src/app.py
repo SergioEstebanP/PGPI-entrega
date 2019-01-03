@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-from functools import wrap
+#from functools import wrap
 
 from flask import Flask, render_template, request, flash, redirect, url_for
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required, UserMixin
@@ -39,10 +39,6 @@ def logout():
 
 
 
-@app.route("/index")
-@login_required
-
-
 @app.route('/informacion_incidencia/<idIncidencia>', methods=['GET', 'POST'])
 @login_required
 def informacion_incidencia_cliente(idIncidencia):
@@ -56,38 +52,40 @@ def informacion_incidencia_cliente(idIncidencia):
     print(incidencias[0].estado)
     return render_template('info_incidencia.html', idIncidencia=idIncidencia, incidencias=incidencias, listaTecnicos=listaTecnicos)
 
+@app.route('/index')
+@login_required
 def index():
-            userType = current_user.tipo
-            if userType == 0:
-                    # supervisor
-                    incidencias = get_incidencias()
+    userType = current_user.tipo
+    if userType == 0:
+        # supervisor
+        incidencias = get_incidencias()
 
-                    incidencias_abiertas = get_incidencias_abiertas_super()
-                    incidencias_notif_cierre = get_incidencias_notif_cierre_super()
+        incidencias_abiertas = get_incidencias_abiertas_super()
+        incidencias_notif_cierre = get_incidencias_notif_cierre_super()
 
-                    login_user(load_user(user.nick))
-                    return render_template('incidencias_supervisor.html', userType=userType, userName=username, incidencias=incidencias, incidencias_abiertas = incidencias_abiertas, incidencias_notif_cierre = incidencias_notif_cierre)
+        login_user(get_user(current_user.nick))
+        return render_template('incidencias_supervisor.html', userType=userType, userName=current_user.nick, incidencias=incidencias, incidencias_abiertas = incidencias_abiertas, incidencias_notif_cierre = incidencias_notif_cierre)
 
-            if userType == 1:
-                    # tecnico
-                    incidencias = get_incidencias_by_user(username)
+    if userType == 1:
+        # tecnico
+        incidencias = get_incidencias_by_user(current_user.nick)
 
-                    incidencias_abiertas = get_incidencias_abiertas(username)
-                    incidencias_notif_cierre = get_incidencias_notif_cierre(username)
+        incidencias_abiertas = get_incidencias_abiertas(current_user.nick)
+        incidencias_notif_cierre = get_incidencias_notif_cierre(current_user.nick)
 
-                    login_user(load_user(user.nick))
-                    return render_template('incidencias_columnas.html', userType=userType, userName=username, incidencias=incidencias, incidencias_abiertas = incidencias_abiertas, incidencias_notif_cierre = incidencias_notif_cierre)
+        login_user(get_user(current_user.nick))
+        return render_template('incidencias_columnas.html', userType=userType, userName=current_user.nick, incidencias=incidencias, incidencias_abiertas = incidencias_abiertas, incidencias_notif_cierre = incidencias_notif_cierre)
 
-            if userType == 2:
-                    # cliente
-                    incidencias = get_incidencias_by_user(username)
-                    login_user(load_user(user.nick))
-                    return render_template('incidencias_cliente.html', userType=userType, userName=username, incidencias=incidencias)
+    if userType == 2:
+        # cliente
+        incidencias = get_incidencias_by_user(current_user.nick)
+        login_user(get_user(current_user.nick))
+        return render_template('incidencias_cliente.html', userType=userType, userName=current_user.nick, incidencias=incidencias)
 
   
 @app.route('/registrar_nueva_incidencia', methods=['GET', 'POST'])
 @login_required
-@requires_access_level([1, 2])
+#@requires_access_level([1, 2])
 def registrar_nueva_incidencia():
     if request.method == 'POST':
         titulo          = request.form.get('titulo')
@@ -104,10 +102,11 @@ def registrar_nueva_incidencia():
 
         insert_incidencia(titulo, descripcion, fecha, estado, reportadaPor, categoria, comentario, prioridad, tiempoEstimado, tecnicoAsignado)
        
-        return redirect(url_for('incidencias'))
+        return redirect(url_for('index'))
       
     return render_template('datos_incidencia_cliente.html')
 
+'''
 def requires_access_level(access_level):
     def decorator(f):
         @wraps(f)
@@ -118,6 +117,7 @@ def requires_access_level(access_level):
             return f(*args, **kwargs)
         return decorated_function
     return decorator
+'''
 
 
 
