@@ -1,7 +1,9 @@
 import os
+from datetime import datetime
+from functools import wrap
+
 from flask import Flask, render_template, request, flash, redirect, url_for
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required, UserMixin
-from datetime import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
@@ -25,7 +27,7 @@ def login():
             flash('Incorrect password.')
         else:
             login_user(user)
-            return redirect(url_for('incidencias'))
+            return redirect(url_for('index'))
 
     return render_template('login.html')
 
@@ -37,23 +39,24 @@ def logout():
 
 
 
-@app.route('/incidencias')
+@app.route("/index")
 @login_required
-def incidencias():
-    if current_user.tipo == 0: # Supervisor
-        incidencias = get_incidencias()
-    else:
-        incidencias = get_incidencias_by_user(current_user.nick)
+def index():
+    if current_user.tipo == 0: #Supervisor
+        return render_template('incidencias_supervisor.html')
+    elif current_user.tipo == 1: #Tecnico
+        return render_template('incidencias_tecnico.html')
+    elif current_user.tipo == 2: #Cliente
+        return render_template('incidencias_cliente.html')
 
-    return render_template('incidencias_cliente.html', incidencias=incidencias)
-
-@app.route('/informacion_incidencia', methods=['GET'])
+@app.route('/informacion_incidencia')
 @login_required
 def informacion_incidencia_cliente():
     return render_template('info_incidencia.html')
   
 @app.route('/registrar_nueva_incidencia', methods=['GET', 'POST'])
 @login_required
+@requires_access_level([1, 2])
 def registrar_nueva_incidencia():
     if request.method == 'POST':
         titulo          = request.form.get('titulo')
@@ -62,9 +65,6 @@ def registrar_nueva_incidencia():
         tiempoEstimado  = 0
         descripcion     = request.form.get('descripcion')
         fecha           = datetime.strptime(request.form.get('fecha'), '%Y-%m-%d')
-        print('TIPO:  ', end='')
-        print(type(fecha))
-        print(fecha)
         estado          = 0
         tecnicoAsignado = 'sin asignar'
         reportadaPor    = current_user.nick
@@ -76,7 +76,19 @@ def registrar_nueva_incidencia():
         return redirect(url_for('incidencias'))
       
     return render_template('datos_incidencia_cliente.html')
-      
+
+
+def requires_access_level(access_level):
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            if current_user.tipo not in access_level:
+                return redirect(url_for('index'))
+
+            return f(*args, **kwargs)
+        return decorated_function
+    return decorator
+
 
 
 ###################################################
