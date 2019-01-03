@@ -43,11 +43,10 @@ def logout():
 @login_required
 def index():
     if current_user.tipo == 0: #Supervisor
-        incidencias = get_incidencias()
         incidencias_abiertas = get_incidencias_abiertas_super()
         incidencias_notif_cierre = get_incidencias_notif_cierre_super()
 
-        return render_template('incidencias_supervisor.html', incidencias=incidencias, incidencias_abiertas = incidencias_abiertas, incidencias_notif_cierre = incidencias_notif_cierre)
+        return render_template('incidencias_supervisor.html', incidencias_abiertas=incidencias_abiertas, incidencias_notif_cierre=incidencias_notif_cierre)
 
     elif current_user.tipo == 1: #Tecnico
         incidencias = get_incidencias_by_user(current_user.nick)
@@ -119,7 +118,7 @@ class Usuario(db.Model, UserMixin):
     tipo = db.Column(db.Integer)
 
     def get_id(self):
-            return self.nick
+        return self.nick
 
 class Incidencia(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -134,15 +133,15 @@ class Incidencia(db.Model):
     reportadaPor = db.Column(db.String(50))
     categoria = db.Column(db.String(40))
      
-class ElementoIncidencia(db.Model):
-    incidencia = db.Column(db.Integer, primary_key=True)
-    elemento = db.Column(db.Integer, primary_key=True)
-
 class Cambio(db.Model):
     fecha = db.Column(db.DateTime, primary_key=True)
     estado = db.Column(db.Integer)
     tecnico = db.Column(db.String(50))
     incidencia = db.Column(db.Integer)
+
+class ElementoIncidencia(db.Model):
+    incidencia = db.Column(db.Integer, primary_key=True)
+    elemento = db.Column(db.Integer, primary_key=True)
 
 
 #######################
@@ -151,7 +150,6 @@ class Cambio(db.Model):
 @login_manager.user_loader
 def get_user(nick):
     return Usuario.query.get(nick)
-
 
 def get_tecnicos():
     return list(Usuario.query.filter_by(tipo=1))
@@ -167,13 +165,12 @@ def get_incidencia(id):
     return Incidencia.query.get(id)
 
 def cambio_estado_incidencia(id, estado, tecnicoAsignado):
-    incidencia = Incidencia.query.get(id)
+    incidencia = get_incidencia(id)
     incidencia.estado = estado
     incidencia.tecnicoAsignado = tecnicoAsignado
     db.session.commit()
 
-def get_incidencias():
-    return list(Incidencia.query.all())
+    insert_cambio(estado, tecnicoAsignado, id)
 
 def get_incidencias_by_user(userNick):
     return list(Incidencia.query.filter_by(reportadaPor=userNick))
@@ -190,6 +187,15 @@ def get_incidencias_notif_cierre_super():
 def get_incidencias_notif_cierre(userNick):
     return list(Incidencia.query.filter_by(reportadaPor=userNick, estado=2))
 
+
+#######################
+#       CAMBIO        #
+#######################
+def insert_cambio(estado, tecnico, incidencia, fecha=datetime.now()):
+    db.session.add(Cambio(fecha=fecha, estado=estado, tecnico=tecnico, incidencia=incidencia))
+    db.session.commit()
+
+
 #######################
 #     INVENTARIO      #
 #######################
@@ -199,11 +205,3 @@ def insert_elemento_incidencia(incidencia, elemento):
 
 def get_elementos_incidencia(incidencia):
     return list(ElementoIncidencia.query.filter_by(incidencia=incidencia))
-
-
-#######################
-#       CAMBIO        #
-#######################
-def insert_cambio(estado, tecnico, incidencia, fecha=datetime.now()):
-    db.session.add(Cambio(fecha=fecha, estado=estado, tecnico=tecnico, incidencia=incidencia))
-    db.session.commit()
