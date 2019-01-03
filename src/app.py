@@ -45,10 +45,10 @@ def informacion_incidencia_cliente(idIncidencia):
     incidencias = get_incidencia(idIncidencia)
     listaTecnicos = get_tecnicos()
     if request.method == 'POST':
-        if incidencias.estado=0:
+        if incidencias[0].estado==0:
             tecnico = request.form['tecnicoAsignado']
             cambio_estado_incidencia(idIncidencia, 1, tecnico)
-        if incidencias.estado=1:
+        if incidencias[0].estado==1:
             tecnico=request.form['tecnicoAsignado']
             cambio_estado_incidencia(idIncidencia, 2, tecnico)
     
