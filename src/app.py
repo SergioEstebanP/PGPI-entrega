@@ -131,9 +131,6 @@ class Cambio(db.Model):
 #######################
 #       USUARIO       #
 #######################
-def get_users():
-    return list(Usuario.query.all())
-
 @login_manager.user_loader
 def get_user(nick):
     return Usuario.query.get(nick)
@@ -148,9 +145,6 @@ def insert_incidencia(titulo, descripcion, fecha, estado, reportadaPor, categori
 
 def get_incidencias():
     return list(Incidencia.query.all())
-
-def get_incidencia(id):
-    return Incidencia.query.get(id)
 
 def get_incidencias_by_user(userNick):
     return list(Incidencia.query.filter_by(reportadaPor=userNick))
