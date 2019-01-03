@@ -20,7 +20,7 @@ def login():
         username = request.form['username']
         password = request.form['password']
         user = get_user(username)
-        
+
         if user is None:
             flash('Incorrect username.')
         elif password != user.password:
@@ -41,18 +41,49 @@ def logout():
 
 @app.route("/index")
 @login_required
-def index():
-    if current_user.tipo == 0: #Supervisor
-        return render_template('incidencias_supervisor.html')
-    elif current_user.tipo == 1: #Tecnico
-        return render_template('incidencias_tecnico.html')
-    elif current_user.tipo == 2: #Cliente
-        return render_template('incidencias_cliente.html')
 
-@app.route('/informacion_incidencia')
+
+@app.route('/informacion_incidencia/<idIncidencia>', methods=['GET', 'POST'])
 @login_required
-def informacion_incidencia_cliente():
-    return render_template('info_incidencia.html')
+def informacion_incidencia_cliente(idIncidencia):
+    incidencias = get_incidencia(idIncidencia)
+    listaTecnicos = get_tecnicos()
+    if request.method == 'POST':
+        tecnico = request.form['tecnicoAsignado']
+        cambio_estado_incidencia(idIncidencia, 1, tecnico)
+
+    print(incidencias[0].tecnicoAsignado)
+    print(incidencias[0].estado)
+    return render_template('info_incidencia.html', idIncidencia=idIncidencia, incidencias=incidencias, listaTecnicos=listaTecnicos)
+
+def index():
+            userType = current_user.tipo
+            if userType == 0:
+                    # supervisor
+                    incidencias = get_incidencias()
+
+                    incidencias_abiertas = get_incidencias_abiertas_super()
+                    incidencias_notif_cierre = get_incidencias_notif_cierre_super()
+
+                    login_user(load_user(user.nick))
+                    return render_template('incidencias_supervisor.html', userType=userType, userName=username, incidencias=incidencias, incidencias_abiertas = incidencias_abiertas, incidencias_notif_cierre = incidencias_notif_cierre)
+
+            if userType == 1:
+                    # tecnico
+                    incidencias = get_incidencias_by_user(username)
+
+                    incidencias_abiertas = get_incidencias_abiertas(username)
+                    incidencias_notif_cierre = get_incidencias_notif_cierre(username)
+
+                    login_user(load_user(user.nick))
+                    return render_template('incidencias_columnas.html', userType=userType, userName=username, incidencias=incidencias, incidencias_abiertas = incidencias_abiertas, incidencias_notif_cierre = incidencias_notif_cierre)
+
+            if userType == 2:
+                    # cliente
+                    incidencias = get_incidencias_by_user(username)
+                    login_user(load_user(user.nick))
+                    return render_template('incidencias_cliente.html', userType=userType, userName=username, incidencias=incidencias)
+
   
 @app.route('/registrar_nueva_incidencia', methods=['GET', 'POST'])
 @login_required
@@ -76,7 +107,6 @@ def registrar_nueva_incidencia():
         return redirect(url_for('incidencias'))
       
     return render_template('datos_incidencia_cliente.html')
-
 
 def requires_access_level(access_level):
     def decorator(f):
@@ -147,7 +177,10 @@ class Cambio(db.Model):
 def get_user(nick):
     return Usuario.query.get(nick)
 
- 
+
+def get_tecnicos():
+    return list(Usuario.query.filter_by(tipo=1))
+
 #######################
 #     INCIDENCIA      #
 #######################
@@ -155,12 +188,32 @@ def insert_incidencia(titulo, descripcion, fecha, estado, reportadaPor, categori
     db.session.add(Incidencia(titulo=titulo, comentario=comentario, prioridad=prioridad, tiempoEstimado=tiempoEstimado, descripcion=descripcion, fecha=fecha, estado=estado, tecnicoAsignado=tecnicoAsignado, reportadaPor=reportadaPor, categoria=categoria))
     db.session.commit()
 
+def cambio_estado_incidencia(id, estado, tecnicoAsignado):
+    incidencia = Incidencia.query.get(id)
+    incidencia.estado = estado
+    incidencia.tecnicoAsignado = tecnicoAsignado
+    db.session.commit()
+
 def get_incidencias():
     return list(Incidencia.query.all())
+
+def get_incidencia(id):
+    return list(Incidencia.query.filter_by(id=id))
 
 def get_incidencias_by_user(userNick):
     return list(Incidencia.query.filter_by(reportadaPor=userNick))
 
+def get_incidencias_abiertas(userNick):
+    return list(Incidencia.query.filter_by(tecnicoAsignado=userNick, estado=1))
+
+def get_incidencias_abiertas_super():
+    return list(Incidencia.query.filter_by(estado=0))
+
+def get_incidencias_notif_cierre_super():
+    return list(Incidencia.query.filter_by(estado=2))
+
+def get_incidencias_notif_cierre(userNick):
+    return list(Incidencia.query.filter_by(reportadaPor=userNick, estado=2))
 
 #######################
 #     INVENTARIO      #

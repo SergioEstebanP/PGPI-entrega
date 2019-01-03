@@ -63,13 +63,14 @@
         <!-- Body -->
         <div class="row" style="width: 100%; padding-top: 0.5em; padding-bottom: 0.5em; font-size: 2em;">
             <div class="col">
-                <p class="text-center">Estado de las incidencias del tecnico {{ username }}</p>
+                <p class="text-center">Estado de las incidencias del supervisor {{ username }}</p>
             </div>
         </div>
 
         <div style="display: flex;">
             <div>
-                <p class="text-center" id="tituloColumna">Abiertas</p>
+                <p class="text-center" id="tituloColumna">Pendientes de asignar</p>
+
                 {% for i in range(incidencias_abiertas|length) %}
                 <div class="card-deck" style="margin: 1em;">
                     <div class="card" id="card1">
@@ -78,7 +79,7 @@
                                 <p class="card-title">{{ incidencias_abiertas[i].titulo }}</p>
                                 <hr>
                                 <p class="card-text">Descripción:</p>
-                                <p class="card-text .text-justify" id="card-description">{{ incidencias_abiertas[i].titulo }}</p>
+                                <p class="card-text .text-justify" id="card-description">{{ incidencias_abiertas[i].descripcion }}</p>
                                 <hr>
                                 <p class="card-text">Incidencia pendiente de asignar a un tecnico.</p>
                             </a>
@@ -90,7 +91,7 @@
             </div>
 
             <div style="border-left: 1px solid grey; height: 70%;">
-                <p class="text-center" id="tituloColumna">Notificacion Cierre</p>
+                <p class="text-center" id="tituloColumna">Pendientes de Cerrar</p>
                 {% for i in range(incidencias_notif_cierre|length) %}
                 <div class="card-deck" style="margin: 1em;">
                     <div class="card" id="card2">
@@ -99,7 +100,7 @@
                                 <p class="card-title">{{ incidencias_notif_cierre[i].titulo }}</p>
                                 <hr>
                                 <p class="card-text">Descripción:</p>
-                                <p class="card-text .text-justify" id="card-description">{{ incidencias_notif_cierre[i].descripcion }}</p>
+                                <p class="card-text .text-justify" id="card-description">{{ incidencasi_notif_cierre[i].descripcion }}</p>
                                 <hr>
                                 <p class="card-text">Incidencia abierta por {{ incidencias_notif_cierre[i].reportadaPor }}</p>
                             </a>
@@ -107,7 +108,6 @@
                     </div>
                 </div>
                 {% endfor %}
-
             </div>
         </div>
     </div>

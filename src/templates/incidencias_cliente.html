@@ -74,7 +74,7 @@
             {% for j in range(3) %}
             <div class="card" id="card1">
                 <div class="card-body">
-                    <a href="/informacion_incidencia">
+                    <a href="/informacion_incidencia/{{ incidencias[3*i+j]['id']  }}">
                         <p class="card-title">{{ incidencias[3*i+j]['titulo'] }}</p>
                         <hr>
                         <p class="card-text">Descripcion</p>
@@ -93,7 +93,7 @@
         
             <div class="card" id="card1">
                 <div class="card-body">
-                    <a href="/informacion_incidencia">
+                    <a href="/informacion_incidencia/{{ incidencias[3*i+j]['id']  }}">
                         <p class="card-title">{{ incidencias[3*i+j]['titulo'] }}</p>
                         <hr>
                         <p class="card-text">Descripcion</p>
