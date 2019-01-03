@@ -144,7 +144,7 @@ class Incidencia(db.Model):
     categoria = db.Column(db.String(40))
 
 class Cambio(db.Model):
-    fecha = db.Column(db.DateTime, primary_key=True)
+    fecha = db.Column(db.String(50), primary_key=True)
     estado = db.Column(db.Integer)
     tecnico = db.Column(db.String(50))
     incidencia = db.Column(db.Integer)

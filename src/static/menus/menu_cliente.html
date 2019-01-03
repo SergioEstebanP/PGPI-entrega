@@ -1,0 +1,24 @@
+<div id="side-nav" class="side-nav fixed-top flex-nowrap flex-column justify-content-start d-inline-flex align-items-start bg-light" onmouseover="openSide('side-nav')">
+    <div class="side-title side-content d-flex ">
+        <img id="user-img" class="user-icon" src="../static/img/default-gravatar.png" alt="user icon">
+        <span class="collapse width align-self-center" style="min-width: 70%;padding-left: 5%">{{ current_user.nick }}</span>
+    </div>
+    <div class="list-group list-group-flush w-100 side-icons">
+
+        <a class="list-group-item d-flex justify-content-start align-items-center bg-light">
+            <span class="material-icons" style="color: black;"></span>
+            <span class="collapse width align-top side-options">Item 1</span>
+        </a>
+
+        <a class="list-group-item d-flex justify-content-start align-items-center bg-light">
+            <span class="material-icons" style="color: black;"></span>
+            <span class="collapse width align-top side-options">Item 2</span>
+        </a>
+
+        <a class="list-group-item d-flex justify-content-start align-items-center bg-light">
+            <span class="material-icons" style="color: black;"></span>
+            <span class="collapse width align-top side-options">Item 3</span>
+        </a>
+
+    </div>
+</div>
