@@ -36,22 +36,19 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-
-
-@app.route('/informacion_incidencia/<idIncidencia>', methods=['GET', 'POST'])
+@app.route('/incidencia/<idIncidencia>', methods=['GET', 'POST'])
 @login_required
 def informacion_incidencia_cliente(idIncidencia):
-    incidencias = get_incidencia(idIncidencia)
+    incidencia = get_incidencia(idIncidencia)
     listaTecnicos = get_tecnicos()
     if request.method == 'POST':
-        print(incidencias[0].estado)
-        if incidencias[0].estado==0:
+        if incidencia.estado==0:
             tecnico = request.form['tecnicoAsignado']
             cambio_estado_incidencia(idIncidencia, 1, tecnico)
-        elif incidencias[0].estado==1:
+        elif incidencia.estado==1:
             cambio_estado(idIncidencia, 2)
 
-    return render_template('info_incidencia.html', idIncidencia=idIncidencia, incidencias=incidencias, listaTecnicos=listaTecnicos)
+    return render_template('info_incidencia.html', incidencia=incidencia, listaTecnicos=listaTecnicos)
 
 @app.route('/index')
 @login_required
@@ -115,7 +112,7 @@ def registrar_incidencia():
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@127.0.0.1:3306/PGPI_grupo02'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@jair.lab.inf.uva.es:3306/PGPI_grupo02'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -187,8 +184,6 @@ def cambio_estado(id,estado):
     incidencia = Incidencia.query.get(id)
     incidencia.estado = estado
     db.session.commit()
-
-    insert_cambio(estado, tecnicoAsignado, id)
 
 def get_incidencias_by_user(userNick):
     return list(Incidencia.query.filter_by(reportadaPor=userNick))
