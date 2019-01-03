@@ -49,9 +49,9 @@ def informacion_incidencia_cliente(idIncidencia):
         if incidencias[0].estado==0:
             tecnico = request.form['tecnicoAsignado']
             cambio_estado_incidencia(idIncidencia, 1, tecnico)
-        elif incidencias[0].estado==1: 
+        elif incidencias[0].estado==1:
             cambio_estado(idIncidencia, 2)
-    
+
     return render_template('info_incidencia.html', idIncidencia=idIncidencia, incidencias=incidencias, listaTecnicos=listaTecnicos)
 
 @app.route('/index')
@@ -84,7 +84,7 @@ def index():
         login_user(get_user(current_user.nick))
         return render_template('incidencias_cliente.html', userType=userType, userName=current_user.nick, incidencias=incidencias)
 
-  
+
 @app.route('/registrar_nueva_incidencia', methods=['GET', 'POST'])
 @login_required
 #@requires_access_level([1, 2])
@@ -103,9 +103,9 @@ def registrar_nueva_incidencia():
         categoria       = request.form.get('categoria')
 
         insert_incidencia(titulo, descripcion, fecha, estado, reportadaPor, categoria, comentario, prioridad, tiempoEstimado, tecnicoAsignado)
-       
+
         return redirect(url_for('index'))
-      
+
     return render_template('datos_incidencia_cliente.html')
 
 '''
@@ -160,7 +160,7 @@ class Incidencia(db.Model):
     tecnicoAsignado = db.Column(db.String(50))
     reportadaPor = db.Column(db.String(50))
     categoria = db.Column(db.String(40))
-     
+
 class ElementoIncidencia(db.Model):
     incidencia = db.Column(db.Integer, primary_key=True)
     elemento = db.Column(db.Integer, primary_key=True)
