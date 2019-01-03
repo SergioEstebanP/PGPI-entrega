@@ -45,11 +45,13 @@ def informacion_incidencia_cliente(idIncidencia):
     incidencias = get_incidencia(idIncidencia)
     listaTecnicos = get_tecnicos()
     if request.method == 'POST':
-        tecnico = request.form['tecnicoAsignado']
-        cambio_estado_incidencia(idIncidencia, 1, tecnico)
-
-    print(incidencias[0].tecnicoAsignado)
-    print(incidencias[0].estado)
+        if incidencias.estado=0:
+            tecnico = request.form['tecnicoAsignado']
+            cambio_estado_incidencia(idIncidencia, 1, tecnico)
+        if incidencias.estado=1:
+            tecnico=request.form['tecnicoAsignado']
+            cambio_estado_incidencia(idIncidencia, 2, tecnico)
+    
     return render_template('info_incidencia.html', idIncidencia=idIncidencia, incidencias=incidencias, listaTecnicos=listaTecnicos)
 
 @app.route('/index')
