@@ -70,7 +70,7 @@ def incidencia(idIncidencia):
 
     incidencia = get_incidencia(idIncidencia)
     listaTecnicos = get_tecnicos()
-    return render_template('info_incidencia.html', idIncidencia=idIncidencia, incidencias=incidencias, listaTecnicos=listaTecnicos)
+    return render_template('info_incidencia.html', incidencia=incidencia, listaTecnicos=listaTecnicos)
   
 @app.route('/registrar_incidencia', methods=['GET', 'POST'])
 @login_required
