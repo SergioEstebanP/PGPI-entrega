@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS usuario;
 DROP TABLE IF EXISTS incidencia;
 DROP TABLE IF EXISTS elementoIncidencia;
 DROP TABLE IF EXISTS cambio;
+DROP TABLE IF EXISTS categoriaIncidencia;
 
 
 /* Valores para estado de la incidencia:
@@ -80,7 +81,7 @@ CREATE TABLE elementoIncidencia(
 );
 
 CREATE TABLE cambio(
-    fecha DATE PRIMARY KEY,
+    fecha DATETIME PRIMARY KEY,
     estado INTEGER REFERENCES estado(id),
     tecnico VARCHAR(50) REFERENCES usuario(nick),
     incidencia INTEGER REFERENCES incidencia(id) 
