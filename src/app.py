@@ -163,6 +163,9 @@ def insert_incidencia(titulo, descripcion, fecha, estado, reportadaPor, categori
     db.session.add(Incidencia(titulo=titulo, comentario=comentario, prioridad=prioridad, tiempoEstimado=tiempoEstimado, descripcion=descripcion, fecha=fecha, estado=estado, tecnicoAsignado=tecnicoAsignado, reportadaPor=reportadaPor, categoria=categoria))
     db.session.commit()
 
+def get_incidencia(id):
+    return Incidencia.query.get(id)
+
 def cambio_estado_incidencia(id, estado, tecnicoAsignado):
     incidencia = Incidencia.query.get(id)
     incidencia.estado = estado
@@ -171,9 +174,6 @@ def cambio_estado_incidencia(id, estado, tecnicoAsignado):
 
 def get_incidencias():
     return list(Incidencia.query.all())
-
-def get_incidencia(id):
-    return list(Incidencia.query.filter_by(id=id))
 
 def get_incidencias_by_user(userNick):
     return list(Incidencia.query.filter_by(reportadaPor=userNick))
