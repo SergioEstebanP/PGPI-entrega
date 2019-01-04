@@ -162,13 +162,13 @@
                 <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
                 {% endif %}}
 
-                {% if (current_user.tipo == 0) and (incidencia.estado ==  2) %}
+                {% if (current_user.tipo == 0) and (incidencia.estado ==  3) %}
                 <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
                 <button type="submit" class="btn btn-outline-primary" name="action" value="Solucion">Cerrar Incidencia Solucionada</button>
                 <button type="submit" class="btn btn-outline-primary" name="action" value="n-Solucion">Cerrar Incidencia sin Solucion</button>
                 {% endif %}}
 
-                {% if (current_user.tipo == 1) and (incidencias[0].estado==1) %}
+                {% if (current_user.tipo == 1) and (incidencia.estado==1) %}
                 <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
                 <button type="submit" class="btn btn-outline-primary" name="action" value="cierre_tecnico">Solicitar Cierre</button>
                 {% endif %}}
@@ -178,7 +178,7 @@
                 {% endif %}}
 
 
-                {% if (current_user.tipo == 2) and (incidencias[0].estado!=2) %}
+                {% if (current_user.tipo == 2) and (incidencia.estado!=2) %}
                 <button type="button" class="btn btn-outline-primary">Ver comentario</button>
                 <button type="submit" class="btn btn-outline-primary" name="action" value="cierre_cliente">Solicitar Cierre</button>
                 {% endif %}
