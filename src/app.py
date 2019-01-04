@@ -36,6 +36,27 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
+@app.route('/incidencia/<idIncidencia>', methods=['GET', 'POST'])
+@login_required
+def informacion_incidencia_cliente(idIncidencia):
+    incidencia = get_incidencia(idIncidencia)
+    listaTecnicos = get_tecnicos()
+    if request.method == 'POST':
+        if request.form['action']=="cierre_cliente":
+            cambio_estado(idIncidencia,2)
+        elif request.form['action']=="cierre_tecnico":
+            cambio_estado(idIncidencia,3)
+        elif request.form['action']=="tecnico":
+            tecnico = request.form['tecnicoAsignado']
+            cambio_estado_incidencia(idIncidencia, 1, tecnico)
+        elif request.form['action']=="n-Solucion":
+            cambio_estado(idIncidencia,4)
+        elif request.form['action']=="Solucion":
+            cambio_estado(idIncidencia,5)
+
+    
+    return render_template('info_incidencia.html', idIncidencia=idIncidencia, incidencias=incidencias, listaTecnicos=listaTecnicos)
+
 @app.route('/index')
 @login_required
 def index():
@@ -48,6 +69,7 @@ def index():
     elif current_user.tipo == 1: #Tecnico
         incidencias_abiertas = get_incidencias_abiertas(current_user.nick)
         incidencias_notif_cierre = get_incidencias_notif_cierre(current_user.nick)
+        incidencias_pendientes_cierre=get_inciencias_pendientes_cierre(current_user.nick)
 
         return render_template('incidencias_tecnico.html', incidencias_abiertas=incidencias_abiertas, incidencias_notif_cierre=incidencias_notif_cierre)
 
@@ -194,10 +216,12 @@ def get_incidencias_abiertas_super():
     return list(Incidencia.query.filter_by(estado=0))
 
 def get_incidencias_notif_cierre_super():
-    return list(Incidencia.query.filter_by(estado=2))
+    return list(Incidencia.query.filter_by(estado=3))
 
 def get_incidencias_notif_cierre(userNick):
-    return list(Incidencia.query.filter_by(reportadaPor=userNick, estado=2))
+    return list((Incidencia.query.filter_by(reportadaPor=userNick, estado=2)))
+def get_inciencias_pendientes_cierre(userNick):
+    return list((Incidencia.query.filter_by(reportadaPor=userNick, estado=3)))
 
 
 #######################
