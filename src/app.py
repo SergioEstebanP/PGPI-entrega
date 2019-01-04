@@ -40,6 +40,7 @@ def logout():
 @login_required
 def incidencia(idIncidencia):
     if request.method == 'POST':
+         incidencia = get_incidencia(idIncidencia)
         if request.form['action']=="tecnico":
             tecnico = request.form['tecnicoAsignado']
             cambio_estado_incidencia(idIncidencia, 1, current_user.nick, tecnicoAsignado=tecnico)
@@ -55,7 +56,7 @@ def incidencia(idIncidencia):
             return render_template('add_comentario.html', incidencia=incidencia)
 
 
-    incidencia = get_incidencia(idIncidencia)
+   
     listaTecnicos = get_tecnicos()
     cambioApertura = get_cambio_by_estado(idIncidencia, 0)
     cambioAsignada = get_cambio_by_estado(idIncidencia, 1)
