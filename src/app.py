@@ -123,6 +123,7 @@ def registrar_incidencia():
 ###################################################
 
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import or_
 from flask_login import UserMixin
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@127.0.0.1:3306/PGPI_grupo02'
@@ -200,7 +201,7 @@ def cambio_estado_incidencia(id, estado, usuario):
 
 
 def get_incidencias_cerradas():
-    return list(Incidencia.query.filter(Incidencia.estado in (4,5)))
+    return list(Incidencia.query.filter(or_(Incidencia.estado == 4, Incidencia.estado == 5)))
 
 def get_incidencias_by_user(userNick):
     return list(Incidencia.query.filter_by(reportadaPor=userNick))
