@@ -41,9 +41,8 @@ def logout():
 def incidencia(idIncidencia):
     incidencia = get_incidencia(idIncidencia)
     if request.method == 'POST':        
-        if request.form['action']=="tecnico":
-            tecnico = request.form['tecnicoAsignado']
-            cambio_estado_incidencia(idIncidencia, 1, current_user.nick, tecnicoAsignado=tecnico)
+        if request.form['action']=="completar":
+            return redirect(url_for('completar_incidencia', idIncidencia=idIncidencia))
         elif request.form['action']=="cierre_cliente":
             cambio_estado_incidencia(idIncidencia, 2, current_user.nick)
         elif request.form['action']=="cierre_tecnico":
@@ -54,8 +53,6 @@ def incidencia(idIncidencia):
             cambio_estado_incidencia(idIncidencia,5, current_user.nick)
         elif request.form['action']=="add_comentario":
             return render_template('add_comentario.html', incidencia=incidencia)
-
-
    
     listaTecnicos = get_tecnicos()
     cambioApertura = get_cambio_by_estado(idIncidencia, 0)
@@ -117,6 +114,21 @@ def registrar_incidencia():
         return redirect(url_for('index'))
 
     return render_template('registrar_incidencia.html')
+
+@app.route('/completar_incidencia/<idIncidencia>', methods=['GET', 'POST'])
+@login_required
+def completar_incidencia(idIncidencia):
+    if request.method == 'POST':
+        comentario = request.form.get('comentario')
+        prioridad  = request.form.get('prioridad')
+        tecnico    = request.form.get('tecnico')
+
+        asignar_incidencia(idIncidencia, comentario, prioridad, tecnico)
+        return redirect(url_for('incidencia', idIncidencia=idIncidencia))
+
+    listaTecnicos = get_tecnicos()
+    incidencia = get_incidencia(idIncidencia)
+    return render_template('completar_incidencia.html', incidencia=incidencia, listaTecnicos=listaTecnicos)
 
 @app.route('/add_comentario/<idIncidencia>', methods=['GET', 'POST'])
 @login_required
@@ -208,13 +220,21 @@ def insert_incidencia(titulo, descripcion, fecha, estado, reportadaPor, categori
 def get_incidencia(id):
     return Incidencia.query.get(id)
 
-def cambio_estado_incidencia(id, estado, usuario, tecnicoAsignado=None):
+def cambio_estado_incidencia(id, estado, usuario):
     incidencia = get_incidencia(id)
     incidencia.estado = estado
-    if tecnicoAsignado: incidencia.tecnicoAsignado = tecnicoAsignado
     db.session.commit()
     
     insert_cambio(estado, usuario, id)
+
+def asignar_incidencia(id, comentario, prioridad, tecnico):
+    incidencia = get_incidencia(id)
+    incidencia.comentario = comentario
+    incidencia.prioridad = prioridad
+    incidencia.tecnicoAsignado = tecnico
+    db.session.commit()
+
+    cambio_estado_incidencia(id, 1, current_user.nick)
 
 def comentar_incidencia(id, comentario):
     incidencia = get_incidencia(id)

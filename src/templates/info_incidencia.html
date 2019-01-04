@@ -166,15 +166,9 @@
   <div id="botonesPiePagina">
         <form method="POST" action='/incidencia/{{ incidencia.id }}'>
             {% if (current_user.tipo == 0) and (incidencia.estado ==  0) %}      
-                <button type="button" class="btn btn-outline-primary" >Añadir comentario</button>
-                <button type="submit" class="btn btn-outline-primary" name="action" value="tecnico">Asignar tecnico</button>
-                <select name="tecnicoAsignado">  
-                    {% for i in range(listaTecnicos|length) %}
-                    <option value="{{ listaTecnicos[i].nick }}">{{ listaTecnicos[i].nick }}</option>
-                    {% endfor %}
-                </select> 
+            <button type="submit" class="btn btn-outline-primary" name="action" value="completar">Completar incidencia</button>
             {% endif %}}
-    
+
             {% if (current_user.tipo == 0) and (incidencia.estado ==  1) %}
             <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
             {% endif %}}
