@@ -38,7 +38,7 @@ def logout():
 
 @app.route('/incidencia/<idIncidencia>', methods=['GET', 'POST'])
 @login_required
-def informacion_incidencia_cliente(idIncidencia):
+def incidencia(idIncidencia):
     incidencia = get_incidencia(idIncidencia)
     listaTecnicos = get_tecnicos()
     if request.method == 'POST':
@@ -55,7 +55,7 @@ def informacion_incidencia_cliente(idIncidencia):
             cambio_estado(idIncidencia,5)
 
     
-    return render_template('info_incidencia.html', idIncidencia=idIncidencia, incidencias=incidencias, listaTecnicos=listaTecnicos)
+    return render_template('info_incidencia.html', incidencia=incidencia, listaTecnicos=listaTecnicos)
 
 @app.route('/index')
 @login_required
@@ -84,20 +84,6 @@ def incidencias_cerradas():
     incidencias = get_incidencias_cerradas()
     return render_template('incidencias_cliente.html', incidencias=incidencias)
 
-
-@app.route('/incidencia/<idIncidencia>', methods=['GET', 'POST'])
-@login_required
-def incidencia(idIncidencia):
-    incidencia = get_incidencia(idIncidencia)
-    listaTecnicos = get_tecnicos()
-    if request.method == 'POST':
-        if incidencia.estado==0:
-            tecnico = request.form['tecnicoAsignado']
-            cambio_estado_incidencia(idIncidencia, 1, tecnico)
-        elif incidencia.estado==1:
-            cambio_estado(idIncidencia, 2)
-
-    return render_template('info_incidencia.html', incidencia=incidencia, listaTecnicos=listaTecnicos)
 
 @app.route('/registrar_incidencia', methods=['GET', 'POST'])
 @login_required
