@@ -62,6 +62,9 @@ def incidencia(idIncidencia):
             cambio_estado_incidencia(idIncidencia,4, current_user.nick)
         elif request.form['action']=="Solucion":
             cambio_estado_incidencia(idIncidencia,5, current_user.nick)
+        elif request.form['action']=="add_comentario":
+            return render_template('add_comentario.html', incidencia=incidencia)
+
 
 
     return render_template('info_incidencia.html', incidencia=incidencia, listaTecnicos=listaTecnicos, cambioApertura=cambioApertura, cambioAsignada=cambioAsignada, cambioCierre=cambioCierre)
@@ -95,12 +98,12 @@ def incidencias_cerradas():
     return render_template('incidencias_cliente.html', incidencias=incidencias)
 
 
-@app.route('/incidencia2/<idIncidencia>', methods=['GET', 'POST'])
+'''@app.route('/incidencia2/<idIncidencia>', methods=['GET', 'POST'])
 @login_required
 def incidencia2(idIncidencia):
     if request.method == 'POST':
         incidencia = get_incidencia(idIncidencia) 
-        return render_template('add_comentario.html', incidencia=incidencia)
+        return render_template('add_comentario.html', incidencia=incidencia)'''
 
 
 
@@ -129,11 +132,15 @@ def registrar_incidencia():
 @app.route('/add_comentario/<idIncidencia>', methods=['GET', 'POST'])
 @login_required
 def add_comentario(idIncidencia):
-    if request.method == 'POST':        
-        comentario = request.form.get('comentario') 
-        comentar_incidencia(idIncidencia, comentario)
-        return redirect(url_for('index'))
+    if request.method == 'POST':   
+        if request.form['action']=="add_com":
+            comentario = request.form.get('comentario') 
+            comentar_incidencia(idIncidencia, comentario)
+            return redirect(url_for('index'))
 
+        elif request.form['action']=="cancelar":  
+            return redirect(url_for('index'))   
+        
     return render_template('info_incidencia.html')
 
 
@@ -146,8 +153,8 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import or_
 from flask_login import UserMixin
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@127.0.0.1:3306/PGPI_grupo02'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@jair.lab.inf.uva.es:3306/PGPI_grupo02'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@127.0.0.1:3306/PGPI_grupo02'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@jair.lab.inf.uva.es:3306/PGPI_grupo02'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 

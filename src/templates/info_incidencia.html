@@ -53,8 +53,16 @@
             <div class="col-md-6">
                 <div class="card" id="card1">
                     <div class="card-body">
-                        <p class="card-text text-justify" id="card-description">{{ incidencia.descripcion}}</p>
+                        <h5>Descripción:</h5>
+                        <p class="card-text text-justify" id="card-description"> {{ incidencia.descripcion}}</p>
+                       
                     </div>
+                    {% if incidencia.comentario is defined and incidencia.comentario|length %}
+                    <div class="card-body">     
+                            <h5>Comentario:</h5>
+                        <p class="card-text text-justify" id="card-description"> {{ incidencia.comentario}}</p>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
             <div class="col-md-6">
@@ -156,8 +164,9 @@
 
 
   <div id="botonesPiePagina">
+        <form method="POST" action='/incidencia/{{ incidencia.id }}'>
             {% if (current_user.tipo == 0) and (incidencia.estado ==  0) %}      
-                <form method="POST" action='/incidencia/{{ incidencia.id }}'>
+                
                     <button type="button" class="btn btn-outline-primary" >Añadir comentario</button>
                     <button type="submit" class="btn btn-outline-primary" name="action" value="tecnico">Asignar tecnico</button>
                      <select name="tecnicoAsignado">  
@@ -166,38 +175,31 @@
                         {% endfor %}
                     </select> 
                     {% endif %}}
-                </form> 
+               
     
                 {% if (current_user.tipo == 0) and (incidencia.estado ==  1) %}
-                <form method="POST" action='/incidencia/{{ incidencia.id }}'>    
+                
                     <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
-                </form>
+                
                 {% endif %}}
 
                 {% if (current_user.tipo == 0) and (incidencia.estado ==  3 or incidencia.estado==2) %}
-                <form method="POST" action='/incidencia/{{ incidencia.id }}'> 
-                  <button type="submit" class="btn btn-outline-primary" name="action" value="Solucion">Cerrar Incidencia Solucionada</button>
+                <button type="submit" class="btn btn-outline-primary" name="action" value="Solucion">Cerrar Incidencia Solucionada</button>
                   <button type="submit" class="btn btn-outline-primary" name="action" value="n-Solucion">Cerrar Incidencia sin Solucion</button>
-                </form>
+               
     
                 {% endif %}}
 
                 {% if (current_user.tipo == 1) and (incidencia.estado==1) %}
-                <form method="POST" action='/incidencia2/{{ incidencia.id }}'> 
-                  <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
-                </form>
-                <form method="POST" action='/incidencia/{{ incidencia.id }}'>
-                  <button type="submit" class="btn btn-outline-primary" name="action" value="cierre_tecnico">Solicitar Cierre</button>
-                </form>
+                <button type="submit" class="btn btn-outline-primary" name="action" value="add_comentario">Añadir comentario</button>
+                <button type="submit" class="btn btn-outline-primary" name="action" value="cierre_tecnico">Solicitar Cierre</button>
+               
                  {% endif %}}
 
                 {% if current_user.tipo == 1 %}
-                <form method="POST" action='/incidencia2/{{ incidencia.id }}'> 
-                  <button type="submit" class="btn btn-outline-primary">Añadir comentario</button>
-                </form>
-                <form method="POST" action='/incidencia/{{ incidencia.id }}'> 
-                    <button type="submit" class="btn btn-outline-primary">Solicitar Cierre</button>
-                </form>
+                <button type="submit" class="btn btn-outline-primary" name="action" value="add_comentario">Añadir comentario</button>
+                <button type="submit" class="btn btn-outline-primary" name="action" value="cierre_tecnico">Solicitar Cierre</button>
+               
                 {% endif %}}
 
 
