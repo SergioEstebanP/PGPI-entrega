@@ -57,7 +57,7 @@ def incidencia(idIncidencia):
             cambio_estado_incidencia(idIncidencia,3, current_user.nick)
         elif request.form['action']=="tecnico":
             tecnico = request.form['tecnicoAsignado']
-            cambio_estado_incidencia(idIncidencia, 1, current_user.nick)
+            cambio_estado_incidencia(idIncidencia, 1, tecnico)
         elif request.form['action']=="n-Solucion":
             cambio_estado_incidencia(idIncidencia,4, current_user.nick)
         elif request.form['action']=="Solucion":
