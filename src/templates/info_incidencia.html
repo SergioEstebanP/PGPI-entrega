@@ -100,7 +100,7 @@
 
     <div class="steps-timeline" style="margin-top: 7em;">
       <div class="steps-one">
-        <img class="steps-img" src="http://placehold.it/50/3498DB/FFFFFF" alt="" />
+        <img class="steps-img" src="http://placehold.it/50/3498DB/3498DB" alt="" />
         <h3 class="steps-name">
           Abierta
         </h3>
@@ -110,8 +110,8 @@
       </div>
 
       <div class="steps-two">
-          {% if incidencia.estado == 1 or incidencia.estado == 2 or incidencia.estado == 3 or incidencia.estado == 4%}
-        <img class="steps-img" src="http://placehold.it/50/3498DB/FFFFFF" alt="" />
+          {% if incidencia.estado == 1 or incidencia.estado == 2 or incidencia.estado == 3 or incidencia.estado == 4 or incidencia.estado == 5 %}
+        <img class="steps-img" src="http://placehold.it/50/3498DB/3498DB" alt="" />
         <h3 class="steps-name">
           Asignada
         </h3>
@@ -119,7 +119,7 @@
         Aceptada y asignada a {{ incidencia.tecnicoAsignado }} el {{ cambioAsignada.fecha }}
         </p>
         {% else %}
-        <img class="steps-img" src="http://placehold.it/50/FF0000/FFFFFF" alt="" />
+        <img class="steps-img" src="http://placehold.it/50/FF0000/FF0000" alt="" />
         <h3 class="steps-name">
           Asignada
         </h3>
@@ -130,8 +130,8 @@
       </div>
 
       <div class="steps-three">
-          {% if incidencia.estado == 3 or incidencia.etado == 4%}
-        <img class="steps-img" src="http://placehold.it/50/3498DB/FFFFFF" alt="" />
+          {% if incidencia.estado == 4 or incidencia.etado == 5%}
+        <img class="steps-img" src="http://placehold.it/50/3498DB/3498DB" alt="" />
         <h3 class="steps-name">
           Cerrada
         </h3>
@@ -139,7 +139,7 @@
         Incidencia cerrada el {{ cambioCierre.fecha  }}
         </p>
         {% else %}
-        <img class="steps-img" src="http://placehold.it/50/FF0000/FFFFFF" alt="" />
+        <img class="steps-img" src="http://placehold.it/50/FF0000/FF0000" alt="" />
         <h3 class="steps-name">
           Cerrada
         </h3>
