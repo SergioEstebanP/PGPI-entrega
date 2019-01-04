@@ -81,6 +81,15 @@ def incidencia(idIncidencia):
     listaTecnicos = get_tecnicos()
     return render_template('info_incidencia.html', incidencia=incidencia, listaTecnicos=listaTecnicos)
 
+@app.route('/incidencia2/<idIncidencia>', methods=['GET', 'POST'])
+@login_required
+def incidencia2(idIncidencia):
+    if request.method == 'POST':
+        incidencia = get_incidencia(idIncidencia) 
+        return render_template('add_comentario.html', incidencia=incidencia)
+
+
+
 @app.route('/registrar_incidencia', methods=['GET', 'POST'])
 @login_required
 def registrar_incidencia():
@@ -102,6 +111,16 @@ def registrar_incidencia():
         return redirect(url_for('index'))
 
     return render_template('registrar_incidencia.html')
+
+@app.route('/add_comentario/<idIncidencia>', methods=['GET', 'POST'])
+@login_required
+def add_comentario(idIncidencia):
+    if request.method == 'POST':        
+        comentario = request.form.get('comentario') 
+        comentar_incidencia(idIncidencia, comentario)
+        return redirect(url_for('index'))
+
+    return render_template('info_incidencia.html')
 
 
 
@@ -174,10 +193,16 @@ def insert_incidencia(titulo, descripcion, fecha, estado, reportadaPor, categori
 def get_incidencia(id):
     return Incidencia.query.get(id)
 
+
 def cambio_estado_incidencia(id, estado, tecnicoAsignado):
     incidencia = get_incidencia(id)
     incidencia.estado = estado
     incidencia.tecnicoAsignado = tecnicoAsignado
+    db.session.commit()
+
+def comentar_incidencia(id, comentario):
+    incidencia = get_incidencia(id)
+    incidencia.comentario = comentario
     db.session.commit()
 
 def cambio_estado(id,estado):

@@ -76,7 +76,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="col-md-6">
                 <table class="table table-striped table-hover" >
                 <thead class="thead-dark">
@@ -116,7 +115,6 @@
                 </table>
             </div>
         </div>
-
         <section id="Steps" class="steps-section">
 
     <div class="steps-timeline" style="margin-top: 7em;">
@@ -163,33 +161,42 @@
   </section>
 
 
-       <form method="POST" action='/incidencia/{{ incidencia.id }}'>
+       
             <footer>
                 {% if (current_user.tipo == 0) and (incidencia.estado ==  0) %}
                 <!-- <form method="POST" action='/incidencia/{{ incidencia.id }}'> -->
-                <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
+                <form method="POST" action='/incidencia/{{ incidencia.id }}'>
+                    <button type="button" class="btn btn-outline-primary" >Añadir comentario</button>
 
                     <button type="submit" class="btn btn-outline-primary">Asignar tecnico</button>
-                     <select name="tecnicoAsignado">  
+                    <select name="tecnicoAsignado">  
                         {% for i in range(listaTecnicos|length) %}
                         <option value="{{ listaTecnicos[i].nick }}">{{ listaTecnicos[i].nick }}</option>
                         {% endfor %}
                     </select> 
-                {% endif %}}
-
+                    {% endif %}}
+                </form>          
                 {% if (current_user.tipo == 0) and (incidencia.estado ==  1) %}
-                <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
+                <form method="POST" action='/incidencia/{{ incidencia.id }}'>    
+                    <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
+                </form>
                 {% endif %}}
 
                 {% if (current_user.tipo == 0) and (incidencia.estado ==  2) %}
-                <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
-                <button type="button" class="btn btn-outline-primary">Cerrar Incidencia</button>
+                <form method="POST" action='/incidencia/{{ incidencia.id }}'> 
+                    <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
+                    <button type="button" class="btn btn-outline-primary">Cerrar Incidencia</button>
+                </form>
                 {% endif %}}
 
 
                 {% if current_user.tipo == 1 %}
-                <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
-                <button type="submit" class="btn btn-outline-primary">Solicitar Cierre</button>
+                <form method="POST" action='/incidencia2/{{ incidencia.id }}'> 
+                  <button type="submit" class="btn btn-outline-primary">Añadir comentario</button>
+                </form>
+                <form method="POST" action='/incidencia/{{ incidencia.id }}'> 
+                    <button type="submit" class="btn btn-outline-primary">Solicitar Cierre</button>
+                </form>
                 {% endif %}}
 
                 {% if current_user.tipo == 2 %}
