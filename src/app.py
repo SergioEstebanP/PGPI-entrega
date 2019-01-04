@@ -49,8 +49,8 @@ def informacion_incidencia_cliente(idIncidencia):
             tecnico = request.form['tecnicoAsignado']
             cambio_estado_incidencia(idIncidencia, 1, tecnico)
         elif incidencias[0].estado==1: 
-            cambio_estado(idIncidencia, 3)
-        elif incidencias[0].estado>1 :
+            cambio_estado(idIncidencia, 2)
+        elif incidencias[0].estado>2 :
             cambio_estado(idIncidencia,4)
             
 
@@ -77,9 +77,10 @@ def index():
 
         incidencias_abiertas = get_incidencias_abiertas(current_user.nick)
         incidencias_notif_cierre = get_incidencias_notif_cierre(current_user.nick)
+        incidencias_pendientes_cierre=get_inciencias_pendientes_cierre(current_user.nick)
 
         login_user(get_user(current_user.nick))
-        return render_template('incidencias_columnas.html', userType=userType, userName=current_user.nick, incidencias=incidencias, incidencias_abiertas = incidencias_abiertas, incidencias_notif_cierre = incidencias_notif_cierre)
+        return render_template('incidencias_columnas.html', userType=userType, userName=current_user.nick, incidencias=incidencias, incidencias_abiertas = incidencias_abiertas, incidencias_notif_cierre = incidencias_notif_cierre, incidencias_pendientes_cierre=incidencias_pendientes_cierre)
 
     if userType == 2:
         # cliente
@@ -222,7 +223,9 @@ def get_incidencias_notif_cierre_super():
     return list(Incidencia.query.filter_by(estado=3))
 
 def get_incidencias_notif_cierre(userNick):
-    return (list((Incidencia.query.filter_by(reportadaPor=userNick, estado=2))),list(Incidencia.query.filter_by(reportadaPor=userNick, estado=3)))
+    return list((Incidencia.query.filter_by(reportadaPor=userNick, estado=2)))
+def get_inciencias_pendientes_cierre(userNick):
+    return list((Incidencia.query.filter_by(reportadaPor=userNick, estado=3)))
 
 #######################
 #     INVENTARIO      #
