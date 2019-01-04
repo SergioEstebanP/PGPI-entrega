@@ -41,29 +41,24 @@ def logout():
 def incidencia(idIncidencia):
     incidencia = get_incidencia(idIncidencia)
 
-    cambioApertura = get_informacion_apertura(idIncidencia)[0]
-    cambioAsignada = get_informacion_asignada(idIncidencia)
-    if len(cambioAsignada) > 0:
-        cambioAsignada = cambioAsignada[0]
-    cambioCierre = get_informacion_cierre(idIncidencia)
-    if len(cambioCierre) > 0:
-        cambioCierre = cambioCierre[0]
+    cambioApertura = get_cambio_by_estado(idIncidencia, 0)
+    cambioAsignada = get_cambio_by_estado(idIncidencia, 1)
+    cambioCierre = get_cambio_by_estado(idIncidencia, 3)
 
-    listaTecnicos = get_tecnicos()
     if request.method == 'POST':
         if request.form['action']=="cierre_cliente":
-            cambio_estado_incidencia(idIncidencia,2, current_user.nick)
+            cambio_estado_incidencia(idIncidencia, 2, current_user.nick)
         elif request.form['action']=="cierre_tecnico":
-            cambio_estado_incidencia(idIncidencia,3, current_user.nick)
+            cambio_estado_incidencia(idIncidencia, 3, current_user.nick)
         elif request.form['action']=="tecnico":
-            tecnico = request.form['tecnicoAsignado']
-            cambio_estado_incidencia(idIncidencia, 1, tecnico)
+            cambio_estado_incidencia(idIncidencia, 1, current_user.nick)
         elif request.form['action']=="n-Solucion":
-            cambio_estado_incidencia(idIncidencia,4, current_user.nick)
+            cambio_estado_incidencia(idIncidencia, 4, current_user.nick)
         elif request.form['action']=="Solucion":
-            cambio_estado_incidencia(idIncidencia,5, current_user.nick)
+            cambio_estado_incidencia(idIncidencia, 5, current_user.nick)
 
 
+    listaTecnicos = get_tecnicos()
     return render_template('info_incidencia.html', incidencia=incidencia, listaTecnicos=listaTecnicos, cambioApertura=cambioApertura, cambioAsignada=cambioAsignada, cambioCierre=cambioCierre)
 
 @app.route('/index')
@@ -217,7 +212,6 @@ def get_incidencia(id):
 def cambio_estado_incidencia(id, estado, usuario):
     incidencia = get_incidencia(id)
     incidencia.estado = estado
-    incidencia.tecnicoAsignado = usuario
     db.session.commit()
     
     insert_cambio(estado, usuario, id)
@@ -251,14 +245,8 @@ def insert_cambio(estado, tecnico, incidencia):
     db.session.add(Cambio(fecha=fecha, estado=estado, tecnico=tecnico, incidencia=incidencia))
     db.session.commit()
 
-def get_informacion_apertura(id):
-    return list(Cambio.query.filter_by(incidencia=id, estado=0))
-
-def get_informacion_asignada(id):
-    return list(Cambio.query.filter_by(incidencia=id, estado=1))
-
-def get_informacion_cierre(id):
-    return list(Cambio.query.filter_by(incidencia=id, estado=3))
+def get_cambio_by_estado(id, estado):
+    return list(Cambio.query.filter_by(incidencia=id, estado=estado))[0]
 
 #######################
 #     INVENTARIO      #
