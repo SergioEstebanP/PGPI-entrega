@@ -49,72 +49,66 @@
         </div>
 
         <div style="display: flex;">
-            {% if (incidencias_abiertas|length) > 0 %}
             <div>
                 <p class="text-center" id="tituloColumna">Abiertas</p>
                 {% for i in range(incidencias_abiertas|length) %}
                 <div class="card-deck" style="margin: 1em;">
                     <div class="card" id="card1">
                         <div class="card-body">
-                            <a href="/incidencia/{{ incidencias_abiertas[i].id  }}">
+                            <!-- <a href="/incidencia/{{ incidencias_abiertas[i].id  }}"> -->
                                 <p class="card-title">{{ incidencias_abiertas[i].titulo }}</p>
                                 <hr>
                                 <p class="card-text">Descripción:</p>
                                 <p class="card-text .text-justify" id="card-description">{{ incidencias_abiertas[i].titulo }}</p>
                                 <hr>
                                 <p class="card-text">Incidencia pendiente de asignar a un tecnico.</p>
-                            </a>
+                            <!-- </a> -->
                         </div>
                     </div>
                 </div>
                 {% endfor %}
             </div>
-            {% endif %}
 
-
-            {% if (incidencias_notif_cierre|length) > 0 %}
             <div style="border-left: 1px solid grey; height: 70%;">
                 <p class="text-center" id="tituloColumna">Notificacion Cierre</p>
                 {% for i in range(incidencias_notif_cierre|length) %}
                 <div class="card-deck" style="margin: 1em;">
                     <div class="card" id="card2">
                         <div class="card-body">
-                            <a href="/incidencia/{{ incidencias_notif_cierre[i].id  }}">
+                            <!-- <a href="/incidencia/{{ incidencias_notif_cierre[i].id  }}"> --> 
                                 <p class="card-title">{{ incidencias_notif_cierre[i].titulo }}</p>
                                 <hr>
                                 <p class="card-text">Descripción:</p>
                                 <p class="card-text .text-justify" id="card-description">{{ incidencias_notif_cierre[i].descripcion }}</p>
                                 <hr>
                                 <p class="card-text">Incidencia abierta por {{ incidencias_notif_cierre[i].reportadaPor }}</p>
-                            </a>
+                            <!-- </a> --> 
                         </div>
                     </div>
                 </div>
                 {% endfor %}
             </div>
-            {% endif %}
 
-            {% if (incidencias_notif_cierre|length) > 0 %}
             <div style="border-left: 1px solid grey; height: 70%;">
                 <p class="text-center" id="tituloColumna">Pendiente Cierre</p>
                 {% for i in range(incidencias_pendientes_cierre|length) %}
                 <div class="card-deck" style="margin: 1em;">
                     <div class="card" id="card2">
                         <div class="card-body">
-                            <a href="/informacion_incidencia/{{ incidencias_notif_cierre[i].id  }}">
+                            <!-- <a href="/informacion_incidencia/{{ incidencias_notif_cierre[i].id  }}"> --> 
                                 <p class="card-title">{{ incidencias_pendientes_cierre[i].titulo }}</p>
                                 <hr>
                                 <p class="card-text">Descripción:</p>
                                 <p class="card-text .text-justify" id="card-description">{{ incidencias_pendientes_cierre[i].descripcion }}</p>
                                 <hr>
                                 <p class="card-text">Incidencia abierta por {{ incidencias_pendientes_cierre[i].reportadaPor }}</p>
-                            </a>
+                            <!-- </a> -->
                         </div>
                     </div>
                 </div>
                 {% endfor %}
             </div>
-            {% endif %}
+
         </div>
     </div>
 
