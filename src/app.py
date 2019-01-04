@@ -202,7 +202,7 @@ def get_incidencias_abiertas_super():
     return list(Incidencia.query.filter_by(estado=0))
 
 def get_incidencias_notif_cierre_super():
-    return (list(Incidencia.query.filter_by(estado=3)),list(Incidencia.query.filter_by(estado=2)))
+    return list(Incidencia.query.filter_by(estado=3))
 
 def get_incidencias_notif_cierre(userNick):
     return list((Incidencia.query.filter_by(reportadaPor=userNick, estado=2)))
