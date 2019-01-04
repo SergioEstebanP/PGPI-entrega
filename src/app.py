@@ -39,8 +39,8 @@ def logout():
 @app.route('/incidencia/<idIncidencia>', methods=['GET', 'POST'])
 @login_required
 def incidencia(idIncidencia):
-    if request.method == 'POST':
-        incidencia = get_incidencia(idIncidencia)
+    incidencia = get_incidencia(idIncidencia)
+    if request.method == 'POST':        
         if request.form['action']=="tecnico":
             tecnico = request.form['tecnicoAsignado']
             cambio_estado_incidencia(idIncidencia, 1, current_user.nick, tecnicoAsignado=tecnico)
