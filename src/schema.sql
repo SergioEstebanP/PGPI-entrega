@@ -90,9 +90,10 @@ CREATE TABLE cambio(
 /* Poblando la tabla: estado */
 INSERT INTO estado (id, estado) VALUES (0, 'abierta');
 INSERT INTO estado (id, estado) VALUES (1, 'asignada a un tecnico');
-INSERT INTO estado (id, estado) VALUES (2, 'pendiente de cerrar');
-INSERT INTO estado (id, estado) VALUES (3, 'cerrada sin solucion');
-INSERT INTO estado (id, estado) VALUES (4, 'cerrada con solucion');
+INSERT INTO estado (id, estado) VALUES (2, 'pendiente de cerrar cliente');
+INSERT INTO estado (id, estado) VALUES (3, 'pendiente de cerrar tecnico');
+INSERT INTO estado (id, estado) VALUES (4, 'cerrada sin solucion');
+INSERT INTO estado (id, estado) VALUES (5, 'cerrada con solusion');
 
 /* Poblando la tabla: tipoUsuario */
 INSERT INTO tipoUsuario (id, tipoUsuario) VALUES (0, 'supervisor');

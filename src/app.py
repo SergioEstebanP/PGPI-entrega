@@ -38,7 +38,7 @@ def logout():
 
 @app.route('/incidencia/<idIncidencia>', methods=['GET', 'POST'])
 @login_required
-def informacion_incidencia_cliente(idIncidencia):
+def incidencia(idIncidencia):
     incidencia = get_incidencia(idIncidencia)
 
     cambioApertura = get_informacion_apertura(idIncidencia)[0]
@@ -51,13 +51,20 @@ def informacion_incidencia_cliente(idIncidencia):
 
     listaTecnicos = get_tecnicos()
     if request.method == 'POST':
-        if incidencia.estado==0:
+        if request.form['action']=="cierre_cliente":
+            cambio_estado(idIncidencia,2)
+        elif request.form['action']=="cierre_tecnico":
+            cambio_estado(idIncidencia,3)
+        elif request.form['action']=="tecnico":
             tecnico = request.form['tecnicoAsignado']
             cambio_estado_incidencia(idIncidencia, 1, tecnico)
-        elif incidencia.estado==1:
-            cambio_estado_incidencia(idIncidencia, 2, current_user.nick)
+        elif request.form['action']=="n-Solucion":
+            cambio_estado(idIncidencia,4)
+        elif request.form['action']=="Solucion":
+            cambio_estado(idIncidencia,5)
 
-    return render_template('info_incidencia.html', incidencia=incidencia, listaTecnicos=listaTecnicos, cambioApertura=cambioApertura, cambioAsignada=cambioAsignada, cambioCierre=cambioCierre)
+    
+    return render_template('info_incidencia.html', incidencia=incidencia, listaTecnicos=listaTecnicos)
 
 @app.route('/index')
 @login_required
@@ -71,6 +78,7 @@ def index():
     elif current_user.tipo == 1: #Tecnico
         incidencias_abiertas = get_incidencias_abiertas(current_user.nick)
         incidencias_notif_cierre = get_incidencias_notif_cierre(current_user.nick)
+        incidencias_pendientes_cierre=get_inciencias_pendientes_cierre(current_user.nick)
 
         return render_template('incidencias_tecnico.html', incidencias_abiertas=incidencias_abiertas, incidencias_notif_cierre=incidencias_notif_cierre)
 
@@ -79,16 +87,12 @@ def index():
 
         return render_template('incidencias_cliente.html', incidencias=incidencias)
 
-@app.route('/incidencia/<idIncidencia>', methods=['GET', 'POST'])
+@app.route('/incidencias_cerradas')
 @login_required
-def incidencia(idIncidencia):
-    if request.method == 'POST':
-        tecnico = request.form['tecnicoAsignado']
-        cambio_estado_incidencia(idIncidencia, 1, tecnico)
+def incidencias_cerradas():
+    incidencias = get_incidencias_cerradas()
+    return render_template('incidencias_cliente.html', incidencias=incidencias)
 
-    incidencia = get_incidencia(idIncidencia)
-    listaTecnicos = get_tecnicos()
-    return render_template('info_incidencia.html', incidencia=incidencia, listaTecnicos=listaTecnicos)
 
 @app.route('/registrar_incidencia', methods=['GET', 'POST'])
 @login_required
@@ -121,7 +125,7 @@ def registrar_incidencia():
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@jair.lab.inf.uva.es:3306/PGPI_grupo02'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@127.0.0.1:3306/PGPI_grupo02'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -153,7 +157,7 @@ class Incidencia(db.Model):
     categoria = db.Column(db.String(40))
 
 class Cambio(db.Model):
-    fecha = db.Column(db.DateTime, primary_key=True)
+    fecha = db.Column(db.String(50), primary_key=True)
     estado = db.Column(db.Integer)
     tecnico = db.Column(db.String(50))
     incidencia = db.Column(db.Integer)
@@ -195,6 +199,9 @@ def cambio_estado_incidencia(id, estado, usuario):
     insert_cambio(estado, usuario, id)
 
 
+def get_incidencias_cerradas():
+    return list(Incidencia.query.filter(Incidencia.estado in (4,5)))
+
 def get_incidencias_by_user(userNick):
     return list(Incidencia.query.filter_by(reportadaPor=userNick))
 
@@ -205,10 +212,12 @@ def get_incidencias_abiertas_super():
     return list(Incidencia.query.filter_by(estado=0))
 
 def get_incidencias_notif_cierre_super():
-    return list(Incidencia.query.filter_by(estado=2))
+    return list(Incidencia.query.filter_by(estado=3))
 
 def get_incidencias_notif_cierre(userNick):
-    return list(Incidencia.query.filter_by(reportadaPor=userNick, estado=2))
+    return list((Incidencia.query.filter_by(reportadaPor=userNick, estado=2)))
+def get_inciencias_pendientes_cierre(userNick):
+    return list((Incidencia.query.filter_by(reportadaPor=userNick, estado=3)))
 
 
 #######################
