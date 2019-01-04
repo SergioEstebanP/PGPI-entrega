@@ -72,8 +72,9 @@ def index():
     if current_user.tipo == 0: #Supervisor
         incidencias_abiertas = get_incidencias_abiertas_super()
         incidencias_notif_cierre = get_incidencias_notif_cierre_super()
+        incidencias_notif_cierre_cliente=get_incidencias_notif_cierre_super_cliente()
 
-        return render_template('incidencias_supervisor.html', incidencias_abiertas=incidencias_abiertas, incidencias_notif_cierre=incidencias_notif_cierre)
+        return render_template('incidencias_supervisor.html', incidencias_abiertas=incidencias_abiertas, incidencias_notif_cierre=incidencias_notif_cierre, incidencias_notif_cierre_cliente=incidencias_notif_cierre_cliente)
 
     elif current_user.tipo == 1: #Tecnico
         incidencias_abiertas = get_incidencias_abiertas(current_user.nick)
@@ -215,7 +216,8 @@ def get_incidencias_abiertas_super():
 
 def get_incidencias_notif_cierre_super():
     return list(Incidencia.query.filter_by(estado=3))
-
+def get_incidencias_notif_cierre_super_cliente():
+    return list(Incidencia.query.filter_by(estado=2))
 def get_incidencias_notif_cierre(userNick):
     return list((Incidencia.query.filter_by(reportadaPor=userNick, estado=2)))
 def get_inciencias_pendientes_cierre(userNick):

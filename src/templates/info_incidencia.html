@@ -175,7 +175,7 @@
                 <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
                 {% endif %}}
 
-                {% if (current_user.tipo == 0) and (incidencia.estado ==  3) %}
+                {% if (current_user.tipo == 0) and (incidencia.estado ==  3 or incidencia.estado==2) %}
                 <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
                 <button type="submit" class="btn btn-outline-primary" name="action" value="Solucion">Cerrar Incidencia Solucionada</button>
                 <button type="submit" class="btn btn-outline-primary" name="action" value="n-Solucion">Cerrar Incidencia sin Solucion</button>
