@@ -82,8 +82,10 @@ def index():
 
     elif current_user.tipo == 2: #Cliente
         incidencias = get_incidencias_by_user(current_user.nick)
+        incidencias_estado=get_incidencias_by_user_estado(current_user.nick)
+        incidencias_estado_cierre=get_incidencias_by_user_estado_cierre(current_user.nick)
 
-        return render_template('incidencias_cliente.html', incidencias=incidencias)
+        return render_template('incidencias_supervisor.html', incidencias=incidencias, incidencias_estado=incidencias_estado, incidencias_estado_cierre=incidencias_estado_cierre)
 
 @app.route('/incidencias_cerradas')
 @login_required
@@ -220,7 +222,14 @@ def comentar_incidencia(id, comentario):
     db.session.commit()
 
 def get_incidencias_by_user(userNick):
-    return list(Incidencia.query.filter_by(reportadaPor=userNick))
+    return list(Incidencia.query.filter_by(reportadaPor=userNick, estado=0))
+
+def get_incidencias_by_user_estado(userNick):
+     return list(Incidencia.query.filter_by(reportadaPor=userNick, estado=1))
+
+def get_incidencias_by_user_estado_cierre(userNick):
+     return list(Incidencia.query.filter_by(reportadaPor=userNick, estado=2))
+
 
 def get_incidencias_by_estado(estado):
     return list(Incidencia.query.filter_by(estado=estado))

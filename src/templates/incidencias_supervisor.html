@@ -43,12 +43,20 @@
     <div id="data-body" class="container-fluid flex-grow-1" onmouseover="closeSide('side-nav')" >
         <!-- Body -->
         <div class="row" style="width: 100%; padding-top: 0.5em; padding-bottom: 0.5em; font-size: 2em;">
+            {% if current_user.tipo==0 %}
             <div class="col">
                 <p class="text-center">Estado de las incidencias del supervisor {{ username }}</p>
             </div>
+            {% endif %}
+            {% if current_user.tipo==2 %}
+            <div class="col">
+                <p class="text-center">Incidencias del cliente {{ username }}</p>
+            </div>
+            {% endif %}
         </div>
 
         <div style="display: flex;">
+            {% if current_user.tipo==0 %}
             <div>
                 <p class="text-center" id="tituloColumna">Pendientes de asignar</p>
 
@@ -70,7 +78,8 @@
                 {% endfor %}
 
             </div>
-
+            {% endif %}
+            {% if current_user.tipo==0 %}
             <div style="border-left: 1px solid grey; height: 70%;">
                 <p class="text-center" id="tituloColumna">Pendientes de Cerrar</p>
                 {% for i in range(incidencias_notif_cierre|length) %}
@@ -90,6 +99,8 @@
                 </div>
                 {% endfor %}
             </div>
+            {% endif %}
+            {% if current_user.tipo==0 %}
             <div style="border-left: 1px solid grey; height: 70%;">
                 <p class="text-center" id="tituloColumna">Pendientes de Cerrar Cliente</p>
                 {% for i in range(incidencias_notif_cierre_cliente|length) %}
@@ -109,6 +120,71 @@
                 </div>
                 {% endfor %}
             </div>
+            {% endif %}
+            {% if current_user.tipo==2 %}
+            <div style="border-left: 1px solid grey; height: 70%;">
+                <p class="text-center" id="tituloColumna">Incidencias abiertas</p>
+                {% for i in range(incidencias|length) %}
+                <div class="card-deck" style="margin: 1em;">
+                    <div class="card" id="card2">
+                        <div class="card-body">
+                            <a href="/incidencia/{{ incidencias[i].id  }}">
+                                <p class="card-title">{{ incidencias[i].titulo }}</p>
+                                <hr>
+                                <p class="card-text">Descripción:</p>
+                                <p class="card-text .text-justify" id="card-description">{{ incidencias[i].descripcion }}</p>
+                                <hr>
+                                <p class="card-text">Incidencia abierta por {{ incidencias[i].reportadaPor }}</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% if current_user.tipo==2 %}
+            <div style="border-left: 1px solid grey; height: 70%;">
+                <p class="text-center" id="tituloColumna">Incidencias en Resolucion</p>
+                {% for i in range(incidencias_estado|length) %}
+                <div class="card-deck" style="margin: 1em;">
+                    <div class="card" id="card2">
+                        <div class="card-body">
+                            <a href="/incidencia/{{ incidencias_estado[i].id  }}">
+                                <p class="card-title">{{ incidencias_estado[i].titulo }}</p>
+                                <hr>
+                                <p class="card-text">Descripción:</p>
+                                <p class="card-text .text-justify" id="card-description">{{ incidencias_estado[i].descripcion }}</p>
+                                <hr>
+                                <p class="card-text">Incidencia abierta por {{ incidencias_estado[i].reportadaPor }}</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% if current_user.tipo==2 %}
+            <div style="border-left: 1px solid grey; height: 70%;">
+                <p class="text-center" id="tituloColumna">Incidencias Solicitud Cierre</p>
+                {% for i in range(incidencias_estado_cierre|length) %}
+                <div class="card-deck" style="margin: 1em;">
+                    <div class="card" id="card2">
+                        <div class="card-body">
+                            <a href="/incidencia/{{ incidencias_estado_cierre[i].id  }}">
+                                <p class="card-title">{{ incidencias_estado_cierre[i].titulo }}</p>
+                                <hr>
+                                <p class="card-text">Descripción:</p>
+                                <p class="card-text .text-justify" id="card-description">{{ incidencias_estado_cierre[i].descripcion }}</p>
+                                <hr>
+                                <p class="card-text">Incidencia abierta por {{ incidencias_estado_cierre[i].reportadaPor }}</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
         </div>
     </div>
 
