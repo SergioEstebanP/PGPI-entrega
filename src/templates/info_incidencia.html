@@ -175,40 +175,41 @@
   </section>
 
 
-       <form method="POST" action='/incidencia/{{ incidencia.id }}'>
-            <footer>
-                {% if (current_user.tipo == 0) and (incidencia.estado ==  0) %}
-                <!-- <form method="POST" action='/incidencia/{{ incidencia.id }}'> -->
-                <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
+  <div id="botonesPiePagina">
+   <form method="POST" action='/incidencia/{{ incidencia.id }}'>
+       <!-- <footer> -->
+            {% if (current_user.tipo == 0) and (incidencia.estado ==  0) %}
+            <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
 
-                    <button type="submit" class="btn btn-outline-primary">Asignar tecnico</button>
-                     <select name="tecnicoAsignado">  
-                        {% for i in range(listaTecnicos|length) %}
-                        <option value="{{ listaTecnicos[i].nick }}">{{ listaTecnicos[i].nick }}</option>
-                        {% endfor %}
-                    </select> 
-                {% endif %}}
+                <button type="submit" class="btn btn-outline-primary">Asignar tecnico</button>
+                 <select name="tecnicoAsignado">  
+                    {% for i in range(listaTecnicos|length) %}
+                    <option value="{{ listaTecnicos[i].nick }}">{{ listaTecnicos[i].nick }}</option>
+                    {% endfor %}
+                </select> 
+            {% endif %}}
 
-                {% if (current_user.tipo == 0) and (incidencia.estado ==  1) %}
-                <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
-                {% endif %}}
+            {% if (current_user.tipo == 0) and (incidencia.estado ==  1) %}
+            <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
+            {% endif %}}
 
-                {% if (current_user.tipo == 0) and (incidencia.estado ==  2) %}
-                <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
-                <button type="button" class="btn btn-outline-primary">Cerrar Incidencia</button>
-                {% endif %}}
+            {% if (current_user.tipo == 0) and (incidencia.estado ==  2) %}
+            <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
+            <button type="button" class="btn btn-outline-primary">Cerrar Incidencia</button>
+            {% endif %}}
 
 
-                {% if current_user.tipo == 1 %}
-                <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
-                <button type="submit" class="btn btn-outline-primary">Solicitar Cierre</button>
-                {% endif %}}
+            {% if current_user.tipo == 1 %}
+            <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
+            <button type="submit" class="btn btn-outline-primary">Solicitar Cierre</button>
+            {% endif %}}
 
-                {% if current_user.tipo == 2 %}
-                <button type="button" class="btn btn-outline-primary">Ver comentario</button>
-                {% endif %}
-            </footer>
-         </form>
+            {% if current_user.tipo == 2 %}
+            <button type="button" class="btn btn-outline-primary">Ver comentario</button>
+            {% endif %}
+       <!-- </footer> --> 
+     </form>
+  </div>
 
     <script>
         function openSide(id) {

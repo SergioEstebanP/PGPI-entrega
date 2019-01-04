@@ -93,7 +93,7 @@ nav {
     width: 100%;
     height: 100%;
     padding-top: 64px!important;
-    padding-left: 4%!important;
+    padding-left: 6%!important;
     margin-right: 0!important;
     margin-bottom: 0!important;
     padding-right: 0!important;
@@ -134,14 +134,14 @@ nav {
     border: 2px solid grey;
 }
 
-footer {
-  position: fixed;
+#botonesPiePagina {
   left: 0;
   bottom: 0;
   width: 100%;
   color: white;
   text-align: center;
   padding: 2em;
+  margin: 0 auto;
 }
 
 .btn {
