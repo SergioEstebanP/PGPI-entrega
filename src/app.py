@@ -52,19 +52,19 @@ def incidencia(idIncidencia):
     listaTecnicos = get_tecnicos()
     if request.method == 'POST':
         if request.form['action']=="cierre_cliente":
-            cambio_estado(idIncidencia,2)
+            cambio_estado_incidenci(idIncidencia,2, current_user.nick)
         elif request.form['action']=="cierre_tecnico":
-            cambio_estado(idIncidencia,3)
+            cambio_estado_incidencia(idIncidencia,3, current_user.nick)
         elif request.form['action']=="tecnico":
             tecnico = request.form['tecnicoAsignado']
-            cambio_estado_incidencia(idIncidencia, 1, tecnico)
+            cambio_estado_incidencia(idIncidencia, 1, current_user.nick)
         elif request.form['action']=="n-Solucion":
-            cambio_estado(idIncidencia,4)
+            cambio_estado_incidencia(idIncidencia,4, current_user.nick)
         elif request.form['action']=="Solucion":
-            cambio_estado(idIncidencia,5)
+            cambio_estado_incidencia(idIncidencia,5, current_user.nick)
 
     
-    return render_template('info_incidencia.html', incidencia=incidencia, listaTecnicos=listaTecnicos)
+    return render_template('info_incidencia.html', incidencia=incidencia, listaTecnicos=listaTecnicos, cambioApertura=cambioApertura, cambioAsignada=cambioAsignada, cambioCierre=cambioCierre)
 
 @app.route('/index')
 @login_required
