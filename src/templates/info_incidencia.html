@@ -14,6 +14,7 @@
         crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP"
         crossorigin="anonymous">
+    <script src="{{ url_for('static', filename='scripts/includeHTML.js') }}"></script>
 </head>
 
 <body class="d-flex" style="min-height: 100%;min-width: 100%;">
@@ -24,39 +25,19 @@
         </div>
     </nav>
 
-    <div id="side-nav" class="side-nav fixed-top flex-nowrap flex-column justify-content-start d-inline-flex align-items-start bg-light"
-        onmouseover="openSide('side-nav')">
+    <div id="side-nav" class="side-nav fixed-top flex-nowrap flex-column justify-content-start d-inline-flex align-items-start bg-light" onmouseover="openSide('side-nav')">
         <div class="side-title side-content d-flex ">
             <img id="user-img" class="user-icon" src="../static/img/default-gravatar.png" alt="user icon">
-            <span class="collapse width align-self-center" style="min-width: 70%;padding-left: 5%">User Name</span>
+            <span class="collapse width align-self-center" style="min-width: 70%;padding-left: 5%;max-height: 10%">{{ current_user.nick }}</span>
         </div>
-        <div class="list-group list-group-flush w-100 side-icons">
-            <a class="list-group-item d-flex justify-content-start align-items-center bg-light">
-                <span class="material-icons" style="color: black;">person_add</span>
-                <span class="collapse width align-top side-options">Add User</span>
-            </a>
-            <a class="list-group-item d-flex justify-content-start align-items-center bg-light">
-                <span class="fa fa-plus-square fa-m" style="color: black;"></span>
-                <span class="collapse width align-top side-options">Item</span>
-            </a>
-            <a class="list-group-item d-flex justify-content-start align-items-center bg-light">
-                <span class="fas fa-envelope fa-m" style="color: black;"></span>
-                <span class="collapse width align-top side-options">E-Mail</span>
-            </a>
-            <a class="list-group-item d-flex justify-content-start align-items-center bg-light">
-                <span class="fas fa-project-diagram fa-m " style="color: gray;"></span>
-                <span class="collapse width align-top side-options">Item</span>
-            </a>
 
-            <a class="list-group-item d-flex justify-content-start align-items-center bg-light">
-                <span class="fas fa-code fa-m " style="color: green;"></span>
-                <span class="collapse width align-top side-options">Item</span>
-            </a>
-            <a class="list-group-item d-flex justify-content-start align-items-center bg-light">
-                <span class="fas fa-code fa-m " style="color: grey;"></span>
-                <span class="collapse width align-top side-options">Item</span>
-            </a>
-        </div>
+        {% if current_user.tipo == 0 %}
+        <div w3-include-html="{{ url_for('static', filename='menus/menu_supervisor.html') }}"></div>
+        {% elif current_user.tipo == 1 %}
+        <div w3-include-html="{{ url_for('static', filename='menus/menu_tecnico.html') }}"></div>
+        {% elif current_user.tipo == 2 %}
+        <div w3-include-html="{{ url_for('static', filename='menus/menu_cliente.html') }}"></div>
+        {% endif %}
     </div>
 
     <div id="data-body" class="container-fluid flex-grow-1" onmouseover="closeSide('side-nav')" >
@@ -124,36 +105,48 @@
           Abierta
         </h3>
         <p class="steps-description">
-        Incidencia abierta por {{ incidencia.reportadaPor}} el 23/12/18
+        Incidencia abierta por {{ incidencia.reportadaPor}} el {{ cambioApertura.fecha }}
         </p>
       </div>
 
       <div class="steps-two">
           {% if incidencia.estado == 1 or incidencia.estado == 2 or incidencia.estado == 3 or incidencia.estado == 4%}
         <img class="steps-img" src="http://placehold.it/50/3498DB/FFFFFF" alt="" />
-        {% else %}
-        <img class="steps-img" src="http://placehold.it/50/FF0000/FFFFFF" alt="" />
-        {% endif %}
         <h3 class="steps-name">
-          Aceptada
+          Asignada
         </h3>
         <p class="steps-description">
-        Aceptada y asignada a {{ incidencia.tecnico }}
+        Aceptada y asignada a {{ incidencia.tecnicoAsignado }} el {{ cambioAsignada.fecha }}
         </p>
+        {% else %}
+        <img class="steps-img" src="http://placehold.it/50/FF0000/FFFFFF" alt="" />
+        <h3 class="steps-name">
+          Asignada
+        </h3>
+        <p class="steps-description">
+        Incidencia aun no asignada
+        </p>
+        {% endif %}
       </div>
 
       <div class="steps-three">
           {% if incidencia.estado == 3 or incidencia.etado == 4%}
         <img class="steps-img" src="http://placehold.it/50/3498DB/FFFFFF" alt="" />
-        {% else %}
-        <img class="steps-img" src="http://placehold.it/50/FF0000/FFFFFF" alt="" />
-        {% endif %}
         <h3 class="steps-name">
           Cerrada
         </h3>
         <p class="steps-description">
-            Incidencia cerrada por supervisor el 25/12/19
+        Incidencia cerrada el {{ cambioCierre.fecha  }}
         </p>
+        {% else %}
+        <img class="steps-img" src="http://placehold.it/50/FF0000/FFFFFF" alt="" />
+        <h3 class="steps-name">
+          Cerrada
+        </h3>
+        <p class="steps-description">
+        Incidencia aun no cerrada
+        </p>
+        {% endif %}
       </div>
 
     </div><!-- /.steps-timeline -->
@@ -161,34 +154,42 @@
   </section>
 
 
-       
-            <footer>
-                {% if (current_user.tipo == 0) and (incidencia.estado ==  0) %}
-                <!-- <form method="POST" action='/incidencia/{{ incidencia.id }}'> -->
+
+  <div id="botonesPiePagina">
+            {% if (current_user.tipo == 0) and (incidencia.estado ==  0) %}      
                 <form method="POST" action='/incidencia/{{ incidencia.id }}'>
                     <button type="button" class="btn btn-outline-primary" >Añadir comentario</button>
-
-                    <button type="submit" class="btn btn-outline-primary">Asignar tecnico</button>
-                    <select name="tecnicoAsignado">  
+                    <button type="submit" class="btn btn-outline-primary" name="action" value="tecnico">Asignar tecnico</button>
+                     <select name="tecnicoAsignado">  
                         {% for i in range(listaTecnicos|length) %}
                         <option value="{{ listaTecnicos[i].nick }}">{{ listaTecnicos[i].nick }}</option>
                         {% endfor %}
                     </select> 
                     {% endif %}}
-                </form>          
+                </form> 
+    
                 {% if (current_user.tipo == 0) and (incidencia.estado ==  1) %}
                 <form method="POST" action='/incidencia/{{ incidencia.id }}'>    
                     <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
                 </form>
                 {% endif %}}
 
-                {% if (current_user.tipo == 0) and (incidencia.estado ==  2) %}
+                {% if (current_user.tipo == 0) and (incidencia.estado ==  3 or incidencia.estado==2) %}
                 <form method="POST" action='/incidencia/{{ incidencia.id }}'> 
-                    <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
-                    <button type="button" class="btn btn-outline-primary">Cerrar Incidencia</button>
+                  <button type="submit" class="btn btn-outline-primary" name="action" value="Solucion">Cerrar Incidencia Solucionada</button>
+                  <button type="submit" class="btn btn-outline-primary" name="action" value="n-Solucion">Cerrar Incidencia sin Solucion</button>
                 </form>
+    
                 {% endif %}}
 
+                {% if (current_user.tipo == 1) and (incidencia.estado==1) %}
+                <form method="POST" action='/incidencia2/{{ incidencia.id }}'> 
+                  <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
+                </form>
+                <form method="POST" action='/incidencia/{{ incidencia.id }}'>
+                  <button type="submit" class="btn btn-outline-primary" name="action" value="cierre_tecnico">Solicitar Cierre</button>
+                </form>
+                 {% endif %}}
 
                 {% if current_user.tipo == 1 %}
                 <form method="POST" action='/incidencia2/{{ incidencia.id }}'> 
@@ -199,11 +200,14 @@
                 </form>
                 {% endif %}}
 
-                {% if current_user.tipo == 2 %}
+
+                {% if (current_user.tipo == 2) and (incidencia.estado!=2) %}
                 <button type="button" class="btn btn-outline-primary">Ver comentario</button>
+                <button type="submit" class="btn btn-outline-primary" name="action" value="cierre_cliente">Solicitar Cierre</button>
                 {% endif %}
-            </footer>
-         </form>
+       <!-- </footer> --> 
+     </form>
+  </div>
 
     <script>
         function openSide(id) {
@@ -231,6 +235,9 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
 
+<script>
+includeHTML();
+</script>
 </body>
 
 </html>

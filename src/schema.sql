@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS usuario;
 DROP TABLE IF EXISTS incidencia;
 DROP TABLE IF EXISTS elementoIncidencia;
 DROP TABLE IF EXISTS cambio;
+DROP TABLE IF EXISTS categoriaIncidencia;
 
 
 /* Valores para estado de la incidencia:
@@ -80,7 +81,7 @@ CREATE TABLE elementoIncidencia(
 );
 
 CREATE TABLE cambio(
-    fecha DATE PRIMARY KEY,
+    fecha DATETIME PRIMARY KEY,
     estado INTEGER REFERENCES estado(id),
     tecnico VARCHAR(50) REFERENCES usuario(nick),
     incidencia INTEGER REFERENCES incidencia(id) 
@@ -89,9 +90,10 @@ CREATE TABLE cambio(
 /* Poblando la tabla: estado */
 INSERT INTO estado (id, estado) VALUES (0, 'abierta');
 INSERT INTO estado (id, estado) VALUES (1, 'asignada a un tecnico');
-INSERT INTO estado (id, estado) VALUES (2, 'pendiente de cerrar');
-INSERT INTO estado (id, estado) VALUES (3, 'cerrada sin solucion');
-INSERT INTO estado (id, estado) VALUES (4, 'cerrada con solucion');
+INSERT INTO estado (id, estado) VALUES (2, 'pendiente de cerrar cliente');
+INSERT INTO estado (id, estado) VALUES (3, 'pendiente de cerrar tecnico');
+INSERT INTO estado (id, estado) VALUES (4, 'cerrada sin solucion');
+INSERT INTO estado (id, estado) VALUES (5, 'cerrada con solusion');
 
 /* Poblando la tabla: tipoUsuario */
 INSERT INTO tipoUsuario (id, tipoUsuario) VALUES (0, 'supervisor');
@@ -103,11 +105,4 @@ INSERT INTO usuario (nick, email, password, nombre, apellidos, biografia, fotoPe
 INSERT INTO usuario (nick, email, password, nombre, apellidos, biografia, fotoPerfil, tipo) VALUES ('tecnico', 'tecnico@mail.com', 'password', 'tec', 'nico', 'probando la biografia del tecnico', 'fotoPerfil', 1);
 INSERT INTO usuario (nick, email, password, nombre, apellidos, biografia, fotoPerfil, tipo) VALUES ('cliente', 'cliente@mail.com', 'password', 'clie', 'nte', 'probando la biografia del cliente', 'fotoPerfil', 2);
 
-/* Poblando la tabla: incidencia */
-INSERT INTO incidencia (id, titulo, comentario, prioridad, tiempoEstimado, descripcion, estado, tecnicoAsignado, reportadaPor) VALUES (1, 'Titulo 1', 'Comentario 1', 0, 4, 'Descripcion 1', 0, 'tecnico 1', 'cliente');
-INSERT INTO incidencia (id, titulo, comentario, prioridad, tiempoEstimado, descripcion, estado, tecnicoAsignado, reportadaPor) VALUES (2, 'Titulo 2', 'Comentario 2', 0, 4, 'Descripcion 2', 0, 'tecnico 2', 'cliente');
-INSERT INTO incidencia (id, titulo, comentario, prioridad, tiempoEstimado, descripcion, estado, tecnicoAsignado, reportadaPor) VALUES (3, 'Titulo 3', 'Comentario 3', 0, 4, 'Descripcion 3', 0, 'tecnico 3', 'cliente');
-INSERT INTO incidencia (id, titulo, comentario, prioridad, tiempoEstimado, descripcion, estado, tecnicoAsignado, reportadaPor) VALUES (4, 'Titulo 4', 'Comentario 4', 0, 4, 'Descripcion 4', 0, 'tecnico 4', 'cliente');
-INSERT INTO incidencia (id, titulo, comentario, prioridad, tiempoEstimado, descripcion, estado, tecnicoAsignado, reportadaPor) VALUES (5, 'Titulo 5', 'Comentario 5', 0, 4, 'Descripcion 5', 0, 'tecnico 5', 'cliente');
-INSERT INTO incidencia (id, titulo, comentario, prioridad, tiempoEstimado, descripcion, estado, tecnicoAsignado, reportadaPor) VALUES (6, 'Titulo 6', 'Comentario 6', 0, 4, 'Descripcion 6', 0, 'tecnico 6', 'cliente');
 
