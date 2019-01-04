@@ -63,7 +63,7 @@
         <!-- Body -->
         <div class="row">
             <div class="col-md-12" style="font: bold; font-size: 2.5em; margin: 1em;">
-                <p>{{  incidencias[0].titulo }}</p>
+                <p>{{  incidencia.titulo }}</p>
                 <hr>
             </div>
         </div>
@@ -72,7 +72,7 @@
             <div class="col-md-6">
                 <div class="card" id="card1">
                     <div class="card-body">
-                        <p class="card-text text-justify" id="card-description">{{ incidencias[0].descripcion}}</p>
+                        <p class="card-text text-justify" id="card-description">{{ incidencia.descripcion}}</p>
                     </div>
                 </div>
             </div>
@@ -90,7 +90,7 @@
                     <tr>
                     <th scope="row">1</th>
                     <td>Estado</td>
-                    <td>{{ incidencias[0].estado  }}</td>
+                    <td>{{ incidencia.estado  }}</td>
                     </tr>
                     <tr>
                     <th scope="row">2</th>
@@ -109,7 +109,7 @@
                     </tr>
                     <tr>
                     <th scope="row">5</th>
-                    <td>{{ incidencias[0].reportadaPor}}</td>
+                    <td>{{ incidencia.reportadaPor}}</td>
                     <td></td>
                     </tr>
                 </tbody>
@@ -126,12 +126,12 @@
           Abierta
         </h3>
         <p class="steps-description">
-        Incidencia abierta por {{ incidencias[0].reportadaPor}} el 23/12/18
+        Incidencia abierta por {{ incidencia.reportadaPor}} el 23/12/18
         </p>
       </div>
 
       <div class="steps-two">
-          {% if incidencias[0].estado == 1 or incidencias[0].estado == 2 or incidencias[0].estado == 3 or incidencias[0].estado == 4%}
+          {% if incidencia.estado == 1 or incidencia.estado == 2 or incidencia.estado == 3 or incidencia.estado == 4%}
         <img class="steps-img" src="http://placehold.it/50/3498DB/FFFFFF" alt="" />
         {% else %}
         <img class="steps-img" src="http://placehold.it/50/FF0000/FFFFFF" alt="" />
@@ -140,12 +140,12 @@
           Aceptada
         </h3>
         <p class="steps-description">
-        Aceptada y asignada a {{ incidencias[0].tecnico }}
+        Aceptada y asignada a {{ incidencia.tecnico }}
         </p>
       </div>
 
       <div class="steps-three">
-          {% if incidencias[0].estado == 3 or incidencias[0].etado == 4%}
+          {% if incidencia.estado == 3 or incidencia.etado == 4%}
         <img class="steps-img" src="http://placehold.it/50/3498DB/FFFFFF" alt="" />
         {% else %}
         <img class="steps-img" src="http://placehold.it/50/FF0000/FFFFFF" alt="" />
@@ -163,10 +163,10 @@
   </section>
 
 
-        <form method="POST" action='/informacion_incidencia/{{ incidencias[0].id }}'>
+       <form method="POST" action='/incidencia/{{ incidencia.id }}'>
             <footer>
-                {% if (current_user.tipo == 0) and (incidencias[0].estado ==  0) %}
-                <!-- <form method="POST" action='/informacion_incidencia/{{ incidencias[0].id }}'> -->
+                {% if (current_user.tipo == 0) and (incidencia.estado ==  0) %}
+                <!-- <form method="POST" action='/incidencia/{{ incidencia.id }}'> -->
                 <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
 
                     <button type="submit" class="btn btn-outline-primary" name="action" value="tecnico">Asignar tecnico</button>
@@ -177,11 +177,11 @@
                     </select> 
                 {% endif %}}
 
-                {% if (current_user.tipo == 0) and (incidencias[0].estado ==  1) %}
+                {% if (current_user.tipo == 0) and (incidencia.estado ==  1) %}
                 <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
                 {% endif %}}
 
-                {% if (current_user.tipo == 0) and (incidencias[0].estado == 3) %}
+                {% if (current_user.tipo == 0) and (incidencia.estado ==  2) %}
                 <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
                 <button type="submit" class="btn btn-outline-primary" name="action" value="Solucion">Cerrar Incidencia Solucionada</button>
                 <button type="submit" class="btn btn-outline-primary" name="action" value="n-Solucion">Cerrar Incidencia sin Solucion</button>

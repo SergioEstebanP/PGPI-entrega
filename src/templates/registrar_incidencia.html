@@ -14,6 +14,7 @@
         crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP"
         crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="../static/css/formulario.css">
 </head>
 
 <body class="d-flex" style="min-height: 100%;min-width: 100%;">
@@ -40,7 +41,7 @@
                 <span class="collapse width align-top side-options">Item</span>
             </a>
             </a>
-            <a class="list-group-item d-flex justify-content-start align-items-center bg-light" href="/registrar_incidencia">
+            <a class="list-group-item d-flex justify-content-start align-items-center bg-light" href="/registrar_nueva_incidencia">
                 <span class="fas fa-project-diagram fa-m " style="color: gray;"></span>
                 <span class="collapse width align-top side-options">Registrar nueva incidencia</span>
             </a>
@@ -58,53 +59,41 @@
 
     <div id="data-body" class="container-fluid flex-grow-1" onmouseover="closeSide('side-nav')" >
         <!-- Body -->
-        <div class="row" style="width: 100%; padding-top: 0.5em; padding-bottom: 0.5em; font-size: 2em;">
-            <div class="col">
-                {% if current_user.tipo == 0 %}
-                <p class="text-center">Todas las Incidencias del Sistema</p>
-                {% elif current_user.tipo == 2 %}
-                <p class="text-center">Incidencias abiertas por {{ current_user.nick }}</p>
-                {% endif %}
-            </div>
-        </div>
+        <!DOCTYPE html>
 
-        {% for i in range(((incidencias|length)/3)|int) %}
-        <div class="card-deck" style="margin: 1em;">
+<div class="inciCli">
+  <div class="formCli">  
+    
+    <form class="incidentCli" method='POST' action='/registrar_incidencia'>
+      
+      <input type="text" placeholder="Título" name="titulo" required/>
+      <textarea placeholder="Descripción" name="descripcion" required></textarea>
+      <input type="text" placeholder="Id elemento inventario " name="idElementoInventario"/>
+      <input type="date" id="fecha" name="fecha" required>
 
-            {% for j in range(3) %}
-            <div class="card" id="card1">
-                <div class="card-body">
-                    <a href="/incidencia/{{ incidencias[3*i+j]['id']  }}">
-                        <p class="card-title">{{ incidencias[3*i+j]['titulo'] }}</p>
-                        <hr>
-                        <p class="card-text">Descripcion</p>
-                        <p class="card-text .text-justify" id="card-description">{{ incidencias[3*i+j]['descripcion'] }}</p>
-                        <hr>
-                        <p class="card-text">Asignado a: {{ incidencias[3*i+j]['tecnicoAsignado'] }}.</p>
-                    </a>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        {% endfor %}
-        {% set i=((incidencias|length)/3)|int %}
-        <div class="card-deck" style="margin: 1em;">
-        {% for j in range((incidencias|length)%3) %}
-        
-            <div class="card" id="card1">
-                <div class="card-body">
-                    <a href="/incidencia/{{ incidencias[3*i+j]['id']  }}">
-                        <p class="card-title">{{ incidencias[3*i+j]['titulo'] }}</p>
-                        <hr>
-                        <p class="card-text">Descripcion</p>
-                        <p class="card-text .text-justify" id="card-description">{{ incidencias[3*i+j]['descripcion'] }}</p>
-                        <hr>
-                        <p class="card-text">Asignado a: {{ incidencias[3*i+j]['tecnicoAsignado'] }}.</p>
-                    </a>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
+      <select name="categoria" required>
+        <option value="hw">Hardware</option>
+        <option value="com">Comunicaciones</option>
+        <option value="softwareBa">Software básico</option>
+        <option value="softwareApp">Software de aplicaciones</option>
+        <option value="otros">Otros</option>
+      </select>
+      <button type="submit" onsubmit="ValidarFecha">Enviar</button>
+      
+    </form>
+    <script>
+        function ValidarFecha(){
+           var fechainicial = new Date();
+           var fechafinal = document.getElementById("fecha").value;        
+           if(Date.parse(fechafinal) < Date.parse(fechainicial)) {        
+           alert("La fecha introducida no puede ser anterior a la actual");}
+        }
+      </script>
+  </div>
+</div>
+
+
+
 
     </div>
 

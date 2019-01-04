@@ -1,6 +1,5 @@
 import os
 from datetime import datetime
-#from functools import wrap
 
 from flask import Flask, render_template, request, flash, redirect, url_for
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required, UserMixin
@@ -37,21 +36,12 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-
-
-@app.route('/informacion_incidencia/<idIncidencia>', methods=['GET', 'POST'])
+@app.route('/incidencia/<idIncidencia>', methods=['GET', 'POST'])
 @login_required
 def informacion_incidencia_cliente(idIncidencia):
-    incidencias = get_incidencia(idIncidencia)
+    incidencia = get_incidencia(idIncidencia)
     listaTecnicos = get_tecnicos()
     if request.method == 'POST':
-        """if incidencias[0].estado==0:
-            tecnico = request.form['tecnicoAsignado']
-            cambio_estado_incidencia(idIncidencia, 1, tecnico)
-        elif incidencias[0].estado==1: 
-            cambio_estado(idIncidencia, 3)
-        elif incidencias[0].estado==3 :
-            cambio_estado(idIncidencia,4)"""
         if request.form['action']=="cierre_cliente":
             cambio_estado(idIncidencia,2)
         elif request.form['action']=="cierre_tecnico":
@@ -70,39 +60,38 @@ def informacion_incidencia_cliente(idIncidencia):
 @app.route('/index')
 @login_required
 def index():
-    userType = current_user.tipo
-    if userType == 0:
-        # supervisor
-        incidencias = get_incidencias()
-
+    if current_user.tipo == 0: #Supervisor
         incidencias_abiertas = get_incidencias_abiertas_super()
         incidencias_notif_cierre = get_incidencias_notif_cierre_super()
 
-        login_user(get_user(current_user.nick))
-        return render_template('incidencias_supervisor.html', userType=userType, userName=current_user.nick, incidencias=incidencias, incidencias_abiertas = incidencias_abiertas, incidencias_notif_cierre = incidencias_notif_cierre)
+        return render_template('incidencias_supervisor.html', incidencias_abiertas=incidencias_abiertas, incidencias_notif_cierre=incidencias_notif_cierre)
 
-    if userType == 1:
-        # tecnico
-        incidencias = get_incidencias_by_user(current_user.nick)
-
+    elif current_user.tipo == 1: #Tecnico
         incidencias_abiertas = get_incidencias_abiertas(current_user.nick)
         incidencias_notif_cierre = get_incidencias_notif_cierre(current_user.nick)
         incidencias_pendientes_cierre=get_inciencias_pendientes_cierre(current_user.nick)
 
-        login_user(get_user(current_user.nick))
-        return render_template('incidencias_columnas.html', userType=userType, userName=current_user.nick, incidencias=incidencias, incidencias_abiertas = incidencias_abiertas, incidencias_notif_cierre = incidencias_notif_cierre, incidencias_pendientes_cierre=incidencias_pendientes_cierre)
+        return render_template('incidencias_tecnico.html', incidencias_abiertas=incidencias_abiertas, incidencias_notif_cierre=incidencias_notif_cierre)
 
-    if userType == 2:
-        # cliente
+    elif current_user.tipo == 2: #Cliente
         incidencias = get_incidencias_by_user(current_user.nick)
-        login_user(get_user(current_user.nick))
-        return render_template('incidencias_cliente.html', userType=userType, userName=current_user.nick, incidencias=incidencias)
 
-  
-@app.route('/registrar_nueva_incidencia', methods=['GET', 'POST'])
+        return render_template('incidencias_cliente.html', incidencias=incidencias)
+
+@app.route('/incidencia/<idIncidencia>', methods=['GET', 'POST'])
 @login_required
-#@requires_access_level([1, 2])
-def registrar_nueva_incidencia():
+def incidencia(idIncidencia):
+    if request.method == 'POST':
+        tecnico = request.form['tecnicoAsignado']
+        cambio_estado_incidencia(idIncidencia, 1, tecnico)
+
+    incidencia = get_incidencia(idIncidencia)
+    listaTecnicos = get_tecnicos()
+    return render_template('info_incidencia.html', incidencia=incidencia, listaTecnicos=listaTecnicos)
+
+@app.route('/registrar_incidencia', methods=['GET', 'POST'])
+@login_required
+def registrar_incidencia():
     if request.method == 'POST':
         titulo          = request.form.get('titulo')
         comentario      = ''
@@ -111,29 +100,16 @@ def registrar_nueva_incidencia():
         descripcion     = request.form.get('descripcion')
         fecha           = datetime.strptime(request.form.get('fecha'), '%Y-%m-%d')
         estado          = 0
-        tecnicoAsignado = 'sin asignar'
+        tecnicoAsignado = 'Sin asignar'
         reportadaPor    = current_user.nick
         idInventario    = request.form.get('idElementoInventario')
         categoria       = request.form.get('categoria')
 
         insert_incidencia(titulo, descripcion, fecha, estado, reportadaPor, categoria, comentario, prioridad, tiempoEstimado, tecnicoAsignado)
-       
+
         return redirect(url_for('index'))
-      
-    return render_template('datos_incidencia_cliente.html')
 
-'''
-def requires_access_level(access_level):
-    def decorator(f):
-        @wraps(f)
-        def decorated_function(*args, **kwargs):
-            if current_user.tipo not in access_level:
-                return redirect(url_for('index'))
-
-            return f(*args, **kwargs)
-        return decorated_function
-    return decorator
-'''
+    return render_template('registrar_incidencia.html')
 
 
 
@@ -160,7 +136,7 @@ class Usuario(db.Model, UserMixin):
     tipo = db.Column(db.Integer)
 
     def get_id(self):
-            return self.nick
+        return self.nick
 
 class Incidencia(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -174,16 +150,16 @@ class Incidencia(db.Model):
     tecnicoAsignado = db.Column(db.String(50))
     reportadaPor = db.Column(db.String(50))
     categoria = db.Column(db.String(40))
-     
-class ElementoIncidencia(db.Model):
-    incidencia = db.Column(db.Integer, primary_key=True)
-    elemento = db.Column(db.Integer, primary_key=True)
 
 class Cambio(db.Model):
     fecha = db.Column(db.DateTime, primary_key=True)
     estado = db.Column(db.Integer)
     tecnico = db.Column(db.String(50))
     incidencia = db.Column(db.Integer)
+
+class ElementoIncidencia(db.Model):
+    incidencia = db.Column(db.Integer, primary_key=True)
+    elemento = db.Column(db.Integer, primary_key=True)
 
 
 #######################
@@ -192,7 +168,6 @@ class Cambio(db.Model):
 @login_manager.user_loader
 def get_user(nick):
     return Usuario.query.get(nick)
-
 
 def get_tecnicos():
     return list(Usuario.query.filter_by(tipo=1))
@@ -204,21 +179,19 @@ def insert_incidencia(titulo, descripcion, fecha, estado, reportadaPor, categori
     db.session.add(Incidencia(titulo=titulo, comentario=comentario, prioridad=prioridad, tiempoEstimado=tiempoEstimado, descripcion=descripcion, fecha=fecha, estado=estado, tecnicoAsignado=tecnicoAsignado, reportadaPor=reportadaPor, categoria=categoria))
     db.session.commit()
 
+def get_incidencia(id):
+    return Incidencia.query.get(id)
+
 def cambio_estado_incidencia(id, estado, tecnicoAsignado):
-    incidencia = Incidencia.query.get(id)
+    incidencia = get_incidencia(id)
     incidencia.estado = estado
     incidencia.tecnicoAsignado = tecnicoAsignado
     db.session.commit()
+
 def cambio_estado(id,estado):
     incidencia = Incidencia.query.get(id)
     incidencia.estado = estado
     db.session.commit()
-
-def get_incidencias():
-    return list(Incidencia.query.all())
-
-def get_incidencia(id):
-    return list(Incidencia.query.filter_by(id=id))
 
 def get_incidencias_by_user(userNick):
     return list(Incidencia.query.filter_by(reportadaPor=userNick))
@@ -237,6 +210,15 @@ def get_incidencias_notif_cierre(userNick):
 def get_inciencias_pendientes_cierre(userNick):
     return list((Incidencia.query.filter_by(reportadaPor=userNick, estado=3)))
 
+
+#######################
+#       CAMBIO        #
+#######################
+def insert_cambio(estado, tecnico, incidencia, fecha=datetime.now()):
+    db.session.add(Cambio(fecha=fecha, estado=estado, tecnico=tecnico, incidencia=incidencia))
+    db.session.commit()
+
+
 #######################
 #     INVENTARIO      #
 #######################
@@ -246,11 +228,3 @@ def insert_elemento_incidencia(incidencia, elemento):
 
 def get_elementos_incidencia(incidencia):
     return list(ElementoIncidencia.query.filter_by(incidencia=incidencia))
-
-
-#######################
-#       CAMBIO        #
-#######################
-def insert_cambio(estado, tecnico, incidencia, fecha=datetime.now()):
-    db.session.add(Cambio(fecha=fecha, estado=estado, tecnico=tecnico, incidencia=incidencia))
-    db.session.commit()
