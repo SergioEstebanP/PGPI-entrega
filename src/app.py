@@ -49,8 +49,8 @@ def informacion_incidencia_cliente(idIncidencia):
             tecnico = request.form['tecnicoAsignado']
             cambio_estado_incidencia(idIncidencia, 1, tecnico)
         elif incidencias[0].estado==1: 
-            cambio_estado(idIncidencia, 2)
-        elif incidencias[0].estado>2 :
+            cambio_estado(idIncidencia, 3)
+        elif incidencias[0].estado==3 :
             cambio_estado(idIncidencia,4)
             
 
