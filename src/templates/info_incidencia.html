@@ -107,36 +107,48 @@
           Abierta
         </h3>
         <p class="steps-description">
-        Incidencia abierta por {{ incidencia.reportadaPor}} el 23/12/18
+        Incidencia abierta por {{ incidencia.reportadaPor}} el {{ cambioApertura.fecha }}
         </p>
       </div>
 
       <div class="steps-two">
           {% if incidencia.estado == 1 or incidencia.estado == 2 or incidencia.estado == 3 or incidencia.estado == 4%}
         <img class="steps-img" src="http://placehold.it/50/3498DB/FFFFFF" alt="" />
-        {% else %}
-        <img class="steps-img" src="http://placehold.it/50/FF0000/FFFFFF" alt="" />
-        {% endif %}
         <h3 class="steps-name">
-          Aceptada
+          Asignada
         </h3>
         <p class="steps-description">
-        Aceptada y asignada a {{ incidencia.tecnico }}
+        Aceptada y asignada a {{ incidencia.tecnicoAsignado }} el {{ cambioAsignada.fecha }}
         </p>
+        {% else %}
+        <img class="steps-img" src="http://placehold.it/50/FF0000/FFFFFF" alt="" />
+        <h3 class="steps-name">
+          Asignada
+        </h3>
+        <p class="steps-description">
+        Incidencia aun no asignada
+        </p>
+        {% endif %}
       </div>
 
       <div class="steps-three">
           {% if incidencia.estado == 3 or incidencia.etado == 4%}
         <img class="steps-img" src="http://placehold.it/50/3498DB/FFFFFF" alt="" />
-        {% else %}
-        <img class="steps-img" src="http://placehold.it/50/FF0000/FFFFFF" alt="" />
-        {% endif %}
         <h3 class="steps-name">
           Cerrada
         </h3>
         <p class="steps-description">
-            Incidencia cerrada por supervisor el 25/12/19
+        Incidencia cerrada el {{ cambioCierre.fecha  }}
         </p>
+        {% else %}
+        <img class="steps-img" src="http://placehold.it/50/FF0000/FFFFFF" alt="" />
+        <h3 class="steps-name">
+          Cerrada
+        </h3>
+        <p class="steps-description">
+        Incidencia aun no cerrada
+        </p>
+        {% endif %}
       </div>
 
     </div><!-- /.steps-timeline -->
@@ -144,9 +156,10 @@
   </section>
 
 
-       <form method="POST" action='/incidencia/{{ incidencia.id }}'>
-            <footer>
-                {% if (current_user.tipo == 0) and (incidencia.estado ==  0) %}
+  <div id="botonesPiePagina">
+   <form method="POST" action='/incidencia/{{ incidencia.id }}'>
+       <!-- <footer> -->
+            {% if (current_user.tipo == 0) and (incidencia.estado ==  0) %}
                 <!-- <form method="POST" action='/incidencia/{{ incidencia.id }}'> -->
                 <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
 
@@ -182,9 +195,9 @@
                 <button type="button" class="btn btn-outline-primary">Ver comentario</button>
                 <button type="submit" class="btn btn-outline-primary" name="action" value="cierre_cliente">Solicitar Cierre</button>
                 {% endif %}
-                
-            </footer>
-         </form>
+       <!-- </footer> --> 
+     </form>
+  </div>
 
     <script>
         function openSide(id) {

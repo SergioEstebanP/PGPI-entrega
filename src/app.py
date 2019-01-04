@@ -40,6 +40,15 @@ def logout():
 @login_required
 def incidencia(idIncidencia):
     incidencia = get_incidencia(idIncidencia)
+
+    cambioApertura = get_informacion_apertura(idIncidencia)[0]
+    cambioAsignada = get_informacion_asignada(idIncidencia)
+    if len(cambioAsignada) > 0:
+        cambioAsignada = cambioAsignada[0]
+    cambioCierre = get_informacion_cierre(idIncidencia)
+    if len(cambioCierre) > 0:
+        cambioCierre = cambioCierre[0]
+
     listaTecnicos = get_tecnicos()
     if request.method == 'POST':
         if request.form['action']=="cierre_cliente":
@@ -172,22 +181,23 @@ def get_tecnicos():
 #     INCIDENCIA      #
 #######################
 def insert_incidencia(titulo, descripcion, fecha, estado, reportadaPor, categoria, comentario=None, prioridad=None, tiempoEstimado=None, tecnicoAsignado=None):
-    db.session.add(Incidencia(titulo=titulo, comentario=comentario, prioridad=prioridad, tiempoEstimado=tiempoEstimado, descripcion=descripcion, fecha=fecha, estado=estado, tecnicoAsignado=tecnicoAsignado, reportadaPor=reportadaPor, categoria=categoria))
+    incidencia = Incidencia(titulo=titulo, comentario=comentario, prioridad=prioridad, tiempoEstimado=tiempoEstimado, descripcion=descripcion, fecha=fecha, estado=estado, tecnicoAsignado=tecnicoAsignado, reportadaPor=reportadaPor, categoria=categoria)
+    db.session.add(incidencia)
     db.session.commit()
+
+    insert_cambio(estado, reportadaPor, incidencia.id)
 
 def get_incidencia(id):
     return Incidencia.query.get(id)
 
-def cambio_estado_incidencia(id, estado, tecnicoAsignado):
+def cambio_estado_incidencia(id, estado, usuario):
     incidencia = get_incidencia(id)
     incidencia.estado = estado
-    incidencia.tecnicoAsignado = tecnicoAsignado
+    incidencia.tecnicoAsignado = usuario
     db.session.commit()
 
-def cambio_estado(id,estado):
-    incidencia = Incidencia.query.get(id)
-    incidencia.estado = estado
-    db.session.commit()
+    insert_cambio(estado, usuario, id)
+
 
 def get_incidencias_cerradas():
     return list(Incidencia.query.filter(Incidencia.estado in (4,5)))
@@ -213,10 +223,19 @@ def get_inciencias_pendientes_cierre(userNick):
 #######################
 #       CAMBIO        #
 #######################
-def insert_cambio(estado, tecnico, incidencia, fecha=datetime.now()):
+def insert_cambio(estado, tecnico, incidencia):
+    fecha = datetime.now()
     db.session.add(Cambio(fecha=fecha, estado=estado, tecnico=tecnico, incidencia=incidencia))
     db.session.commit()
 
+def get_informacion_apertura(id):
+    return list(Cambio.query.filter_by(incidencia=id, estado=0))
+
+def get_informacion_asignada(id):
+    return list(Cambio.query.filter_by(incidencia=id, estado=1))
+
+def get_informacion_cierre(id):
+    return list(Cambio.query.filter_by(incidencia=id, estado=3))
 
 #######################
 #     INVENTARIO      #
