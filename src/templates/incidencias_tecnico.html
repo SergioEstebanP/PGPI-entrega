@@ -49,6 +49,7 @@
         </div>
 
         <div style="display: flex;">
+            {% if (incidencias_abiertas|length) > 0 %}
             <div>
                 <p class="text-center" id="tituloColumna">Abiertas</p>
                 {% for i in range(incidencias_abiertas|length) %}
@@ -67,9 +68,11 @@
                     </div>
                 </div>
                 {% endfor %}
-
             </div>
+            {% endif %}
 
+
+            {% if (incidencias_notif_cierre|length) > 0 %}
             <div style="border-left: 1px solid grey; height: 70%;">
                 <p class="text-center" id="tituloColumna">Notificacion Cierre</p>
                 {% for i in range(incidencias_notif_cierre|length) %}
@@ -88,8 +91,10 @@
                     </div>
                 </div>
                 {% endfor %}
-
             </div>
+            {% endif %}
+
+            {% if (incidencias_notif_cierre|length) > 0 %}
             <div style="border-left: 1px solid grey; height: 70%;">
                 <p class="text-center" id="tituloColumna">Pendiente Cierre</p>
                 {% for i in range(incidencias_pendientes_cierre|length) %}
@@ -108,8 +113,8 @@
                     </div>
                 </div>
                 {% endfor %}
-
             </div>
+            {% endif %}
         </div>
     </div>
 

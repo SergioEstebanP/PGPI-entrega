@@ -63,7 +63,7 @@ def incidencia(idIncidencia):
         elif request.form['action']=="Solucion":
             cambio_estado_incidencia(idIncidencia,5, current_user.nick)
 
-    
+
     return render_template('info_incidencia.html', incidencia=incidencia, listaTecnicos=listaTecnicos, cambioApertura=cambioApertura, cambioAsignada=cambioAsignada, cambioCierre=cambioCierre)
 
 @app.route('/index')
@@ -125,7 +125,8 @@ def registrar_incidencia():
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@127.0.0.1:3306/PGPI_grupo02'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@127.0.0.1:3306/PGPI_grupo02'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@jair.lab.inf.uva.es:3306/PGPI_grupo02'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
