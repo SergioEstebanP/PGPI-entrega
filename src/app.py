@@ -45,14 +45,24 @@ def informacion_incidencia_cliente(idIncidencia):
     incidencias = get_incidencia(idIncidencia)
     listaTecnicos = get_tecnicos()
     if request.method == 'POST':
-        if incidencias[0].estado==0:
+        """if incidencias[0].estado==0:
             tecnico = request.form['tecnicoAsignado']
             cambio_estado_incidencia(idIncidencia, 1, tecnico)
         elif incidencias[0].estado==1: 
             cambio_estado(idIncidencia, 3)
         elif incidencias[0].estado==3 :
+            cambio_estado(idIncidencia,4)"""
+        if request.form['action']=="cierre_cliente":
+            cambio_estado(idIncidencia,2)
+        elif request.form['action']=="cierre_tecnico":
+            cambio_estado(idIncidencia,3)
+        elif request.form['action']=="tecnico":
+            tecnico = request.form['tecnicoAsignado']
+            cambio_estado_incidencia(idIncidencia, 1, tecnico)
+        elif request.form['action']=="n-Solucion":
             cambio_estado(idIncidencia,4)
-            
+        elif request.form['action']=="Solucion":
+            cambio_estado(idIncidencia,5)
 
     
     return render_template('info_incidencia.html', idIncidencia=idIncidencia, incidencias=incidencias, listaTecnicos=listaTecnicos)

@@ -169,7 +169,7 @@
                 <!-- <form method="POST" action='/informacion_incidencia/{{ incidencias[0].id }}'> -->
                 <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
 
-                    <button type="submit" class="btn btn-outline-primary">Asignar tecnico</button>
+                    <button type="submit" class="btn btn-outline-primary" name="action" value="tecnico">Asignar tecnico</button>
                      <select name="tecnicoAsignado">  
                         {% for i in range(listaTecnicos|length) %}
                         <option value="{{ listaTecnicos[i].nick }}">{{ listaTecnicos[i].nick }}</option>
@@ -181,15 +181,15 @@
                 <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
                 {% endif %}}
 
-                {% if (current_user.tipo == 0) and (incidencias[0].estado ==  3) %}
+                {% if (current_user.tipo == 0) and (incidencias[0].estado == 3) %}
                 <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
-                <button type="submit" class="btn btn-outline-primary" >Cerrar Incidencia Solucionada</button>
-                <button type="submit" class="btn btn-outline-primary" >Cerrar Incidencia sin Solucion</button>
+                <button type="submit" class="btn btn-outline-primary" name="action" value="Solucion">Cerrar Incidencia Solucionada</button>
+                <button type="submit" class="btn btn-outline-primary" name="action" value="n-Solucion">Cerrar Incidencia sin Solucion</button>
                 {% endif %}}
 
                 {% if (current_user.tipo == 1) and (incidencias[0].estado==1) %}
                 <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
-                <button type="submit" class="btn btn-outline-primary">Solicitar Cierre</button>
+                <button type="submit" class="btn btn-outline-primary" name="action" value="cierre_tecnico">Solicitar Cierre</button>
                 {% endif %}}
 
                 {% if current_user.tipo == 1 %}
@@ -197,9 +197,9 @@
                 {% endif %}}
 
 
-                {% if current_user.tipo == 2 %}
+                {% if (current_user.tipo == 2) and (incidencias[0].estado!=2) %}
                 <button type="button" class="btn btn-outline-primary">Ver comentario</button>
-                <button type="submit" class="btn btn-outline-primary">Solicitar Cierre</button>
+                <button type="submit" class="btn btn-outline-primary" name="action" value="cierre_cliente">Solicitar Cierre</button>
                 {% endif %}
                 
             </footer>
