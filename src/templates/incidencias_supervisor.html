@@ -90,6 +90,25 @@
                 </div>
                 {% endfor %}
             </div>
+            <div style="border-left: 1px solid grey; height: 70%;">
+                <p class="text-center" id="tituloColumna">Pendientes de Cerrar Cliente</p>
+                {% for i in range(incidencias_notif_cierre_cliente|length) %}
+                <div class="card-deck" style="margin: 1em;">
+                    <div class="card" id="card2">
+                        <div class="card-body">
+                            <a href="/incidencia/{{ incidencias_notif_cierre_cliente[i].id  }}">
+                                <p class="card-title">{{ incidencias_notif_cierre_cliente[i].titulo }}</p>
+                                <hr>
+                                <p class="card-text">Descripción:</p>
+                                <p class="card-text .text-justify" id="card-description">{{ incidencias_notif_cierre_cliente[i].descripcion }}</p>
+                                <hr>
+                                <p class="card-text">Incidencia abierta por {{ incidencias_notif_cierre_cliente[i].reportadaPor }}</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 
