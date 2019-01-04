@@ -94,7 +94,7 @@
             </div>
             {% endif %}
 
-            {% if (incidencias_notif_cierre|length) > 0 %}
+            {% if (incidencias_pendientes_cierre|length) > 0 %}
             <div style="border-left: 1px solid grey; height: 70%;">
                 <p class="text-center" id="tituloColumna">Pendiente Cierre</p>
                 {% for i in range(incidencias_pendientes_cierre|length) %}

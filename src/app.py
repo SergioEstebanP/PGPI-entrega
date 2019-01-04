@@ -81,7 +81,7 @@ def index():
         incidencias_notif_cierre = get_incidencias_notif_cierre(current_user.nick)
         incidencias_pendientes_cierre = get_incidencias_pendientes_cierre(current_user.nick)
 
-        return render_template('incidencias_tecnico.html', incidencias_abiertas=incidencias_abiertas, incidencias_notif_cierre=incidencias_notif_cierre)
+        return render_template('incidencias_tecnico.html', incidencias_abiertas=incidencias_abiertas, incidencias_notif_cierre=incidencias_notif_cierre, incidencias_pendientes_cierre=incidencias_pendientes_cierre)
 
     elif current_user.tipo == 2: #Cliente
         incidencias = get_incidencias_by_user(current_user.nick)
