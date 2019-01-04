@@ -52,7 +52,7 @@ def incidencia(idIncidencia):
     listaTecnicos = get_tecnicos()
     if request.method == 'POST':
         if request.form['action']=="cierre_cliente":
-            cambio_estado_incidenci(idIncidencia,2, current_user.nick)
+            cambio_estado_incidencia(idIncidencia,2, current_user.nick)
         elif request.form['action']=="cierre_tecnico":
             cambio_estado_incidencia(idIncidencia,3, current_user.nick)
         elif request.form['action']=="tecnico":
