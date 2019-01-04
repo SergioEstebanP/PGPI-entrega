@@ -98,15 +98,6 @@ def incidencias_cerradas():
     return render_template('incidencias_cliente.html', incidencias=incidencias)
 
 
-'''@app.route('/incidencia2/<idIncidencia>', methods=['GET', 'POST'])
-@login_required
-def incidencia2(idIncidencia):
-    if request.method == 'POST':
-        incidencia = get_incidencia(idIncidencia) 
-        return render_template('add_comentario.html', incidencia=incidencia)'''
-
-
-
 @app.route('/registrar_incidencia', methods=['GET', 'POST'])
 @login_required
 def registrar_incidencia():
@@ -133,13 +124,14 @@ def registrar_incidencia():
 @login_required
 def add_comentario(idIncidencia):
     if request.method == 'POST':   
+        incidencia = get_incidencia(idIncidencia)
         if request.form['action']=="add_com":
             comentario = request.form.get('comentario') 
             comentar_incidencia(idIncidencia, comentario)
             return redirect(url_for('index'))
 
         elif request.form['action']=="cancelar":  
-            return redirect(url_for('index'))   
+            return redirect(url_for('incidencia', idIncidencia=idIncidencia))   
         
     return render_template('info_incidencia.html')
 
