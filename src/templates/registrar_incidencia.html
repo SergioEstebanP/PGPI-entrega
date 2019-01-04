@@ -45,16 +45,16 @@
             <!-- Body -->
             <!DOCTYPE html>
 
-            <div class="inciCli">
-                <div class="formCli">  
 
-                    <form name="formulario" class="incidentCli" method='POST' action='/registrar_incidencia'>
-
-                        <input type="text" placeholder="Título" name="titulo" required/>
-                        <textarea placeholder="Descripción" name="descripcion" required minlength="100" title="Debe de tener mínimo 100 caracteres"></textarea>
-                        <input type="text" placeholder="Id elemento inventario " name="idElementoInventario"/>
-                        <input type="date" id="fecha" name="fecha" required>
-
+<div class="inciCli">
+  <div class="formCli">  
+    
+    <form class="incidentCli" method='POST' action='/registrar_incidencia'>
+      
+      <input type="text" placeholder="Título" name="titulo" required/>
+      <textarea placeholder="Descripción" name="descripcion" required></textarea>
+      <input type="number" pattern="[0-9]" placeholder="Id elemento inventario " name="idElementoInventario"/>
+      <input type="date" id="fecha" name="fecha" required>
                         <select name="categoria" required>
                             <option value="hw">Hardware</option>
                             <option value="com">Comunicaciones</option>

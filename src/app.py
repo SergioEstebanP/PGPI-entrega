@@ -53,6 +53,9 @@ def incidencia(idIncidencia):
             cambio_estado_incidencia(idIncidencia,5, current_user.nick)
         elif request.form['action']=="add_comentario":
             return render_template('add_comentario.html', incidencia=incidencia)
+        elif request.form['action']=="add_tiempoSol":            
+            return render_template('add_time.html', incidencia=incidencia)
+
    
     listaTecnicos = get_tecnicos()
     cambioApertura = get_cambio_by_estado(idIncidencia, 0)
@@ -137,13 +140,26 @@ def add_comentario(idIncidencia):
         if request.form['action']=="add_com":
             comentario = request.form.get('comentario') 
             comentar_incidencia(idIncidencia, comentario)
-            return redirect(url_for('index'))
+            return redirect(url_for('incidencia', idIncidencia=idIncidencia)) 
 
         elif request.form['action']=="cancelar":  
             return redirect(url_for('incidencia', idIncidencia=idIncidencia))   
         
     return render_template('info_incidencia.html')
 
+@app.route('/add_time/<idIncidencia>', methods=['GET', 'POST'])
+@login_required
+def add_time(idIncidencia):
+    if request.method == 'POST':   
+        if request.form['action']=="add_time":
+            tiempo = request.form.get('tiempo') 
+            addTiempo_incidencia(idIncidencia, tiempo)
+            return redirect(url_for('incidencia', idIncidencia=idIncidencia)) 
+
+        elif request.form['action']=="cancelar":  
+            return redirect(url_for('incidencia', idIncidencia=idIncidencia))   
+        
+    return render_template('info_incidencia.html')
 
 
 ###################################################
@@ -239,6 +255,11 @@ def asignar_incidencia(id, comentario, prioridad, tecnico):
 def comentar_incidencia(id, comentario):
     incidencia = get_incidencia(id)
     incidencia.comentario = comentario
+    db.session.commit()
+
+def addTiempo_incidencia(id, tiempo):
+    incidencia = get_incidencia(id)
+    incidencia.tiempoEstimado = tiempo
     db.session.commit()
 
 def get_incidencias_by_user(userNick):
