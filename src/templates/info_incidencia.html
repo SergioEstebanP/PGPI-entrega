@@ -53,8 +53,16 @@
             <div class="col-md-6">
                 <div class="card" id="card1">
                     <div class="card-body">
-                        <p class="card-text text-justify" id="card-description">{{ incidencia.descripcion}}</p>
+                        <h5>Descripción:</h5>
+                        <p class="card-text text-justify" id="card-description"> {{ incidencia.descripcion}}</p>
+                       
                     </div>
+                    {% if incidencia.comentario is defined and incidencia.comentario|length %}
+                    <div class="card-body">     
+                            <h5>Comentario:</h5>
+                        <p class="card-text text-justify" id="card-description"> {{ incidencia.comentario}}</p>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
             <div class="col-md-6">
@@ -100,7 +108,7 @@
 
     <div class="steps-timeline" style="margin-top: 7em;">
       <div class="steps-one">
-        <img class="steps-img" src="http://placehold.it/50/3498DB/FFFFFF" alt="" />
+        <img class="steps-img" src="http://placehold.it/50/3498DB/3498DB" alt="" />
         <h3 class="steps-name">
           Abierta
         </h3>
@@ -110,8 +118,8 @@
       </div>
 
       <div class="steps-two">
-          {% if incidencia.estado == 1 or incidencia.estado == 2 or incidencia.estado == 3 or incidencia.estado == 4%}
-        <img class="steps-img" src="http://placehold.it/50/3498DB/FFFFFF" alt="" />
+          {% if incidencia.estado == 1 or incidencia.estado == 2 or incidencia.estado == 3 or incidencia.estado == 4 or incidencia.estado == 5 %}
+        <img class="steps-img" src="http://placehold.it/50/3498DB/3498DB" alt="" />
         <h3 class="steps-name">
           Asignada
         </h3>
@@ -119,7 +127,7 @@
         Aceptada y asignada a {{ incidencia.tecnicoAsignado }} el {{ cambioAsignada.fecha }}
         </p>
         {% else %}
-        <img class="steps-img" src="http://placehold.it/50/FF0000/FFFFFF" alt="" />
+        <img class="steps-img" src="http://placehold.it/50/FF0000/FF0000" alt="" />
         <h3 class="steps-name">
           Asignada
         </h3>
@@ -130,8 +138,8 @@
       </div>
 
       <div class="steps-three">
-          {% if incidencia.estado == 3 or incidencia.etado == 4%}
-        <img class="steps-img" src="http://placehold.it/50/3498DB/FFFFFF" alt="" />
+          {% if incidencia.estado == 4 or incidencia.etado == 5%}
+        <img class="steps-img" src="http://placehold.it/50/3498DB/3498DB" alt="" />
         <h3 class="steps-name">
           Cerrada
         </h3>
@@ -139,7 +147,7 @@
         Incidencia cerrada el {{ cambioCierre.fecha  }}
         </p>
         {% else %}
-        <img class="steps-img" src="http://placehold.it/50/FF0000/FFFFFF" alt="" />
+        <img class="steps-img" src="http://placehold.it/50/FF0000/FF0000" alt="" />
         <h3 class="steps-name">
           Cerrada
         </h3>
@@ -156,58 +164,37 @@
 
 
   <div id="botonesPiePagina">
+        <form method="POST" action='/incidencia/{{ incidencia.id }}'>
             {% if (current_user.tipo == 0) and (incidencia.estado ==  0) %}      
-                <form method="POST" action='/incidencia/{{ incidencia.id }}'>
-                    <button type="button" class="btn btn-outline-primary" >Añadir comentario</button>
-                    <button type="submit" class="btn btn-outline-primary" name="action" value="tecnico">Asignar tecnico</button>
-                     <select name="tecnicoAsignado">  
-                        {% for i in range(listaTecnicos|length) %}
-                        <option value="{{ listaTecnicos[i].nick }}">{{ listaTecnicos[i].nick }}</option>
-                        {% endfor %}
-                    </select> 
-                    {% endif %}}
-                </form> 
-    
-                {% if (current_user.tipo == 0) and (incidencia.estado ==  1) %}
-                <form method="POST" action='/incidencia/{{ incidencia.id }}'>    
-                    <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
-                </form>
-                {% endif %}}
+            <button type="submit" class="btn btn-outline-primary" name="action" value="completar">Completar incidencia</button>
+            {% endif %}}
 
-                {% if (current_user.tipo == 0) and (incidencia.estado ==  3 or incidencia.estado==2) %}
-                <form method="POST" action='/incidencia/{{ incidencia.id }}'> 
-                  <button type="submit" class="btn btn-outline-primary" name="action" value="Solucion">Cerrar Incidencia Solucionada</button>
-                  <button type="submit" class="btn btn-outline-primary" name="action" value="n-Solucion">Cerrar Incidencia sin Solucion</button>
-                </form>
-    
-                {% endif %}}
+            {% if (current_user.tipo == 0) and (incidencia.estado ==  1) %}
+            <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
+            {% endif %}}
 
-                {% if (current_user.tipo == 1) and (incidencia.estado==1) %}
-                <form method="POST" action='/incidencia2/{{ incidencia.id }}'> 
-                  <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
-                </form>
-                <form method="POST" action='/incidencia/{{ incidencia.id }}'>
-                  <button type="submit" class="btn btn-outline-primary" name="action" value="cierre_tecnico">Solicitar Cierre</button>
-                </form>
-                 {% endif %}}
-
-                {% if current_user.tipo == 1 %}
-                <form method="POST" action='/incidencia2/{{ incidencia.id }}'> 
-                  <button type="submit" class="btn btn-outline-primary">Añadir comentario</button>
-                </form>
-                <form method="POST" action='/incidencia/{{ incidencia.id }}'> 
-                    <button type="submit" class="btn btn-outline-primary">Solicitar Cierre</button>
-                </form>
-                {% endif %}}
+            {% if (current_user.tipo == 0) and (incidencia.estado ==  3 or incidencia.estado==2) %}
+            <button type="submit" class="btn btn-outline-primary" name="action" value="Solucion">Cerrar Incidencia Solucionada</button>
+            <button type="submit" class="btn btn-outline-primary" name="action" value="n-Solucion">Cerrar Incidencia sin Solucion</button>
+            {% endif %}}
 
 
-                {% if (current_user.tipo == 2) and (incidencia.estado!=2) %}
-                <button type="button" class="btn btn-outline-primary">Ver comentario</button>
-                <button type="submit" class="btn btn-outline-primary" name="action" value="cierre_cliente">Solicitar Cierre</button>
-                {% endif %}
-       <!-- </footer> --> 
-     </form>
-  </div>
+            {% if (current_user.tipo == 1) and (incidencia.estado==1) %}
+            <button type="submit" class="btn btn-outline-primary" name="action" value="add_comentario">Añadir comentario</button>
+            <button type="submit" class="btn btn-outline-primary" name="action" value="cierre_tecnico">Solicitar Cierre</button>
+            {% endif %}}
+
+            {% if (current_user.tipo == 1) and (incidencia.estado!=1) %}
+            <button type="submit" class="btn btn-outline-primary" name="action" value="add_comentario">Añadir comentario</button>
+            {% endif %}}
+
+
+            {% if (current_user.tipo == 2) and (incidencia.estado!=2) %}
+            <button type="button" class="btn btn-outline-primary">Ver comentario</button>
+            <button type="submit" class="btn btn-outline-primary" name="action" value="cierre_cliente">Solicitar Cierre</button>
+            {% endif %}
+ </form>
+</div>
 
     <script>
         function openSide(id) {

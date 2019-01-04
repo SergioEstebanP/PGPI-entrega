@@ -64,9 +64,9 @@
     <div class="addCom">  
         <div class="formuCom">
             <form class="formCom" method='POST' action='/add_comentario/{{ incidencia.id }}'>
-                <textarea placeholder="Añadir Comentario" name="comentario" required>{{ incidencia.comentario }}</textarea>
-                <button type="submit">Añadir Comentario</button>
-                <button type="submit">Cancelar</button>
+                <textarea placeholder="Añadir Comentario" name="comentario">{{ incidencia.comentario }}</textarea>
+                <button type="submit" name="action" value="add_com">Añadir Comentario</button>
+                <button type="submit" name="action" value="cancelar">Cancelar</button>
             
             </form>
     
