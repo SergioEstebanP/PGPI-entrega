@@ -40,7 +40,7 @@ def logout():
 @login_required
 def incidencia(idIncidencia):
     incidencia = get_incidencia(idIncidencia)
-    if request.method == 'POST':        
+    if request.method == 'POST':
         if request.form['action']=="completar":
             return redirect(url_for('completar_incidencia', idIncidencia=idIncidencia))
         elif request.form['action']=="cierre_cliente":
@@ -53,10 +53,10 @@ def incidencia(idIncidencia):
             cambio_estado_incidencia(idIncidencia,5, current_user.nick)
         elif request.form['action']=="add_comentario":
             return render_template('add_comentario.html', incidencia=incidencia)
-        elif request.form['action']=="add_tiempoSol":            
+        elif request.form['action']=="add_tiempoSol":
             return render_template('add_time.html', incidencia=incidencia)
 
-   
+
     listaTecnicos = get_tecnicos()
     cambioApertura = get_cambio_by_estado(idIncidencia, 0)
     cambioAsignada = get_cambio_by_estado(idIncidencia, 1)
@@ -136,29 +136,29 @@ def completar_incidencia(idIncidencia):
 @app.route('/add_comentario/<idIncidencia>', methods=['GET', 'POST'])
 @login_required
 def add_comentario(idIncidencia):
-    if request.method == 'POST':   
+    if request.method == 'POST':
         if request.form['action']=="add_com":
-            comentario = request.form.get('comentario') 
+            comentario = request.form.get('comentario')
             comentar_incidencia(idIncidencia, comentario)
-            return redirect(url_for('incidencia', idIncidencia=idIncidencia)) 
+            return redirect(url_for('incidencia', idIncidencia=idIncidencia))
 
-        elif request.form['action']=="cancelar":  
-            return redirect(url_for('incidencia', idIncidencia=idIncidencia))   
-        
+        elif request.form['action']=="cancelar":
+            return redirect(url_for('incidencia', idIncidencia=idIncidencia))
+
     return render_template('info_incidencia.html')
 
 @app.route('/add_time/<idIncidencia>', methods=['GET', 'POST'])
 @login_required
 def add_time(idIncidencia):
-    if request.method == 'POST':   
+    if request.method == 'POST':
         if request.form['action']=="add_time":
-            tiempo = request.form.get('tiempo') 
+            tiempo = request.form.get('tiempo')
             addTiempo_incidencia(idIncidencia, tiempo)
-            return redirect(url_for('incidencia', idIncidencia=idIncidencia)) 
+            return redirect(url_for('incidencia', idIncidencia=idIncidencia))
 
-        elif request.form['action']=="cancelar":  
-            return redirect(url_for('incidencia', idIncidencia=idIncidencia))   
-        
+        elif request.form['action']=="cancelar":
+            return redirect(url_for('incidencia', idIncidencia=idIncidencia))
+
     return render_template('info_incidencia.html')
 
 
@@ -170,8 +170,8 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import or_
 from flask_login import UserMixin
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@127.0.0.1:3306/PGPI_grupo02'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@jair.lab.inf.uva.es:3306/PGPI_grupo02'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@127.0.0.1:3306/PGPI_grupo02'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@jair.lab.inf.uva.es:3306/PGPI_grupo02'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -240,7 +240,7 @@ def cambio_estado_incidencia(id, estado, usuario):
     incidencia = get_incidencia(id)
     incidencia.estado = estado
     db.session.commit()
-    
+
     insert_cambio(estado, usuario, id)
 
 def asignar_incidencia(id, comentario, prioridad, tecnico):
