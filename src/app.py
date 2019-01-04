@@ -124,7 +124,6 @@ def registrar_incidencia():
 @login_required
 def add_comentario(idIncidencia):
     if request.method == 'POST':   
-        incidencia = get_incidencia(idIncidencia)
         if request.form['action']=="add_com":
             comentario = request.form.get('comentario') 
             comentar_incidencia(idIncidencia, comentario)
