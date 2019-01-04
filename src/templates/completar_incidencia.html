@@ -8,12 +8,13 @@
     <meta name="viewport" content="width = device-width, initial-scale = 1, shrink-to-fit=no">
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="../static/css/clientView.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/clientView.css') }}">
     <!-- Link al css de Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
         crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP"
         crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="../static/css/formulario.css">
     <script src="{{ url_for('static', filename='scripts/includeHTML.js') }}"></script>
 </head>
 
@@ -42,74 +43,31 @@
 
     <div id="data-body" class="container-fluid flex-grow-1" onmouseover="closeSide('side-nav')" >
         <!-- Body -->
-        <div class="row" style="width: 100%; padding-top: 0.5em; padding-bottom: 0.5em; font-size: 2em;">
-            <div class="col">
-                <p class="text-center">Estado de las incidencias del tecnico {{ username }}</p>
-            </div>
-        </div>
+        <!DOCTYPE html>
 
-        <div style="display: flex;">
-            <div>
-                <p class="text-center" id="tituloColumna">Abiertas</p>
-                {% for i in range(incidencias_abiertas|length) %}
-                <div class="card-deck" style="margin: 1em;">
-                    <div class="card" id="card1">
-                        <div class="card-body">
-                            <!-- <a href="/incidencia/{{ incidencias_abiertas[i].id  }}"> -->
-                                <p class="card-title">{{ incidencias_abiertas[i].titulo }}</p>
-                                <hr>
-                                <p class="card-text">Descripción:</p>
-                                <p class="card-text .text-justify" id="card-description">{{ incidencias_abiertas[i].titulo }}</p>
-                                <hr>
-                                <p class="card-text">Incidencia pendiente de asignar a un tecnico.</p>
-                            <!-- </a> -->
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
+<div class="inciCli">
+  <div class="formCli">  
+    
+    <form class="incidentCli" method='POST' action='/completar_incidencia/{{ incidencia.id }}'>
+      
+      <p> Incidencia {{ incidencia.id }} </p>
+      <textarea placeholder="Comentario" name="comentario" required></textarea>
+      <input type="text" placeholder="prioridad" name="prioridad" required/>
 
-            <div style="border-left: 1px solid grey; height: 70%;">
-                <p class="text-center" id="tituloColumna">Notificacion Cierre</p>
-                {% for i in range(incidencias_notif_cierre|length) %}
-                <div class="card-deck" style="margin: 1em;">
-                    <div class="card" id="card2">
-                        <div class="card-body">
-                            <!-- <a href="/incidencia/{{ incidencias_notif_cierre[i].id  }}"> --> 
-                                <p class="card-title">{{ incidencias_notif_cierre[i].titulo }}</p>
-                                <hr>
-                                <p class="card-text">Descripción:</p>
-                                <p class="card-text .text-justify" id="card-description">{{ incidencias_notif_cierre[i].descripcion }}</p>
-                                <hr>
-                                <p class="card-text">Incidencia abierta por {{ incidencias_notif_cierre[i].reportadaPor }}</p>
-                            <!-- </a> --> 
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-          
-            <div style="border-left: 1px solid grey; height: 70%;">
-                <p class="text-center" id="tituloColumna">Pendiente Cierre</p>
-                {% for i in range(incidencias_pendientes_cierre|length) %}
-                <div class="card-deck" style="margin: 1em;">
-                    <div class="card" id="card2">
-                        <div class="card-body">
-                            <!-- <a href="/informacion_incidencia/{{ incidencias_notif_cierre[i].id  }}"> --> 
-                                <p class="card-title">{{ incidencias_pendientes_cierre[i].titulo }}</p>
-                                <hr>
-                                <p class="card-text">Descripción:</p>
-                                <p class="card-text .text-justify" id="card-description">{{ incidencias_pendientes_cierre[i].descripcion }}</p>
-                                <hr>
-                                <p class="card-text">Incidencia abierta por {{ incidencias_pendientes_cierre[i].reportadaPor }}</p>
-                            <!-- </a> -->
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
+      <select name="tecnico" required>
+          {% for i in range(listaTecnicos|length) %} 
+          <option value="{{ listaTecnicos[i].nick }}">{{ listaTecnicos[i].nick }}</option>
+          {% endfor %}
+      </select>
+      <button type="submit">Enviar</button>
+      
+    </form>
+  </div>
+</div>
 
-        </div>
+
+
+
     </div>
 
     <script>
