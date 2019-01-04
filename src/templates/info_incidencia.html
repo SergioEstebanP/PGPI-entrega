@@ -187,11 +187,13 @@
 
             {% if (current_user.tipo == 1) and (incidencia.estado==1) %}
             <button type="submit" class="btn btn-outline-primary" name="action" value="add_comentario">Añadir comentario</button>
+            <button type="submit" class="btn btn-outline-primary" name="action" value="add_tiempoSol">Añadir tiempo</button>
             <button type="submit" class="btn btn-outline-primary" name="action" value="cierre_tecnico">Solicitar Cierre</button>
             {% endif %}}
 
             {% if (current_user.tipo == 1) and (incidencia.estado!=1) %}
             <button type="submit" class="btn btn-outline-primary" name="action" value="add_comentario">Añadir comentario</button>
+            
             {% endif %}}
 
 
