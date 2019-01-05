@@ -62,8 +62,6 @@ def incidencia(idIncidencia):
     cambioCierre = get_cambio_by_estado(idIncidencia, 3)
     estado = get_estado(incidencia.estado)
     categoria = get_categoria(incidencia.categoria)
-    print(incidencia)
-    print(incidencia.comentario)
     return render_template('info_incidencia.html', incidencia=incidencia, estado=estado, categoria=categoria, cambioApertura=cambioApertura, cambioAsignada=cambioAsignada, cambioCierre=cambioCierre)
 
 @app.route('/index')
