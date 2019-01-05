@@ -50,19 +50,22 @@
   <div class="formCli">  
     
     <form class="incidentCli" method='POST' action='/registrar_incidencia'>
-      
-      <input type="text" placeholder="Título" name="titulo" required/>
-      <textarea placeholder="Descripción" name="descripcion" required minlength="100" title="La descripcion ha de tener minimo 100 caracteres"></textarea>
-      <input type="number" pattern="[0-9]" placeholder="Id elemento inventario " name="idElementoInventario"/>
-      <input type="date" id="fecha" name="fecha" required>
-                        <select name="categoria" required>
-                            {% for c in range(categorias|length) %}
-                            <option value="{{ c }}">{{ categorias[c].categoria }}</option>
-                            {% endfor %}
-                        </select>
-                        <button type="submit" onsubmit="validarCampos()">Enviar</button>
-
-                    </form>
+        <input type="text" placeholder="Título" name="titulo" required/>
+        <textarea placeholder="Descripción" name="descripcion" required minlength="100" title="La descripcion ha de tener minimo 100 caracteres"></textarea>
+        <select name="elementoInventario">
+            <option value="-1">Seleccionar elemento del inventario afectado</option>
+            {% for c in range(elementosInventario|length) %}
+            <option value="{{ c }}">{{ elementosInventario[c].nombre }}</option>
+            {% endfor %}
+        </select>
+        <input type="date" id="fecha" name="fecha" required>
+        <select name="categoria" required>
+            {% for c in range(categorias|length) %}
+            <option value="{{ c }}">{{ categorias[c].categoria }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" onsubmit="validarCampos()">Enviar</button>
+    </form>
                     <script>
                         function validarCampos(){
                             var fechainicial = new Date();

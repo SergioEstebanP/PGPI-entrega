@@ -112,13 +112,14 @@ def registrar_incidencia():
         estado          = 0
         tecnicoAsignado = 'Sin asignar'
         reportadaPor    = current_user.nick
-        idInventario    = request.form.get('idElementoInventario')
+        inventario      = request.form.get('elementoInventario')
         categoria       = request.form.get('categoria')
 
-        insert_incidencia(titulo, descripcion, fecha, estado, reportadaPor, categoria, comentario, prioridad, tiempoEstimado, tecnicoAsignado)
+        insert_incidencia(titulo, descripcion, fecha, estado, reportadaPor, categoria, comentario, prioridad, tiempoEstimado, tecnicoAsignado, elementoInventario=inventario if inventario >= 0 else None)
         return redirect(url_for('index'))
 
     categorias = get_categorias()
+    elementosInventario = getElementos()
     return render_template('registrar_incidencia.html', categorias=categorias)
 
 @app.route('/completar_incidencia/<idIncidencia>', methods=['GET', 'POST'])
@@ -128,13 +129,15 @@ def completar_incidencia(idIncidencia):
         comentario = request.form.get('comentario')
         prioridad  = request.form.get('prioridad')
         tecnico    = request.form.get('tecnico')
+        inventario = request.form.get('elementoInventario')
 
-        asignar_incidencia(idIncidencia, comentario, prioridad, tecnico)
+        asignar_incidencia(idIncidencia, comentario, prioridad, tecnico, inventario)
         return redirect(url_for('incidencia', idIncidencia=idIncidencia))
 
     listaTecnicos = get_tecnicos()
     incidencia = get_incidencia(idIncidencia)
-    return render_template('completar_incidencia.html', incidencia=incidencia, listaTecnicos=listaTecnicos)
+    elementosInventario = getElementos()
+    return render_template('completar_incidencia.html', incidencia=incidencia, listaTecnicos=listaTecnicos, elementosInventario=elementosInventario)
 
 @app.route('/add_comentario/<idIncidencia>', methods=['GET', 'POST'])
 @login_required
@@ -171,8 +174,8 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import or_
 from flask_login import UserMixin
 
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@127.0.0.1:3306/PGPI_grupo02'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@jair.lab.inf.uva.es:3306/PGPI_grupo02'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@127.0.0.1:3306/PGPI_grupo02'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@jair.lab.inf.uva.es:3306/PGPI_grupo02'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -202,6 +205,7 @@ class Incidencia(db.Model):
     tecnicoAsignado = db.Column(db.String(50))
     reportadaPor = db.Column(db.String(50))
     categoria = db.Column(db.String(40))
+    elementoInventario = db.Column(db.Integer)
 
 class Cambio(db.Model):
     fecha = db.Column(db.String(50), primary_key=True)
@@ -217,6 +221,10 @@ class CategoriaIncidencia(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     categoria = db.Column(db.String(40))
 
+class ElementoInventario(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(200))
+
 
 #######################
 #       USUARIO       #
@@ -231,8 +239,8 @@ def get_tecnicos():
 #######################
 #     INCIDENCIA      #
 #######################
-def insert_incidencia(titulo, descripcion, fecha, estado, reportadaPor, categoria, comentario=None, prioridad=None, tiempoEstimado=None, tecnicoAsignado=None):
-    incidencia = Incidencia(titulo=titulo, comentario=comentario, prioridad=prioridad, tiempoEstimado=tiempoEstimado, descripcion=descripcion, fecha=fecha, estado=estado, tecnicoAsignado=tecnicoAsignado, reportadaPor=reportadaPor, categoria=categoria)
+def insert_incidencia(titulo, descripcion, fecha, estado, reportadaPor, categoria, elementoInventario, comentario=None, prioridad=None, tiempoEstimado=None, tecnicoAsignado=None):
+    incidencia = Incidencia(titulo=titulo, comentario=comentario, prioridad=prioridad, tiempoEstimado=tiempoEstimado, descripcion=descripcion, fecha=fecha, estado=estado, tecnicoAsignado=tecnicoAsignado, reportadaPor=reportadaPor, categoria=categoria, elementoInventario=elementoInventario)
     db.session.add(incidencia)
     db.session.commit()
 
@@ -248,11 +256,12 @@ def cambio_estado_incidencia(id, estado, usuario):
 
     insert_cambio(estado, usuario, id)
 
-def asignar_incidencia(id, comentario, prioridad, tecnico):
+def asignar_incidencia(id, comentario, prioridad, tecnico, elementoInventario):
     incidencia = get_incidencia(id)
     incidencia.comentario = comentario
     incidencia.prioridad = prioridad
     incidencia.tecnicoAsignado = tecnico
+    if elementoInventario: incidencia.elementoInventario = elementoInventario
     db.session.commit()
 
     cambio_estado_incidencia(id, 1, current_user.nick)
@@ -317,3 +326,13 @@ def get_categorias():
 
 def get_categoria(id):
     return CategoriaIncidencia.query.get(id).categoria
+
+
+#######################
+#     INVENTARIO      #
+#######################
+def get_elementos():
+    return list(ElementoInventario.query.all())
+
+def get_elemento():
+    return ElementoInventario.query.get(id).nombre
