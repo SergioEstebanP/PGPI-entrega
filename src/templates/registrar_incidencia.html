@@ -52,7 +52,7 @@
     <form class="incidentCli" method='POST' action='/registrar_incidencia'>
       
       <input type="text" placeholder="Título" name="titulo" required/>
-      <textarea placeholder="Descripción" name="descripcion" required></textarea>
+      <textarea placeholder="Descripción" name="descripcion" required minlength="100" title="La descripcion ha de tener minimo 100 caracteres"></textarea>
       <input type="number" pattern="[0-9]" placeholder="Id elemento inventario " name="idElementoInventario"/>
       <input type="date" id="fecha" name="fecha" required>
                         <select name="categoria" required>

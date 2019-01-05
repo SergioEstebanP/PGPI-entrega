@@ -12,7 +12,7 @@ DROP TABLE IF EXISTS cambio;
 
 CREATE TABLE estado(
     id INTEGER PRIMARY KEY,
-    estado VARCHAR (30)
+    estado VARCHAR (50)
 );
 
 
@@ -51,10 +51,10 @@ CREATE TABLE usuario(
 CREATE TABLE incidencia(
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     titulo VARCHAR(100),
-    comentario VARCHAR(200),
+    comentario VARCHAR(500),
     prioridad INTEGER,
     tiempoEstimado INTEGER,
-    descripcion VARCHAR(200),
+    descripcion VARCHAR(500),
     fecha DATE,
     estado INTEGER REFERENCES estado(id),
     tecnicoAsignado VARCHAR(50) REFERENCES usuario(nick),
@@ -79,8 +79,8 @@ INSERT INTO estado (id, estado) VALUES (0, 'Abierta');
 INSERT INTO estado (id, estado) VALUES (1, 'Asignada a un técnico');
 INSERT INTO estado (id, estado) VALUES (2, 'Solicitado cierre por el cliente');
 INSERT INTO estado (id, estado) VALUES (3, 'Solicitado cierre por el técnico');
-INSERT INTO estado (id, estado) VALUES (4, 'Cerrada sin solucion');
-INSERT INTO estado (id, estado) VALUES (5, 'Cerrada con solusion');
+INSERT INTO estado (id, estado) VALUES (4, 'Cerrada sin solución');
+INSERT INTO estado (id, estado) VALUES (5, 'Cerrada con solución');
 
 /* Poblando la tabla: tipo_usuario */
 INSERT INTO tipo_usuario (id, tipo_usuario) VALUES (0, 'supervisor');

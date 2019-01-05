@@ -52,9 +52,9 @@
       
       <p> Incidencia {{ incidencia.id }} </p>
       <textarea placeholder="Comentario" name="comentario" required></textarea>
-      <input type="text" placeholder="prioridad" name="prioridad" required/>
+      <input type="number" min="1" max="10" pattern="\d+" placeholder="Prioridad" name="prioridad" required title="Campo obligatorio. Numero entre 1 y 10"/>
 
-      <select name="tecnico" required>
+      <select name="tecnico" required placeholder="Elegir técnico">
           {% for i in range(listaTecnicos|length) %} 
           <option value="{{ listaTecnicos[i].nick }}">{{ listaTecnicos[i].nick }}</option>
           {% endfor %}

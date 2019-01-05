@@ -67,9 +67,10 @@
                 <h4>Identificador: {{ incidencia.id}}</h4>
                 <h4>Título: {{ incidencia.titulo }}</h4>
                 <h5>Descripción: {{ incidencia.descripcion }}</h5>
-                <input type="number" pattern="[1-999]"  name="tiempo">
-                <button type="submit" name="action" value="add_tiempo">Añadir tiempo</button>
-                <button type="submit" name="action" value="cancelar">Cancelar</button>
+                <p>Introduzca el número en horas: </p>
+                <input type="number" pattern="\d+"  name="tiempo" min="1" max="72">
+                <button class="btn btn-outline-primary" type="submit" name="action" value="add_tiempo" >Añadir tiempo</button>
+                <button class="btn btn-outline-primary" type="submit" name="action" value="cancelar">Cancelar</button>
             
             </form>
     

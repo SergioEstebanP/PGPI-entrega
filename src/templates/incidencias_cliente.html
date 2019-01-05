@@ -72,9 +72,9 @@
         </div>
         {% endfor %}
         {% set i=((incidencias|length)/3)|int %}
+
         <div class="card-deck" style="margin: 1em;">
         {% for j in range((incidencias|length)%3) %}
-        
             <div class="card" id="card1">
                 <div class="card-body">
                     <a href="/incidencia/{{ incidencias[3*i+j]['id']  }}">

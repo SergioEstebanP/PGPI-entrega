@@ -62,6 +62,8 @@ def incidencia(idIncidencia):
     cambioCierre = get_cambio_by_estado(idIncidencia, 3)
     estado = get_estado(incidencia.estado)
     categoria = get_categoria(incidencia.categoria)
+    print(incidencia)
+    print(incidencia.comentario)
     return render_template('info_incidencia.html', incidencia=incidencia, estado=estado, categoria=categoria, cambioApertura=cambioApertura, cambioAsignada=cambioAsignada, cambioCierre=cambioCierre)
 
 @app.route('/index')
@@ -169,8 +171,8 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import or_
 from flask_login import UserMixin
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@127.0.0.1:3306/PGPI_grupo02'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@jair.lab.inf.uva.es:3306/PGPI_grupo02'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@127.0.0.1:3306/PGPI_grupo02'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@jair.lab.inf.uva.es:3306/PGPI_grupo02'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 

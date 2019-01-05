@@ -57,7 +57,7 @@
                         <p class="card-text text-justify" id="card-description"> {{ incidencia.descripcion}}</p>
                        
                     </div>
-                    {% if incidencia.comentario is defined and incidencia.comentario|length %}
+                    {% if (incidencia.comentario is defined) and (incidencia.comentario|length) %}
                     <div class="card-body">     
                             <h5>Comentario:</h5>
                         <p class="card-text text-justify" id="card-description"> {{ incidencia.comentario}}</p>
@@ -146,7 +146,7 @@
       </div>
 
       <div class="steps-three">
-          {% if incidencia.estado == 4 or incidencia.etado == 5%}
+          {% if incidencia.estado == 4 or incidencia.estado == 5 %}
         <img class="steps-img" src="http://placehold.it/50/3498DB/3498DB" alt="" />
         <h3 class="steps-name">
           Cerrada
@@ -178,12 +178,12 @@
             {% endif %}}
 
             {% if (current_user.tipo == 0) and (incidencia.estado ==  1) %}
-            <button type="button" class="btn btn-outline-primary">Añadir comentario</button>
+            <button type="submit" class="btn btn-outline-primary" name="action" value="add_comentario">Añadir comentario</button>
             {% endif %}}
 
             {% if (current_user.tipo == 0) and (incidencia.estado ==  3 or incidencia.estado==2) %}
-            <button type="submit" class="btn btn-outline-primary" name="action" value="Solucion">Cerrar Incidencia Solucionada</button>
-            <button type="submit" class="btn btn-outline-primary" name="action" value="n-Solucion">Cerrar Incidencia sin Solucion</button>
+            <button type="submit" class="btn btn-outline-primary" name="action" value="Solucion">Cerrar Solucion</button>
+            <button type="submit" class="btn btn-outline-primary" name="action" value="n-Solucion">Cerrar sin Solucion</button>
             {% endif %}}
 
 
@@ -200,7 +200,6 @@
 
 
             {% if (current_user.tipo == 2) and (incidencia.estado!=2) %}
-            <button type="button" class="btn btn-outline-primary">Ver comentario</button>
             <button type="submit" class="btn btn-outline-primary" name="action" value="cierre_cliente">Solicitar Cierre</button>
             {% endif %}
  </form>
