@@ -102,6 +102,11 @@ def incidencias_abiertas():
     incidencias = get_incidencias_reportadas_por(current_user.nick)
     return render_template('incidencias_cliente.html', incidencias=incidencias)
 
+@app.route('/incidencias_abiertas_clientes')
+@login_required
+def incidencias_abiertas_clientes():
+    incidencias = get_incidencias_reportadas_por_clientes()
+    return render_template('incidencias_cliente.html', incidencias=incidencias)
 
 @app.route('/registrar_incidencia', methods=['GET', 'POST'])
 @login_required
@@ -221,6 +226,9 @@ class CategoriaIncidencia(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     categoria = db.Column(db.String(40))
 
+class TipoUsuario(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    tipoUsuario = db.Column(db.String(20))
 
 #######################
 #       USUARIO       #
@@ -295,6 +303,17 @@ def get_incidencias_pendientes_cierre(userNick):
 def get_incidencias_reportadas_por(userNick):
     return list(Incidencia.query.filter_by(reportadaPor=userNick))
 
+def get_incidencias_reportadas_por_clientes():
+    incidencias = list(Incidencia.query.all())
+    usuarios = list(Usuario.query.all())
+    clientes = []
+
+    for i in range(len(incidencias)):
+        for j in range(len(usuarios)):
+            if incidencias[i].reportadaPor == usuarios[j].nick:
+                clientes.append(incidencias[i])
+
+    return clientes;
 
 #######################
 #       CAMBIO        #
