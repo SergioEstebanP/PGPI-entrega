@@ -52,16 +52,17 @@ def incidencia(idIncidencia):
         elif request.form['action']=="Solucion":
             cambio_estado_incidencia(idIncidencia,5, current_user.nick)
         elif request.form['action']=="add_comentario":
-            return render_template('add_comentario.html', incidencia=incidencia)
+            return redirect(url_for('add_comentario', idIncidencia=idIncidencia))
         elif request.form['action']=="add_tiempoSol":
-            return render_template('add_time.html', incidencia=incidencia)
+            return redirect(url_for('add_tiempo', idIncidencia=idIncidencia))
 
 
-    listaTecnicos = get_tecnicos()
     cambioApertura = get_cambio_by_estado(idIncidencia, 0)
     cambioAsignada = get_cambio_by_estado(idIncidencia, 1)
     cambioCierre = get_cambio_by_estado(idIncidencia, 3)
-    return render_template('info_incidencia.html', incidencia=incidencia, listaTecnicos=listaTecnicos, cambioApertura=cambioApertura, cambioAsignada=cambioAsignada, cambioCierre=cambioCierre)
+    estado = get_estado(incidencia.estado)
+    categoria = get_categoria(incidencia.categoria)
+    return render_template('info_incidencia.html', incidencia=incidencia, estado=estado, categoria=categoria, cambioApertura=cambioApertura, cambioAsignada=cambioAsignada, cambioCierre=cambioCierre)
 
 @app.route('/index')
 @login_required
@@ -113,10 +114,10 @@ def registrar_incidencia():
         categoria       = request.form.get('categoria')
 
         insert_incidencia(titulo, descripcion, fecha, estado, reportadaPor, categoria, comentario, prioridad, tiempoEstimado, tecnicoAsignado)
-
         return redirect(url_for('index'))
 
-    return render_template('registrar_incidencia.html')
+    categorias = get_categorias()
+    return render_template('registrar_incidencia.html', categorias=categorias)
 
 @app.route('/completar_incidencia/<idIncidencia>', methods=['GET', 'POST'])
 @login_required
@@ -140,26 +141,24 @@ def add_comentario(idIncidencia):
         if request.form['action']=="add_com":
             comentario = request.form.get('comentario')
             comentar_incidencia(idIncidencia, comentario)
-            return redirect(url_for('incidencia', idIncidencia=idIncidencia))
 
-        elif request.form['action']=="cancelar":
-            return redirect(url_for('incidencia', idIncidencia=idIncidencia))
+        return redirect(url_for('incidencia', idIncidencia=idIncidencia))
 
-    return render_template('info_incidencia.html')
+    incidencia = get_incidencia(idIncidencia)
+    return render_template('add_comentario.html', incidencia=incidencia)
 
-@app.route('/add_time/<idIncidencia>', methods=['GET', 'POST'])
+@app.route('/add_tiempo/<idIncidencia>', methods=['GET', 'POST'])
 @login_required
-def add_time(idIncidencia):
+def add_tiempo(idIncidencia):
     if request.method == 'POST':
-        if request.form['action']=="add_time":
+        if request.form['action']=="add_tiempo":
             tiempo = request.form.get('tiempo')
             addTiempo_incidencia(idIncidencia, tiempo)
-            return redirect(url_for('incidencia', idIncidencia=idIncidencia))
 
-        elif request.form['action']=="cancelar":
-            return redirect(url_for('incidencia', idIncidencia=idIncidencia))
+        return redirect(url_for('incidencia', idIncidencia=idIncidencia))
 
-    return render_template('info_incidencia.html')
+    incidencia = get_incidencia(idIncidencia)
+    return render_template('add_tiempo.html', incidencia=incidencia)
 
 
 ###################################################
@@ -208,9 +207,13 @@ class Cambio(db.Model):
     tecnico = db.Column(db.String(50))
     incidencia = db.Column(db.Integer)
 
-class ElementoIncidencia(db.Model):
-    incidencia = db.Column(db.Integer, primary_key=True)
-    elemento = db.Column(db.Integer, primary_key=True)
+class Estado(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    estado = db.Column(db.String(30))
+
+class CategoriaIncidencia(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    categoria = db.Column(db.String(40))
 
 
 #######################
@@ -296,12 +299,19 @@ def insert_cambio(estado, tecnico, incidencia):
 def get_cambio_by_estado(id, estado):
     return next(iter(list(Cambio.query.filter_by(incidencia=id, estado=estado))), None)
 
-#######################
-#     INVENTARIO      #
-#######################
-def insert_elemento_incidencia(incidencia, elemento):
-    db.session.add(ElementoIncidencia(incidencia=incidencia, elemento=elemento))
-    db.session.commit()
 
-def get_elementos_incidencia(incidencia):
-    return list(ElementoIncidencia.query.filter_by(incidencia=incidencia))
+#######################
+#       ESTADO        #
+#######################
+def get_estado(id):
+    return Estado.query.get(id).estado
+
+
+#######################
+#     CATEGORÍA       #
+#######################
+def get_categorias():
+    return list(CategoriaIncidencia.query.all())
+
+def get_categoria(id):
+    return CategoriaIncidencia.query.get(id).categoria

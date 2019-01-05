@@ -63,12 +63,12 @@
 
     <div class="addCom">  
         <div class="formuCom">
-            <form class="formCom" method='POST' action='/add_time/{{ incidencia.id }}'>
+            <form class="formCom" method='POST' action='/add_tiempo/{{ incidencia.id }}'>
                 <h4>Identificador: {{ incidencia.id}}</h4>
                 <h4>Título: {{ incidencia.titulo }}</h4>
                 <h5>Descripción: {{ incidencia.descripcion }}</h5>
                 <input type="number" pattern="[1-999]"  name="tiempo">
-                <button type="submit" name="action" value="add_time">Añadir tiempo</button>
+                <button type="submit" name="action" value="add_tiempo">Añadir tiempo</button>
                 <button type="submit" name="action" value="cancelar">Cancelar</button>
             
             </form>

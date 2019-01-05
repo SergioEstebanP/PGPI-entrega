@@ -56,11 +56,9 @@
       <input type="number" pattern="[0-9]" placeholder="Id elemento inventario " name="idElementoInventario"/>
       <input type="date" id="fecha" name="fecha" required>
                         <select name="categoria" required>
-                            <option value="hw">Hardware</option>
-                            <option value="com">Comunicaciones</option>
-                            <option value="softwareBa">Software básico</option>
-                            <option value="softwareApp">Software de aplicaciones</option>
-                            <option value="otros">Otros</option>
+                            {% for c in range(categorias|length) %}
+                            <option value="{{ c }}">{{ categorias[c].categoria }}</option>
+                            {% endfor %}
                         </select>
                         <button type="submit" onsubmit="validarCampos()">Enviar</button>
 

@@ -77,28 +77,36 @@
                 <tbody>
                     <tr>
                     <th scope="row">1</th>
-                    <td>Estado</td>
-                    <td>{{ incidencia.estado  }}</td>
+                    <td>ID Incidencia</td>
+                    <td>{{ incidencia.id }}</td>
                     </tr>
                     <tr>
                     <th scope="row">2</th>
-                    <td>Fecha de Apertura</td>
-                    <td>24 de Diciembre de 2018</td>
+                    <td>Estado</td>
+                    <td>{{ estado }}</td>
                     </tr>
                     <tr>
                     <th scope="row">3</th>
-                    <td>Fecha Apertura</td>
-                    <td>24 de Dicimbre de 2018</td>
+                    <td>Prioridad</td>
+                    {% if incidencia.prioridad != 0 %}
+                    <td>{{ incidencia.prioridad }}</td>
+                    {% else %}
+                    <td>No asignada</td>
+                    {% endif %}
                     </tr>
                     <tr>
                     <th scope="row">4</th>
-                    <td>Fecha estimada de cierre</td>
-                    <td>23 de Julio de 2065</td>
+                    <td>Tiempo estimado de resolución</td>
+                    {% if incidencia.tiempoEstimado != 0 %}
+                    <td>{{ incidencia.tiempoEstimado }} horas</td>
+                    {% else %}
+                    <td>No estimado</td>
+                    {% endif %}
                     </tr>
                     <tr>
                     <th scope="row">5</th>
-                    <td>{{ incidencia.reportadaPor}}</td>
-                    <td></td>
+                    <td>Categoría</td>
+                    <td>{{ categoria }}</td>
                     </tr>
                 </tbody>
                 </table>
