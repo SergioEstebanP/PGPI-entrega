@@ -108,6 +108,15 @@
                     <td>Categoría</td>
                     <td>{{ categoria }}</td>
                     </tr>
+                    <tr>
+                    <th scope="row">6</th>
+                    <td>Elemento del inventario afectado</td>
+                    {% if incidencia.tiempoEstimado < 0 %}
+                    <td>No asignado</td>
+                    {% else %}
+                    <td>{{ elementoInventario }}</td>
+                    {% endif %}
+                    </tr>
                 </tbody>
                 </table>
             </div>
