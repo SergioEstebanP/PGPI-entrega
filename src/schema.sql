@@ -6,7 +6,6 @@ DROP TABLE IF EXISTS categoria_incidencia;
 DROP TABLE IF EXISTS elemento_inventario;
 DROP TABLE IF EXISTS usuario;
 DROP TABLE IF EXISTS incidencia;
-DROP TABLE IF EXISTS elemento_incidencia;
 DROP TABLE IF EXISTS cambio;
 
 
@@ -33,8 +32,7 @@ CREATE TABLE categoria_incidencia(
 
 CREATE TABLE elemento_inventario(
     id INTEGER PRIMARY KEY,
-    nombre VARCHAR(200),
-    fechaAdquisicion INTEGER
+    nombre VARCHAR(200)
 );
 
 CREATE TABLE usuario(
@@ -59,12 +57,8 @@ CREATE TABLE incidencia(
     estado INTEGER REFERENCES estado(id),
     tecnicoAsignado VARCHAR(50) REFERENCES usuario(nick),
     reportadaPor VARCHAR(50) REFERENCES usuario(nick),
-    categoria INTEGER REFERENCES categoria_incidencia(id)
-);
-
-CREATE TABLE elemento_incidencia(
-    incidencia INTEGER REFERENCES incidencia(id),
-    elemento INTEGER REFERENCES elemento_inventario(id) 
+    categoria INTEGER REFERENCES categoria_incidencia(id),
+    elementoInventario INTEGER REFERENCES elemento_inventario(id)
 );
 
 CREATE TABLE cambio(
