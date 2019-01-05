@@ -62,8 +62,6 @@ def incidencia(idIncidencia):
     cambioCierre = get_cambio_by_estado(idIncidencia, 3)
     estado = get_estado(incidencia.estado)
     categoria = get_categoria(incidencia.categoria)
-    print(incidencia)
-    print(incidencia.comentario)
     return render_template('info_incidencia.html', incidencia=incidencia, estado=estado, categoria=categoria, cambioApertura=cambioApertura, cambioAsignada=cambioAsignada, cambioCierre=cambioCierre)
 
 @app.route('/index')
@@ -96,6 +94,12 @@ def incidencias_cerradas():
     sin_solucion = get_incidencias_by_estado(4)
     con_solucion = get_incidencias_by_estado(5)
     incidencias = list(set(sin_solucion + con_solucion))
+    return render_template('incidencias_cliente.html', incidencias=incidencias)
+
+@app.route('/incidencias_abiertas')
+@login_required
+def incidencias_abiertas():
+    incidencias = get_incidencias_reportadas_por(current_user.nick)
     return render_template('incidencias_cliente.html', incidencias=incidencias)
 
 
@@ -276,7 +280,6 @@ def get_incidencias_by_user_estado(userNick):
 def get_incidencias_by_user_estado_cierre(userNick):
      return list(Incidencia.query.filter_by(reportadaPor=userNick, estado=2))
 
-
 def get_incidencias_by_estado(estado):
     return list(Incidencia.query.filter_by(estado=estado))
 
@@ -288,6 +291,9 @@ def get_incidencias_notif_cierre(userNick):
 
 def get_incidencias_pendientes_cierre(userNick):
     return list(Incidencia.query.filter_by(tecnicoAsignado=userNick, estado=3))
+
+def get_incidencias_reportadas_por(userNick):
+    return list(Incidencia.query.filter_by(reportadaPor=userNick))
 
 
 #######################
