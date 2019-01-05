@@ -1,22 +1,15 @@
 USE PGPI_grupo02;
 
 DROP TABLE IF EXISTS estado;
-DROP TABLE IF EXISTS tipoUsuario;
-DROP TABLE IF EXISTS elementoInventario;
+DROP TABLE IF EXISTS tipo_usuario;
+DROP TABLE IF EXISTS categoria_incidencia;
+DROP TABLE IF EXISTS elemento_inventario;
 DROP TABLE IF EXISTS usuario;
 DROP TABLE IF EXISTS incidencia;
-DROP TABLE IF EXISTS elementoIncidencia;
+DROP TABLE IF EXISTS elemento_incidencia;
 DROP TABLE IF EXISTS cambio;
-DROP TABLE IF EXISTS categoriaIncidencia;
 
 
-/* Valores para estado de la incidencia:
-    [0, abierta]
-    [1, asignada a un tecnico]
-    [2, pendiente de cerrar]
-    [3, cerrada con solucion]
-    [4, cerrada sin solucion]
- */
 CREATE TABLE estado(
     id INTEGER PRIMARY KEY,
     estado VARCHAR (30)
@@ -28,23 +21,17 @@ CREATE TABLE estado(
     [1, tecnico]
     [2, cliente]
  */
-CREATE TABLE tipoUsuario(
+CREATE TABLE tipo_usuario(
     id INTEGER PRIMARY KEY,
-    tipoUsuario VARCHAR(20)
+    tipo_usuario VARCHAR(20)
 );
 
-/* Valores para categoria de incidencia:
-    [0, hardware]
-    [1, problemas con las comunicaciones]
-    [2, software basico]
-    [3, software de aplicaciones]
- */
-CREATE TABLE categoriaIncidencia(
+CREATE TABLE categoria_incidencia(
     id INTEGER PRIMARY KEY,
     categoria VARCHAR(40)
 );
 
-CREATE TABLE elementoInventario(
+CREATE TABLE elemento_inventario(
     id INTEGER PRIMARY KEY,
     nombre VARCHAR(200),
     fechaAdquisicion INTEGER
@@ -58,7 +45,7 @@ CREATE TABLE usuario(
     apellidos VARCHAR(100),
     biografia VARCHAR(200),
     fotoPerfil VARCHAR(200),
-    tipo INTEGER REFERENCES tipoUsuario(id) 
+    tipo INTEGER REFERENCES tipo_usuario(id) 
 );
 
 CREATE TABLE incidencia(
@@ -72,12 +59,12 @@ CREATE TABLE incidencia(
     estado INTEGER REFERENCES estado(id),
     tecnicoAsignado VARCHAR(50) REFERENCES usuario(nick),
     reportadaPor VARCHAR(50) REFERENCES usuario(nick),
-    categoria INTEGER REFERENCES categoriaIncidencia(id)
+    categoria INTEGER REFERENCES categoria_incidencia(id)
 );
 
-CREATE TABLE elementoIncidencia(
+CREATE TABLE elemento_incidencia(
     incidencia INTEGER REFERENCES incidencia(id),
-    elemento INTEGER REFERENCES elementoInventario(id) 
+    elemento INTEGER REFERENCES elemento_inventario(id) 
 );
 
 CREATE TABLE cambio(
@@ -88,21 +75,26 @@ CREATE TABLE cambio(
 );
 
 /* Poblando la tabla: estado */
-INSERT INTO estado (id, estado) VALUES (0, 'abierta');
-INSERT INTO estado (id, estado) VALUES (1, 'asignada a un tecnico');
-INSERT INTO estado (id, estado) VALUES (2, 'pendiente de cerrar cliente');
-INSERT INTO estado (id, estado) VALUES (3, 'pendiente de cerrar tecnico');
-INSERT INTO estado (id, estado) VALUES (4, 'cerrada sin solucion');
-INSERT INTO estado (id, estado) VALUES (5, 'cerrada con solusion');
+INSERT INTO estado (id, estado) VALUES (0, 'Abierta');
+INSERT INTO estado (id, estado) VALUES (1, 'Asignada a un técnico');
+INSERT INTO estado (id, estado) VALUES (2, 'Solicitado cierre por el cliente');
+INSERT INTO estado (id, estado) VALUES (3, 'Solicitado cierre por el técnico');
+INSERT INTO estado (id, estado) VALUES (4, 'Cerrada sin solucion');
+INSERT INTO estado (id, estado) VALUES (5, 'Cerrada con solusion');
 
-/* Poblando la tabla: tipoUsuario */
-INSERT INTO tipoUsuario (id, tipoUsuario) VALUES (0, 'supervisor');
-INSERT INTO tipoUsuario (id, tipoUsuario) VALUES (1, 'tecnnico');
-INSERT INTO tipoUsuario (id, tipoUsuario) VALUES (2, 'cliente');
+/* Poblando la tabla: tipo_usuario */
+INSERT INTO tipo_usuario (id, tipo_usuario) VALUES (0, 'supervisor');
+INSERT INTO tipo_usuario (id, tipo_usuario) VALUES (1, 'tecnnico');
+INSERT INTO tipo_usuario (id, tipo_usuario) VALUES (2, 'cliente');
+
+/* Poblando la tabla: categoria_incidencia */
+INSERT INTO categoria_incidencia (id, categoria) VALUES (0, 'Hardware');
+INSERT INTO categoria_incidencia (id, categoria) VALUES (1, 'Problemas con las comunicaciones');
+INSERT INTO categoria_incidencia (id, categoria) VALUES (2, 'Software básico');
+INSERT INTO categoria_incidencia (id, categoria) VALUES (3, 'Software de aplicaciones');
+INSERT INTO categoria_incidencia (id, categoria) VALUES (4, 'Otros');
 
 /* Poblando la tabla: usuario */
 INSERT INTO usuario (nick, email, password, nombre, apellidos, biografia, fotoPerfil, tipo) VALUES ('supervisor', 'super@mail.com', 'password', 'super', 'visor', 'probando la biografia del supervisor', 'fotoPerfil', 0);
 INSERT INTO usuario (nick, email, password, nombre, apellidos, biografia, fotoPerfil, tipo) VALUES ('tecnico', 'tecnico@mail.com', 'password', 'tec', 'nico', 'probando la biografia del tecnico', 'fotoPerfil', 1);
 INSERT INTO usuario (nick, email, password, nombre, apellidos, biografia, fotoPerfil, tipo) VALUES ('cliente', 'cliente@mail.com', 'password', 'clie', 'nte', 'probando la biografia del cliente', 'fotoPerfil', 2);
-
-
