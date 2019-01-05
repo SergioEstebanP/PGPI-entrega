@@ -6,7 +6,6 @@ DROP TABLE IF EXISTS categoria_incidencia;
 DROP TABLE IF EXISTS elemento_inventario;
 DROP TABLE IF EXISTS usuario;
 DROP TABLE IF EXISTS incidencia;
-DROP TABLE IF EXISTS elemento_incidencia;
 DROP TABLE IF EXISTS cambio;
 
 
@@ -33,8 +32,7 @@ CREATE TABLE categoria_incidencia(
 
 CREATE TABLE elemento_inventario(
     id INTEGER PRIMARY KEY,
-    nombre VARCHAR(200),
-    fechaAdquisicion INTEGER
+    nombre VARCHAR(200)
 );
 
 CREATE TABLE usuario(
@@ -59,12 +57,8 @@ CREATE TABLE incidencia(
     estado INTEGER REFERENCES estado(id),
     tecnicoAsignado VARCHAR(50) REFERENCES usuario(nick),
     reportadaPor VARCHAR(50) REFERENCES usuario(nick),
-    categoria INTEGER REFERENCES categoria_incidencia(id)
-);
-
-CREATE TABLE elemento_incidencia(
-    incidencia INTEGER REFERENCES incidencia(id),
-    elemento INTEGER REFERENCES elemento_inventario(id) 
+    categoria INTEGER REFERENCES categoria_incidencia(id),
+    elementoInventario INTEGER REFERENCES elemento_inventario(id)
 );
 
 CREATE TABLE cambio(
@@ -93,6 +87,14 @@ INSERT INTO categoria_incidencia (id, categoria) VALUES (1, 'Problemas con las c
 INSERT INTO categoria_incidencia (id, categoria) VALUES (2, 'Software básico');
 INSERT INTO categoria_incidencia (id, categoria) VALUES (3, 'Software de aplicaciones');
 INSERT INTO categoria_incidencia (id, categoria) VALUES (4, 'Otros');
+
+/* Poblando la tabla: elemento_inventario */
+INSERT INTO elemento_inventario (id, nombre) VALUES (0, 'Sin asignar');
+INSERT INTO elemento_inventario (id, nombre) VALUES (1, 'PC01');
+INSERT INTO elemento_inventario (id, nombre) VALUES (2, 'PC02');
+INSERT INTO elemento_inventario (id, nombre) VALUES (3, 'PC03');
+INSERT INTO elemento_inventario (id, nombre) VALUES (4, 'PC04');
+INSERT INTO elemento_inventario (id, nombre) VALUES (5, 'PC05');
 
 /* Poblando la tabla: usuario */
 INSERT INTO usuario (nick, email, password, nombre, apellidos, biografia, fotoPerfil, tipo) VALUES ('Supervisor', 'supervisor@mail.com', 'password', 'Manolo', 'Garcia', 'Biografia del supervisor Manolo Garcia', 'fotoPerfil', 0);
