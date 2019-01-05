@@ -95,14 +95,31 @@ def incidencias_cerradas():
     sin_solucion = get_incidencias_by_estado(4)
     con_solucion = get_incidencias_by_estado(5)
     incidencias = list(set(sin_solucion + con_solucion))
-    return render_template('incidencias_cliente.html', incidencias=incidencias)
+    return render_template('incidencias_cliente.html', incidencias=incidencias, titulo='Todas las incidencias cerradas')
 
 @app.route('/incidencias_abiertas')
 @login_required
 def incidencias_abiertas():
     incidencias = get_incidencias_reportadas_por(current_user.nick)
-    return render_template('incidencias_cliente.html', incidencias=incidencias)
+    return render_template('incidencias_cliente.html', incidencias=incidencias, titulo='Incidencias abiertas reportadas por '+current_user.nick)
 
+@app.route('/incidencias_abiertas_clientes')
+@login_required
+def incidencias_abiertas_clientes():
+    incidencias = get_incidencias_reportadas_por_clientes()
+    return render_template('incidencias_cliente.html', incidencias=incidencias, titulo='Incidencias abiertas reportadas por clientes')
+
+@app.route('/todas_incidencias')
+@login_required
+def todas_incidencias():
+    incidencias = get_incidencias()
+    return render_template('incidencias_cliente.html', incidencias=incidencias, titulo='Todas las incidencias del sistema')
+
+@app.route('/incidencias_asignadas_tecnico')
+@login_required
+def incidencias_asignadas_tecnico():
+    incidencias = get_incidencias_by_estado(1)
+    return render_template('incidencias_cliente.html', incidencias=incidencias, titulo='Incidencias en resolución')
 
 @app.route('/registrar_incidencia', methods=['GET', 'POST'])
 @login_required
@@ -226,6 +243,10 @@ class CategoriaIncidencia(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     categoria = db.Column(db.String(40))
 
+class TipoUsuario(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    tipoUsuario = db.Column(db.String(20))
+
 class ElementoInventario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(200))
@@ -250,9 +271,6 @@ def insert_incidencia(titulo, descripcion, fecha, estado, reportadaPor, categori
     db.session.commit()
 
     insert_cambio(estado, reportadaPor, incidencia.id)
-
-def get_incidencia(id):
-    return Incidencia.query.get(id)
 
 def cambio_estado_incidencia(id, estado, usuario):
     incidencia = get_incidencia(id)
@@ -281,17 +299,24 @@ def addTiempo_incidencia(id, tiempo):
     incidencia.tiempoEstimado = tiempo
     db.session.commit()
 
+
+def get_incidencias():
+    return list(Incidencia.query.all())
+
+def get_incidencia(id):
+    return Incidencia.query.get(id)
+
 def get_incidencias_by_user(userNick):
     return list(Incidencia.query.filter_by(reportadaPor=userNick, estado=0))
+
+def get_incidencias_by_estado(estado):
+    return list(Incidencia.query.filter_by(estado=estado))
 
 def get_incidencias_by_user_estado(userNick):
      return list(Incidencia.query.filter_by(reportadaPor=userNick, estado=1))
 
 def get_incidencias_by_user_estado_cierre(userNick):
      return list(Incidencia.query.filter_by(reportadaPor=userNick, estado=2))
-
-def get_incidencias_by_estado(estado):
-    return list(Incidencia.query.filter_by(estado=estado))
 
 def get_incidencias_abiertas(userNick):
     return list(Incidencia.query.filter_by(tecnicoAsignado=userNick, estado=1))
@@ -305,6 +330,17 @@ def get_incidencias_pendientes_cierre(userNick):
 def get_incidencias_reportadas_por(userNick):
     return list(Incidencia.query.filter_by(reportadaPor=userNick))
 
+def get_incidencias_reportadas_por_clientes():
+    incidencias = list(Incidencia.query.all())
+    usuarios = list(Usuario.query.all())
+    clientes = []
+
+    for i in range(len(incidencias)):
+        for j in range(len(usuarios)):
+            if incidencias[i].reportadaPor == usuarios[j].nick:
+                clientes.append(incidencias[i])
+
+    return clientes
 
 #######################
 #       CAMBIO        #
