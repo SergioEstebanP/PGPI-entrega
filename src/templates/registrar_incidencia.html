@@ -51,7 +51,7 @@
     
     <form class="incidentCli" method='POST' action='/registrar_incidencia'>
         <input type="text" placeholder="Título" name="titulo" required/>
-        <textarea placeholder="Descripción" name="descripcion" required minlength="100" title="La descripcion ha de tener minimo 100 caracteres"></textarea>
+        <textarea placeholder="Descripción" name="descripcion" required></textarea>
         <select name="elementoInventario">
             {% for c in range(elementosInventario|length) %}
             <option value="{{ c }}">{{ elementosInventario[c].nombre }}</option>
@@ -110,6 +110,21 @@
 
         <script>
             includeHTML();
+        </script>
+        <script>
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+        var yyyy = today.getFullYear();
+        if(dd<10){
+            dd='0'+dd
+        } 
+        if(mm<10){
+            mm='0'+mm
+        } 
+
+        today = yyyy+'-'+mm+'-'+dd;
+        document.getElementById("fecha").setAttribute("max", today);
         </script>
     </body>
 
