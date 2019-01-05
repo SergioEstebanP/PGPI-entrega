@@ -58,12 +58,13 @@
           <option value="{{ listaTecnicos[i].nick }}">{{ listaTecnicos[i].nick }}</option>
           {% endfor %}
       </select>
-      {% if incidencia.elementoInventario < 0 %}
+
+      {% if incidencia.elementoInventario == 0 %}
           <select name="elementoInventario" required>
-              {% for i in range(elementosInventario|length) %} 
+              {% for i in range(1, elementosInventario|length) %} 
               <option value="{{ i }}">{{ elementosInventario[i].nombre }}</option>
               {% endfor %}
-          </select
+          </select>
       {% endif %}
       
       <button type="submit">Enviar</button>

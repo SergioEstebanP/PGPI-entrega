@@ -53,7 +53,6 @@
         <input type="text" placeholder="Título" name="titulo" required/>
         <textarea placeholder="Descripción" name="descripcion" required minlength="100" title="La descripcion ha de tener minimo 100 caracteres"></textarea>
         <select name="elementoInventario">
-            <option value="-1">Seleccionar elemento del inventario afectado</option>
             {% for c in range(elementosInventario|length) %}
             <option value="{{ c }}">{{ elementosInventario[c].nombre }}</option>
             {% endfor %}

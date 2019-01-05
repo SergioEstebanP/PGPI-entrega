@@ -88,6 +88,14 @@ INSERT INTO categoria_incidencia (id, categoria) VALUES (2, 'Software básico');
 INSERT INTO categoria_incidencia (id, categoria) VALUES (3, 'Software de aplicaciones');
 INSERT INTO categoria_incidencia (id, categoria) VALUES (4, 'Otros');
 
+/* Poblando la tabla: elemento_inventario */
+INSERT INTO elemento_inventario (id, nombre) VALUES (0, 'Sin asignar');
+INSERT INTO elemento_inventario (id, nombre) VALUES (1, 'PC01');
+INSERT INTO elemento_inventario (id, nombre) VALUES (2, 'PC02');
+INSERT INTO elemento_inventario (id, nombre) VALUES (3, 'PC03');
+INSERT INTO elemento_inventario (id, nombre) VALUES (4, 'PC04');
+INSERT INTO elemento_inventario (id, nombre) VALUES (5, 'PC05');
+
 /* Poblando la tabla: usuario */
 INSERT INTO usuario (nick, email, password, nombre, apellidos, biografia, fotoPerfil, tipo) VALUES ('Supervisor', 'supervisor@mail.com', 'password', 'Manolo', 'Garcia', 'Biografia del supervisor Manolo Garcia', 'fotoPerfil', 0);
 

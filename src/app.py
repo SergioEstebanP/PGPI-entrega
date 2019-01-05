@@ -62,7 +62,8 @@ def incidencia(idIncidencia):
     cambioCierre = get_cambio_by_estado(idIncidencia, 3)
     estado = get_estado(incidencia.estado)
     categoria = get_categoria(incidencia.categoria)
-    return render_template('info_incidencia.html', incidencia=incidencia, estado=estado, categoria=categoria, cambioApertura=cambioApertura, cambioAsignada=cambioAsignada, cambioCierre=cambioCierre)
+    elementoInventario = get_elemento(incidencia.elementoInventario)
+    return render_template('info_incidencia.html', incidencia=incidencia, estado=estado, categoria=categoria, elementoInventario=elementoInventario, cambioApertura=cambioApertura, cambioAsignada=cambioAsignada, cambioCierre=cambioCierre)
 
 @app.route('/index')
 @login_required
@@ -119,12 +120,12 @@ def registrar_incidencia():
         inventario      = request.form.get('elementoInventario')
         categoria       = request.form.get('categoria')
 
-        insert_incidencia(titulo, descripcion, fecha, estado, reportadaPor, categoria, comentario, prioridad, tiempoEstimado, tecnicoAsignado, elementoInventario=inventario if inventario >= 0 else None)
+        insert_incidencia(titulo, descripcion, fecha, estado, reportadaPor, categoria, inventario, comentario, prioridad, tiempoEstimado, tecnicoAsignado)
         return redirect(url_for('index'))
 
     categorias = get_categorias()
-    elementosInventario = getElementos()
-    return render_template('registrar_incidencia.html', categorias=categorias)
+    elementosInventario = get_elementos()
+    return render_template('registrar_incidencia.html', categorias=categorias, elementosInventario=elementosInventario)
 
 @app.route('/completar_incidencia/<idIncidencia>', methods=['GET', 'POST'])
 @login_required
@@ -140,7 +141,7 @@ def completar_incidencia(idIncidencia):
 
     listaTecnicos = get_tecnicos()
     incidencia = get_incidencia(idIncidencia)
-    elementosInventario = getElementos()
+    elementosInventario = get_elementos()
     return render_template('completar_incidencia.html', incidencia=incidencia, listaTecnicos=listaTecnicos, elementosInventario=elementosInventario)
 
 @app.route('/add_comentario/<idIncidencia>', methods=['GET', 'POST'])
@@ -340,5 +341,5 @@ def get_categoria(id):
 def get_elementos():
     return list(ElementoInventario.query.all())
 
-def get_elemento():
+def get_elemento(id):
     return ElementoInventario.query.get(id).nombre
