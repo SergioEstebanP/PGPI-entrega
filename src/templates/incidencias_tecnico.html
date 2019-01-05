@@ -48,9 +48,9 @@
             </div>
         </div>
 
-        <div style="display: flex;">
+        <div class="row">
             {% if incidencias_abiertas|length > 0 %}
-            <div>
+            <div class="col-md-4">
                 <p class="text-center" id="tituloColumna">Abiertas</p>
                 {% for i in range(incidencias_abiertas|length) %}
                 <div class="card-deck" style="margin: 1em;">
@@ -72,7 +72,7 @@
             {% endif %}
 
             {% if incidencias_notif_cierre|length > 0 %}
-            <div>
+            <div class="col-md-4">
                 <p class="text-center" id="tituloColumna">Notificacion Cierre</p>
                 {% for i in range(incidencias_notif_cierre|length) %}
                 <div class="card-deck" style="margin: 1em;">
@@ -94,7 +94,7 @@
             {% endif %}
 
             {% if incidencias_pendientes_cierre|length > 0 %}
-            <div>
+            <div class="col-md-4">
                 <p class="text-center" id="tituloColumna">Pendiente Cierre</p>
                 {% for i in range(incidencias_pendientes_cierre|length) %}
                 <div class="card-deck" style="margin: 1em;">

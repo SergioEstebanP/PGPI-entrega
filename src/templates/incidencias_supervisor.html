@@ -55,11 +55,11 @@
             {% endif %}
         </div>
 
-        <div style="display: flex;">
+        <div class="row">
 
             {% if (incidencias_abiertas|length) > 0 %}
             {% if current_user.tipo==0 %}
-            <div>
+            <div class="col-md-4">
                 <p class="text-center" id="tituloColumna">Pendientes de asignar</p>
 
                 {% for i in range(incidencias_abiertas|length) %}
@@ -85,7 +85,7 @@
 
             {% if (incidencias_notif_cierre|length) > 0 %}
             {% if current_user.tipo==0 %}
-            <div>
+            <div class="col-md-4">
                 <p class="text-center" id="tituloColumna">Pendientes de Cerrar</p>
                 {% for i in range(incidencias_notif_cierre|length) %}
                 <div class="card-deck" style="margin: 1em;">
@@ -109,7 +109,7 @@
 
             {% if (incidencias_notif_cierre_cliente|length) > 0 %}
             {% if current_user.tipo==0 %}
-            <div>
+            <div class="col-md-4">
                 <p class="text-center" id="tituloColumna">Pendientes de Cerrar Cliente</p>
                 {% for i in range(incidencias_notif_cierre_cliente|length) %}
                 <div class="card-deck" style="margin: 1em;">
@@ -131,9 +131,11 @@
             {% endif %}
             {% endif %}
 
+            <!-- HASTA AQUI LAS COLUMNAS DEL SUPERVISOR -->
+
             {% if (incidencias|length) > 0 %}
             {% if current_user.tipo==2 %}
-            <div>
+            <div class="col-md-4">
                 <p class="text-center" id="tituloColumna">Incidencias abiertas</p>
                 {% for i in range(incidencias|length) %}
                 <div class="card-deck" style="margin: 1em;">
@@ -157,7 +159,7 @@
 
             {% if (incidencias_estado|length) > 0 %}
             {% if current_user.tipo==2 %}
-            <div>
+            <div class="col-md-4">
                 <p class="text-center" id="tituloColumna">Incidencias en Resolucion</p>
                 {% for i in range(incidencias_estado|length) %}
                 <div class="card-deck" style="margin: 1em;">
@@ -181,7 +183,7 @@
 
             {% if (incidencias_estado_cierre|length) > 0 %}
             {% if current_user.tipo==2 %}
-            <div>
+            <div class="col-md-4">
                 <p class="text-center" id="tituloColumna">Incidencias Solicitud Cierre</p>
                 {% for i in range(incidencias_estado_cierre|length) %}
                 <div class="card-deck" style="margin: 1em;">
@@ -202,6 +204,8 @@
             </div>
             {% endif %}
             {% endif %}
+
+            <!-- HASTA AQUI LAS COLUMNAS DEL cliente -->
 
         </div>
     </div>
