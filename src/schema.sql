@@ -95,6 +95,15 @@ INSERT INTO categoria_incidencia (id, categoria) VALUES (3, 'Software de aplicac
 INSERT INTO categoria_incidencia (id, categoria) VALUES (4, 'Otros');
 
 /* Poblando la tabla: usuario */
-INSERT INTO usuario (nick, email, password, nombre, apellidos, biografia, fotoPerfil, tipo) VALUES ('supervisor', 'super@mail.com', 'password', 'super', 'visor', 'probando la biografia del supervisor', 'fotoPerfil', 0);
-INSERT INTO usuario (nick, email, password, nombre, apellidos, biografia, fotoPerfil, tipo) VALUES ('tecnico', 'tecnico@mail.com', 'password', 'tec', 'nico', 'probando la biografia del tecnico', 'fotoPerfil', 1);
-INSERT INTO usuario (nick, email, password, nombre, apellidos, biografia, fotoPerfil, tipo) VALUES ('cliente', 'cliente@mail.com', 'password', 'clie', 'nte', 'probando la biografia del cliente', 'fotoPerfil', 2);
+INSERT INTO usuario (nick, email, password, nombre, apellidos, biografia, fotoPerfil, tipo) VALUES ('Supervisor', 'supervisor@mail.com', 'password', 'Manolo', 'Garcia', 'Biografia del supervisor Manolo Garcia', 'fotoPerfil', 0);
+
+INSERT INTO usuario (nick, email, password, nombre, apellidos, biografia, fotoPerfil, tipo) VALUES ('Tecnico 1', 'tecnico1@mail.com', 'password', 'Juan', 'Olmos', 'Biografia del tecnico 1 Juan Olmos', 'fotoPerfil', 1);
+INSERT INTO usuario (nick, email, password, nombre, apellidos, biografia, fotoPerfil, tipo) VALUES ('Tecnico 2', 'tecnico2@mail.com', 'password', 'Marta', 'Gutierrez', 'Biografia del tecnico 2', 'fotoPerfil', 1);
+INSERT INTO usuario (nick, email, password, nombre, apellidos, biografia, fotoPerfil, tipo) VALUES ('Tecnico 3', 'tecnico3@mail.com', 'password', 'Jose', 'Martinez', 'Biografia del tecnico 3', 'fotoPerfil', 1);
+INSERT INTO usuario (nick, email, password, nombre, apellidos, biografia, fotoPerfil, tipo) VALUES ('Tecnico 4', 'tecnico4@mail.com', 'password', 'Maria', 'Bigorruezo', 'Biografia del tecnico 4', 'fotoPerfil', 1);
+INSERT INTO usuario (nick, email, password, nombre, apellidos, biografia, fotoPerfil, tipo) VALUES ('Tecnico 5', 'tecnico5@mail.com', 'password', 'Feranda', 'Vals', 'Biografia del tecnico 5', 'fotoPerfil', 1);
+
+INSERT INTO usuario (nick, email, password, nombre, apellidos, biografia, fotoPerfil, tipo) VALUES ('Cliente 1', 'cliente1@mail.com', 'password', 'Patricia', 'Pellejero', 'Biografia del cliente 1', 'fotoPerfil', 2);
+INSERT INTO usuario (nick, email, password, nombre, apellidos, biografia, fotoPerfil, tipo) VALUES ('Cliente 2', 'cliente2@mail.com', 'password', 'Pablo', 'Arguedas', 'Biografia del cliente 2', 'fotoPerfil', 2);
+INSERT INTO usuario (nick, email, password, nombre, apellidos, biografia, fotoPerfil, tipo) VALUES ('Cliente 3', 'cliente3@mail.com', 'password', 'Alvaro', 'Perez', 'Biografia del cliente 3', 'fotoPerfil', 2);
+INSERT INTO usuario (nick, email, password, nombre, apellidos, biografia, fotoPerfil, tipo) VALUES ('Cliente 4', 'cliente4@mail.com', 'password', 'Jose Ignacio', 'Galindo', 'Biografia del cliente 4', 'fotoPerfil', 2);
