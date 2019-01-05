@@ -53,6 +53,8 @@
 
       <textarea placeholder="Comentario" name="comentario" required></textarea>
       <input type="number" min="1" max="10" pattern="\d+" placeholder="Prioridad" name="prioridad" required title="Campo obligatorio. Numero entre 1 y 10"/>
+      <br>  </br>
+      <label for="tecnico">Tecnicos Actuales:</label>
       <select name="tecnico" required>
           {% for i in range(listaTecnicos|length) %} 
           <option value="{{ listaTecnicos[i].nick }}">{{ listaTecnicos[i].nick }}</option>
