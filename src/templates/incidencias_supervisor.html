@@ -113,7 +113,7 @@
                 <p class="text-center" id="tituloColumna">Pendientes de Cerrar Cliente</p>
                 {% for i in range(incidencias_notif_cierre_cliente|length) %}
                 <div class="card-deck" style="margin: 1em;">
-                    <div class="card" id="card2">
+                    <div class="card" id="card1">
                         <div class="card-body">
                             <a href="/incidencia/{{ incidencias_notif_cierre_cliente[i].id  }}">
                                 <p class="card-title">{{ incidencias_notif_cierre_cliente[i].titulo }}</p>
@@ -139,7 +139,7 @@
                 <p class="text-center" id="tituloColumna">Incidencias abiertas</p>
                 {% for i in range(incidencias|length) %}
                 <div class="card-deck" style="margin: 1em;">
-                    <div class="card" id="card2">
+                    <div class="card" id="card1">
                         <div class="card-body">
                             <a href="/incidencia/{{ incidencias[i].id  }}">
                                 <p class="card-title">{{ incidencias[i].titulo }}</p>
@@ -187,7 +187,7 @@
                 <p class="text-center" id="tituloColumna">Incidencias Solicitud Cierre</p>
                 {% for i in range(incidencias_estado_cierre|length) %}
                 <div class="card-deck" style="margin: 1em;">
-                    <div class="card" id="card2">
+                    <div class="card" id="card1">
                         <div class="card-body">
                             <a href="/incidencia/{{ incidencias_estado_cierre[i].id  }}">
                                 <p class="card-title">{{ incidencias_estado_cierre[i].titulo }}</p>
