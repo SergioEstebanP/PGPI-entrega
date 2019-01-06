@@ -53,15 +53,16 @@
         <input type="text" placeholder="Título" name="titulo" required/>
         <textarea placeholder="Descripción" name="descripcion" required></textarea>
         <br>  </br>
-        <label for="elementoInventario">Elementos Inventario:</label>
+        <label for="elementoInventario">Elemento del inventario afectado:</label>
         <select name="elementoInventario">
             {% for c in range(elementosInventario|length) %}
             <option value="{{ c }}">{{ elementosInventario[c].nombre }}</option>
             {% endfor %}
         </select>
+        <label for="fechaLabel">Fecha de ocurrencia:</label>
         <input type="date" id="fecha" name="fecha" required>
         <br>  </br>
-        <label for="categoria">Categorias Incidencias:</label>
+        <label for="categoria">Categoría de la incidencia:</label>
         <select name="categoria" required>
             {% for c in range(categorias|length) %}
             <option value="{{ c }}">{{ categorias[c].categoria }}</option>
