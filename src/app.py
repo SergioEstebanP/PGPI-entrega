@@ -79,7 +79,7 @@ def index():
         incidencias_abiertas = get_incidencias_abiertas(current_user.nick)
         incidencias_notif_cierre = get_incidencias_notif_cierre(current_user.nick)
         incidencias_pendientes_cierre = get_incidencias_pendientes_cierre(current_user.nick)
-
+        
         return render_template('incidencias_tecnico.html', incidencias_abiertas=incidencias_abiertas, incidencias_notif_cierre=incidencias_notif_cierre, incidencias_pendientes_cierre=incidencias_pendientes_cierre)
 
     elif current_user.tipo == 2: #Cliente
@@ -102,6 +102,12 @@ def incidencias_cerradas():
 def incidencias_abiertas():
     incidencias = get_incidencias_reportadas_por(current_user.nick)
     return render_template('incidencias_cliente.html', incidencias=incidencias, titulo='Incidencias abiertas reportadas por '+current_user.nick)
+    
+@app.route('/incidencias_abiertas_tec')
+@login_required
+def incidencias_abiertas_tec():
+    incidencias = get_incidencias_reportadas_por(current_user.nick)
+    return render_template('incidencias_tecnico.html', incidencias=incidencias, titulo='Incidencias abiertas reportadas por '+current_user.nick)
 
 @app.route('/incidencias_abiertas_clientes')
 @login_required
