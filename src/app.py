@@ -101,19 +101,19 @@ def incidencias_cerradas():
 @login_required
 def incidencias_abiertas():
     incidencias = get_incidencias_reportadas_por(current_user.nick)
-    return render_template('incidencias_cliente.html', incidencias=incidencias, titulo='Incidencias abiertas reportadas por '+current_user.nick)
+    return render_template('incidencias_cliente.html', incidencias=incidencias, titulo='Incidencias reportadas por '+current_user.nick)
     
 @app.route('/incidencias_abiertas_tec')
 @login_required
 def incidencias_abiertas_tec():
     incidencias = get_incidencias_reportadas_por(current_user.nick)
-    return render_template('incidencias_cliente.html', incidencias=incidencias, titulo='Incidencias abiertas reportadas por '+current_user.nick)
+    return render_template('incidencias_cliente.html', incidencias=incidencias, titulo='Incidencias reportadas por '+current_user.nick)
 
 @app.route('/incidencias_abiertas_clientes')
 @login_required
 def incidencias_abiertas_clientes():
     incidencias = get_incidencias_reportadas_por_clientes()
-    return render_template('incidencias_cliente.html', incidencias=incidencias, titulo='Incidencias abiertas reportadas por clientes')
+    return render_template('incidencias_cliente.html', incidencias=incidencias, titulo='Incidencias reportadas por clientes')
 
 @app.route('/todas_incidencias')
 @login_required
