@@ -1,3 +1,7 @@
-# Amazon Proof of Concept
+# PGPI autmated tests cases
 
-Now is your time! Start developing some automation test for amazon webpage. If you have any question you can ask the organizers.
+Automated test cases implemented for the app:
+    - [x] Login as a client
+    - [x] Login as a techcnic
+    - [x] Login as a supervisor
+    - [ ] Open a new incident as a client
