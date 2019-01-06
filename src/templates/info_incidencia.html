@@ -180,7 +180,7 @@
 
 
 
-  <div id="botonesPiePagina">
+    <div id="botonesPiePagina">
         <form method="POST" action='/incidencia/{{ incidencia.id }}'>
             {% if (current_user.tipo == 0) and (incidencia.estado ==  0) %}      
             <button type="submit" class="btn btn-outline-primary" name="action" value="completar">Completar incidencia</button>
@@ -190,29 +190,23 @@
             <button type="submit" class="btn btn-outline-primary" name="action" value="add_comentario">Añadir comentario</button>
             {% endif %}}
 
-            {% if (current_user.tipo == 0) and (incidencia.estado ==  3 or incidencia.estado==2) %}
+            {% if (current_user.tipo == 0) and (incidencia.estado > 0) and (incidencia.estado < 4)%}
             <button type="submit" class="btn btn-outline-primary" name="action" value="Solucion">Cerrar Solucion</button>
             <button type="submit" class="btn btn-outline-primary" name="action" value="n-Solucion">Cerrar sin Solucion</button>
             {% endif %}}
 
 
-            {% if (current_user.tipo == 1) and (incidencia.estado==1) %}
+            {% if (current_user.tipo == 1) and (incidencia.estado == 1) %}
             <button type="submit" class="btn btn-outline-primary" name="action" value="add_comentario">Añadir comentario</button>
             <button type="submit" class="btn btn-outline-primary" name="action" value="add_tiempoSol">Añadir tiempo</button>
             <button type="submit" class="btn btn-outline-primary" name="action" value="cierre_tecnico">Solicitar Cierre</button>
             {% endif %}}
 
-            {% if (current_user.tipo == 1) and (incidencia.estado!=1) %}
-            <button type="submit" class="btn btn-outline-primary" name="action" value="add_comentario">Añadir comentario</button>
-            
-            {% endif %}}
-
-
-            {% if (current_user.tipo == 2) and (incidencia.estado!=2) %}
+            {% if (current_user.tipo == 2) and (incidencia.estado < 2) %}
             <button type="submit" class="btn btn-outline-primary" name="action" value="cierre_cliente">Solicitar Cierre</button>
             {% endif %}
- </form>
-</div>
+         </form>
+    </div>
 
     <script>
         function openSide(id) {

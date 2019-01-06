@@ -39,7 +39,6 @@ def logout():
 @app.route('/incidencia/<idIncidencia>', methods=['GET', 'POST'])
 @login_required
 def incidencia(idIncidencia):
-    incidencia = get_incidencia(idIncidencia)
     if request.method == 'POST':
         if request.form['action']=="completar":
             return redirect(url_for('completar_incidencia', idIncidencia=idIncidencia))
@@ -59,7 +58,11 @@ def incidencia(idIncidencia):
 
     cambioApertura = get_cambio_by_estado(idIncidencia, 0)
     cambioAsignada = get_cambio_by_estado(idIncidencia, 1)
-    cambioCierre = get_cambio_by_estado(idIncidencia, 3)
+    cambioCierreSolucion = get_cambio_by_estado(idIncidencia, 4)
+    cambioCierreNoSol = get_cambio_by_estado(idIncidencia, 5)
+    cambioCierre = cambioCierreSolucion or cambioCierreNoSol
+
+    incidencia = get_incidencia(idIncidencia)
     estado = get_estado(incidencia.estado)
     categoria = get_categoria(incidencia.categoria)
     elementoInventario = get_elemento(incidencia.elementoInventario)
