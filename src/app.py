@@ -342,14 +342,14 @@ def get_incidencias_reportadas_por(userNick):
 def get_incidencias_reportadas_por_clientes():
     incidencias = list(Incidencia.query.all())
     usuarios = list(Usuario.query.all())
-    clientes = []
+    resultado = []
 
     for i in range(len(incidencias)):
         for j in range(len(usuarios)):
-            if incidencias[i].reportadaPor == usuarios[j].nick:
-                clientes.append(incidencias[i])
+            if (incidencias[i].reportadaPor == usuarios[j].nick) and (usuarios[j].tipo == 2):
+                resultado.append(incidencias[i])
 
-    return clientes
+    return resultado
 
 #######################
 #       CAMBIO        #
