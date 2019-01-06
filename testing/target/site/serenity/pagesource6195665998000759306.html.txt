@@ -1,0 +1,17 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta charset="UTF-8" />
+<link rel="stylesheet" type="text/css" href="../static/css/login.css" />
+<title>Inicio de sesión</title>
+</head>
+
+<body><div class="login-page">
+  <div class="form">
+      <form class="login-form" method="post" action="/">
+      <h1 align="center">PGPIncidents</h1>
+      <input id="usernameField" type="text" placeholder="usuario" name="username" required="" />
+      <input id="passField" type="password" placeholder="contraseña" name="password" required="" />
+      <button id="loginButton">entrar</button>
+    </form>
+  </div>
+</div>
+</body></html>

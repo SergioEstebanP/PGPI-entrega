@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?><testsuite errors="1" failures="0" name="Amazon search" skipped="1" tests="2" time="13.12" timestamp="2018-11-28 03:16:41"><testcase name="Amazon mobile phone"><error message="Tried to run command without establishing a connection&#10;Build info: version: '3.141.0', revision: '2ecb7d9a', time: '2018-10-31T20:09:30'&#10;System info: host: 'sergio-Alienware-17-R2', ip: '127.0.1.1', os.name: 'Linux', os.arch: 'amd64', os.version: '4.18.0-11-generic', java.version: '11.0.1'&#10;Driver info: org.openqa.selenium.remote.RemoteWebDriver&#10;Capabilities {acceptInsecureCerts: true, browserName: firefox, browserVersion: 63.0.3, javascriptEnabled: true, moz:accessibilityChecks: false, moz:geckodriverVersion: 0.23.0, moz:headless: false, moz:processID: 25959, moz:profile: /tmp/rust_mozprofile.QoQqgA..., moz:useNonSpecCompliantPointerOrigin: false, moz:webdriverClick: true, pageLoadStrategy: normal, platform: LINUX, platformName: LINUX, platformVersion: 4.18.0-11-generic, rotatable: false, setWindowRect: true, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify}&#10;Session ID: 7f9f2efc-0aec-41e4-8f68-820ba47fcac8&#10;Build info: version: '3.141.0', revision: '2ecb7d9a', time: '2018-10-31T20:09:30'&#10;System info: host: 'sergio-Alienware-17-R2', ip: '127.0.1.1', os.name: 'Linux', os.arch: 'amd64', os.version: '4.18.0-11-generic', java.version: '11.0.1'&#10;Driver info: driver.version: unknown" type="org.openqa.selenium.NoSuchSessionException">Tried to run command without establishing a connection
+Build info: version: '3.141.0', revision: '2ecb7d9a', time: '2018-10-31T20:09:30'
+System info: host: 'sergio-Alienware-17-R2', ip: '127.0.1.1', os.name: 'Linux', os.arch: 'amd64', os.version: '4.18.0-11-generic', java.version: '11.0.1'
+Driver info: org.openqa.selenium.remote.RemoteWebDriver
+Capabilities {acceptInsecureCerts: true, browserName: firefox, browserVersion: 63.0.3, javascriptEnabled: true, moz:accessibilityChecks: false, moz:geckodriverVersion: 0.23.0, moz:headless: false, moz:processID: 25959, moz:profile: /tmp/rust_mozprofile.QoQqgA..., moz:useNonSpecCompliantPointerOrigin: false, moz:webdriverClick: true, pageLoadStrategy: normal, platform: LINUX, platformName: LINUX, platformVersion: 4.18.0-11-generic, rotatable: false, setWindowRect: true, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify}
+Session ID: 7f9f2efc-0aec-41e4-8f68-820ba47fcac8
+Build info: version: '3.141.0', revision: '2ecb7d9a', time: '2018-10-31T20:09:30'
+System info: host: 'sergio-Alienware-17-R2', ip: '127.0.1.1', os.name: 'Linux', os.arch: 'amd64', os.version: '4.18.0-11-generic', java.version: '11.0.1'
+Driver info: driver.version: unknown</error><system-err>Tried to run command without establishing a connection
+Build info: version: '3.141.0', revision: '2ecb7d9a', time: '2018-10-31T20:09:30'
+System info: host: 'sergio-Alienware-17-R2', ip: '127.0.1.1', os.name: 'Linux', os.arch: 'amd64', os.version: '4.18.0-11-generic', java.version: '11.0.1'
+Driver info: org.openqa.selenium.remote.RemoteWebDriver
+Capabilities {acceptInsecureCerts: true, browserName: firefox, browserVersion: 63.0.3, javascriptEnabled: true, moz:accessibilityChecks: false, moz:geckodriverVersion: 0.23.0, moz:headless: false, moz:processID: 25959, moz:profile: /tmp/rust_mozprofile.QoQqgA..., moz:useNonSpecCompliantPointerOrigin: false, moz:webdriverClick: true, pageLoadStrategy: normal, platform: LINUX, platformName: LINUX, platformVersion: 4.18.0-11-generic, rotatable: false, setWindowRect: true, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify}
+Session ID: 7f9f2efc-0aec-41e4-8f68-820ba47fcac8
+Build info: version: '3.141.0', revision: '2ecb7d9a', time: '2018-10-31T20:09:30'
+System info: host: 'sergio-Alienware-17-R2', ip: '127.0.1.1', os.name: 'Linux', os.arch: 'amd64', os.version: '4.18.0-11-generic', java.version: '11.0.1'
+Driver info: driver.version: unknown
+java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+com.hfc.demo.pageObjects.PgpiHome.waitLoad(AmazonHome.java:23)
+com.hfc.demo.serenitySteps.UserSteps.iAmInAmazonWebPage(UserSteps.java:15)
+com.hfc.demo.stepDefinitions.GherkinDefinitions.iAmInAmazonWebPage(GherkinDefinitions.java:16)
+✽.I am in amazon webpage(src/test/resources/features/example.feature:8)
+</system-err></testcase></testsuite>

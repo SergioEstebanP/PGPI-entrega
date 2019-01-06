@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Un cliente abre una incidencia" tests="1" skipped="0" failures="0" errors="0" timestamp="2019-01-05T22:53:45" hostname="sergio-Alienware-17-R2" time="8.179">
+  <properties/>
+  <testcase name="client_login_succesful" classname="Un cliente abre una incidencia" time="8.179"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[ene. 05, 2019 11:53:45 P. M. org.openqa.selenium.remote.DesiredCapabilities firefox
+INFORMACIÓN: Using `new FirefoxOptions()` is preferred to `DesiredCapabilities.firefox()`
+ene. 05, 2019 11:53:45 P. M. org.openqa.selenium.remote.DesiredCapabilities firefox
+INFORMACIÓN: Using `new FirefoxOptions()` is preferred to `DesiredCapabilities.firefox()`
+1546728826260	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.3644xEzP6R8L"
+1546728826546	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid host permission: resource://pdf.js/
+1546728826546	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid host permission: about:reader*
+
+(firefox:6182): Gtk-WARNING **: 23:53:46.797: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:6182): Gtk-WARNING **: 23:53:46.797: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1546728827672	Marionette	INFO	Listening on port 43975
+1546728827783	Marionette	WARN	TLS certificate errors will be ignored for this session
+ene. 05, 2019 11:53:47 P. M. org.openqa.selenium.remote.ProtocolHandshake createSession
+INFORMACIÓN: Detected dialect: W3C
+
+(/usr/lib/firefox/firefox:6346): dconf-WARNING **: 23:53:50.805: Unable to open /var/lib/snapd/desktop/dconf/profile/user: Permiso denegado
+1546728832747	Marionette	INFO	Stopped listening on port 43975
+[Parent 6182, Gecko_IOThread] WARNING: pipe error (78): Conexión reinicializada por la máquina remota: file /build/firefox-OWzVI3/firefox-64.0+build3/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 363
+[Parent 6182, Gecko_IOThread] WARNING: pipe error (68): Conexión reinicializada por la máquina remota: file /build/firefox-OWzVI3/firefox-64.0+build3/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 363
+[Test worker] INFO net.thucydides.core.steps.ConsoleLoggingListener - 
+        __    _____ _____ ____ _____   ____   _    ____  ____  _____ ____  
+  _     \ \  |_   _| ____/ ___|_   _| |  _ \ / \  / ___|/ ___|| ____|  _ \ 
+ (_)_____| |   | | |  _| \___ \ | |   | |_) / _ \ \___ \\___ \|  _| | | | |
+  _|_____| |   | | | |___ ___) || |   |  __/ ___ \ ___) |___) | |___| |_| |
+ (_)     | |   |_| |_____|____/ |_|   |_| /_/   \_\____/|____/|_____|____/ 
+        /_/                                                                
+
+TEST PASSED: Client login succesful
+----------------------------------------------------------------------------
+]]></system-err>
+</testsuite>

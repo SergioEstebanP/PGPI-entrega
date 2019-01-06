@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><testsuite errors="0" failures="1" name="Un cliente se registra en la pagina" skipped="0" tests="1" time="8.35" timestamp="2019-01-06 01:22:34"><testcase name="Client ope incident successful"><failure message="Expected enabled element was not enabled&#10;Build info: version: '3.141.0', revision: '2ecb7d9a', time: '2018-10-31T20:09:30'&#10;System info: host: 'sergio-Alienware-17-R2', ip: '127.0.1.1', os.name: 'Linux', os.arch: 'amd64', os.version: '4.18.0-13-generic', java.version: '11.0.1'&#10;Driver info: driver.version: unknown" type="net.thucydides.core.webdriver.exceptions.ElementShouldBeEnabledException">Expected enabled element was not enabled
+Build info: version: '3.141.0', revision: '2ecb7d9a', time: '2018-10-31T20:09:30'
+System info: host: 'sergio-Alienware-17-R2', ip: '127.0.1.1', os.name: 'Linux', os.arch: 'amd64', os.version: '4.18.0-13-generic', java.version: '11.0.1'
+Driver info: driver.version: unknown</failure><system-err>Expected enabled element was not enabled
+Build info: version: '3.141.0', revision: '2ecb7d9a', time: '2018-10-31T20:09:30'
+System info: host: 'sergio-Alienware-17-R2', ip: '127.0.1.1', os.name: 'Linux', os.arch: 'amd64', os.version: '4.18.0-13-generic', java.version: '11.0.1'
+Driver info: driver.version: unknown
+java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+com.hfc.demo.pageObjects.PgpiMainIndex.newIncident(PgpiMainIndex.java:32)
+com.hfc.demo.serenitySteps.UserSteps.newIncident(UserSteps.java:58)
+com.hfc.demo.stepDefinitions.GherkinDefinitions.newIncidentWithData(GherkinDefinitions.java:66)
+✽.I open a new incident with this data(src/test/resources/features/new_incidents_testing/registrar_incidencia_cliente.feature:7)
+</system-err></testcase></testsuite>
