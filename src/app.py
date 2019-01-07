@@ -82,7 +82,7 @@ def index():
         incidencias_abiertas = get_incidencias_abiertas(current_user.nick)
         incidencias_notif_cierre = get_incidencias_notif_cierre(current_user.nick)
         incidencias_pendientes_cierre = get_incidencias_pendientes_cierre(current_user.nick)
-        
+
         return render_template('incidencias_tecnico.html', incidencias_abiertas=incidencias_abiertas, incidencias_notif_cierre=incidencias_notif_cierre, incidencias_pendientes_cierre=incidencias_pendientes_cierre)
 
     elif current_user.tipo == 2: #Cliente
@@ -105,7 +105,7 @@ def incidencias_cerradas():
 def incidencias_abiertas():
     incidencias = get_incidencias_reportadas_por(current_user.nick)
     return render_template('incidencias_cliente.html', incidencias=incidencias, titulo='Incidencias reportadas por '+current_user.nick)
-    
+
 @app.route('/incidencias_abiertas_tec')
 @login_required
 def incidencias_abiertas_tec():
@@ -205,8 +205,8 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import or_
 from flask_login import UserMixin
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@127.0.0.1:3306/PGPI_grupo02'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@jair.lab.inf.uva.es:3306/PGPI_grupo02'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@127.0.0.1:3306/PGPI_grupo02'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://PGPI_grupo02:JEbITzwe@jair.lab.inf.uva.es:3306/PGPI_grupo02'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
